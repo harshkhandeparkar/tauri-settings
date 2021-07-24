@@ -1,0 +1,31 @@
+{
+  "name": "tauri-settings",
+  "version": "0.1.0",
+  "description": "A user settings manager for Tauri inspired by electron-settings.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "npm-publish": "yarn test && yarn build && yarn publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/harshkhandeparkar/tauri-settings.git"
+  },
+  "keywords": [
+    "tauri",
+    "tauri-apps",
+    "tauri-settings",
+    "settings-manager"
+  ],
+  "author": "harshkhandeparkar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harshkhandeparkar/tauri-settings/issues"
+  },
+  "homepage": "https://github.com/harshkhandeparkar/tauri-settings#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
