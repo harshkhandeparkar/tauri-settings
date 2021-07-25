@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@tauri-apps/api@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.0-beta.5.tgz#32727b3b478f67330a79409ceaf16a4a51410fce"
+  integrity sha512-gecjskr6nCLyjky2rtth64Jsk1qyHeWykYO5wroEkoTwESJJEzFnpnqyZHCWgkRLJC1TIYEv+lddldKvH/O1RA==
+
 typescript@^4.3.5:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
