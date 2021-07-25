@@ -1,5 +1,5 @@
-import { getSettings } from './get-settings';
-import { saveSettings } from './save-settings';
+import { getSettings } from '../fs/get-settings';
+import { saveSettings } from '../fs/save-settings';
 
 /**
  * Sets the value of a particular setting

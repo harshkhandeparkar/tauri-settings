@@ -1,7 +1,7 @@
 import { appDir, resolvePath } from '@tauri-apps/api/path';
 import { BaseDirectory, createDir, readDir, readTextFile, writeFile } from '@tauri-apps/api/fs';
 
-import { SETTINGS_FILE } from './constants';
+import { SETTINGS_FILE } from '../constants';
 
 export enum STATUS {
   FILE_EXISTS = 'file_exists',

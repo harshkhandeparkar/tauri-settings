@@ -1,11 +1,11 @@
-import { STATUS } from './ensure-settings-file';
+import { STATUS } from '../fs/ensure-settings-file';
 
-import { getSettings } from './get-settings';
-import { saveSettings } from './save-settings';
+import { getSettings } from '../fs/get-settings';
+import { saveSettings } from '../fs/save-settings';
 
-import { has } from './has';
-import { get } from './get';
-import { set } from './set';
+import { has } from '../settings/has';
+import { get } from '../settings/get';
+import { set } from '../settings/set';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
   settings: SettingsSchema;

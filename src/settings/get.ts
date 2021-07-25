@@ -1,4 +1,4 @@
-import { getSettings } from './get-settings';
+import { getSettings } from '../fs/get-settings';
 import { has } from './has';
 
 /**

@@ -1,4 +1,4 @@
-import { getSettings } from './get-settings';
+import { getSettings } from '../fs/get-settings';
 
 /**
  * Checks whether a key exists in the settings.
