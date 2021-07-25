@@ -1,5 +1,9 @@
 import { ensureSettingsFile, STATUS } from './ensure-settings-file';
 
+/**
+ * Get all the settings.
+ * @returns The entire settings object.
+ */
 export async function getSettings
   <SettingsSchema extends any>
   (): Promise<{settings: SettingsSchema, path: string, status: STATUS}>
