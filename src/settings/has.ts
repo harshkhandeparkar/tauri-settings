@@ -6,7 +6,7 @@ import { getSettings } from '../fs/get-settings';
  */
 export async function has
   <SettingsSchema extends {} = any>
-  (key: string): Promise<boolean>
+  (key: string | number | symbol): Promise<boolean>
 {
   return (key in (await getSettings<SettingsSchema>()).settings);
 }

@@ -20,7 +20,12 @@ export async function ensureSettingsFile(): Promise<{
   }
   catch (e) {
     // doesn't exist
-    await createDir(await appDir());
+    try {
+      await createDir(await appDir());
+    }
+    catch (e) {
+      throw e;
+    }
   }
 
   try {
@@ -35,15 +40,20 @@ export async function ensureSettingsFile(): Promise<{
   catch(e) {
     // doesn't exist
 
-    await writeFile({
-      contents: JSON.stringify({}),
-      path: settingsFilePath
-    })
+      try {
+      await writeFile({
+        contents: JSON.stringify({}),
+        path: settingsFilePath
+      })
 
-    return {
-      status: STATUS.FILE_CREATED,
-      path: settingsFilePath,
-      content: JSON.stringify({})
+      return {
+        status: STATUS.FILE_CREATED,
+        path: settingsFilePath,
+        content: JSON.stringify({})
+      }
+    }
+    catch (e) {
+      throw e;
     }
   }
 }

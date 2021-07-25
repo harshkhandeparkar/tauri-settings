@@ -40,7 +40,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * Checks whether a key exists in the settings cache.
    * @param key The key for the setting
    */
-  hasCache(key: string): boolean {
+  hasCache(key: string | number | symbol): boolean {
     return key in this.settings;
   }
 
@@ -50,10 +50,10 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @returns The value of the setting
    */
   getCache<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K): SettingsSchema[K] {
-    if (this.hasCache(key as string)) {
+    if (this.hasCache(key)) {
       return this.settings[key];
     }
-    else throw 'Error: key doesn\'t exist';
+    else throw 'Error: key does not exist';
   }
 
   /**
@@ -72,7 +72,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * Checks whether a key exists in the settings directly from the storage.
    * @param key The key for the setting
    */
-  async has(key: string): Promise<boolean> {
+  async has(key: string | number | symbol): Promise<boolean> {
     return await has<SettingsSchema>(key);
   }
 
@@ -82,12 +82,15 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @returns The value of the setting
    */
   async get<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K): Promise<SettingsSchema[K]> {
-    const value = await get<SettingsSchema, K>(key);
+    if (await this.has(key)) {
+      const value = await get<SettingsSchema, K>(key);
 
-    // to also update cache
-    this.setCache(key, value);
+      // to also update cache
+      this.setCache(key, value);
 
-    return value;
+      return value;
+    }
+    else throw 'Error: key does not exist';
   }
 
   /**

@@ -10,6 +10,6 @@ export async function get
   <SettingsSchema extends {} = any, K  extends keyof SettingsSchema = keyof SettingsSchema>
   (key: K): Promise<SettingsSchema[K]>
 {
-  if (await has<SettingsSchema>(key as string)) return (await getSettings<SettingsSchema>()).settings[key];
+  if (await has<SettingsSchema>(key)) return (await getSettings<SettingsSchema>()).settings[key];
   else throw 'Error: key does not exist.'
 }
