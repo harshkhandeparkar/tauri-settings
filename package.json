@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w",
-    "npm-publish": "yarn test && yarn build && yarn publish"
+    "npm-publish": "yarn build && yarn publish"
   },
   "repository": {
     "type": "git",
