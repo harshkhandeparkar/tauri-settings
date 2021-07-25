@@ -20,7 +20,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * Initializes a settings file with the defaults. If settings exist, load them.
    * @returns The entire settings object
    */
-  async initialize() {
+  async initialize(): Promise<SettingsSchema> {
     const currentSettings = await getSettings<SettingsSchema>();
     this.path = currentSettings.path;
 

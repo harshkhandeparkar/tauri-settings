@@ -102,9 +102,13 @@ const settingsManager = new SettingsManager<Schema>(
   }
 )
 
-// any key other than 'theme' and 'startFullscreen' will be invalid.
-// theme key will only accept 'dark' or 'light' as a value due to the generic.
-settingsManager.setCache('theme', 'dark');
+// checks whether the settings file exists and created it if not
+// loads the settings if it exists
+settingsManager.initialize().then(() => {
+  // any key other than 'theme' and 'startFullscreen' will be invalid.
+  // theme key will only accept 'dark' or 'light' as a value due to the generic.
+  settingsManager.setCache('theme', 'dark');
+}
 
 // at a later time
 await settingsManager.syncCache();
