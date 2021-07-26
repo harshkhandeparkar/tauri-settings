@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w",
-    "npm-publish": "yarn build && yarn publish"
+    "doc": "typedoc --options config/typedoc.js",
+    "npm-publish": "yarn build && yarn doc && yarn publish"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/harshkhandeparkar/tauri-settings#readme",
   "devDependencies": {
     "@tauri-apps/api": "^1.0.0-beta.5",
+    "typedoc": "^0.21.4",
     "typescript": "^4.3.5"
   }
 }
