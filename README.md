@@ -4,7 +4,7 @@ A user settings manager for [Tauri](https://tauri.studio) inspired by [electron-
 ### Table of Contents
 - [Installation And Usage](#installation-and-usage)
 - [Differences From `electron-settings`](#differences-from-electron-settings)
-- [API Docs]
+- [API Docs](https://harskhandeparkar.github.io/tauri-settings/)
 - [License](LICENSE)
 
 ### Installation And Usage
@@ -69,7 +69,7 @@ get<Schema>('theme').then((theme) => {
 set<Schema>('theme').then(() => console.log('theme changed succesfully'));
 ```
 
-See the complete [API Docs]()
+See the complete [API Docs](https://harskhandeparkar.github.io/tauri-settings/).
 
 #### SettingsManager
 `SettingsManager` is a class that can be used not only to set and get settings but it is meant to be a complete settings *manager*.
@@ -114,4 +114,4 @@ settingsManager.initialize().then(() => {
 await settingsManager.syncCache();
 ```
 
-See the complete [API Docs]()
+See the complete [API Docs](https://harskhandeparkar.github.io/tauri-settings/).
