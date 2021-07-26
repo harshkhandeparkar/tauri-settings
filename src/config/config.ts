@@ -27,6 +27,9 @@ export interface IConfig {
 
 export type ConfigOptions = IConfig | {};
 
+/**
+ * @internal
+ */
 export function parseOptions(options: ConfigOptions): IConfig {
   const finalConfig: IConfig = {
     ...CONFIG_DEFAULTS,
