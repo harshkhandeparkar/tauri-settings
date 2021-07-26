@@ -4,7 +4,7 @@ A user settings manager for [Tauri](https://tauri.studio) inspired by [electron-
 ### Table of Contents
 - [Installation And Usage](#installation-and-usage)
 - [Differences From `electron-settings`](#differences-from-electron-settings)
-- [API Docs](https://harskhandeparkar.github.io/tauri-settings/)
+- [API Docs](https://harshkhandeparkar.github.io/tauri-settings/)
 - [License](LICENSE)
 
 ### Installation And Usage
@@ -80,7 +80,7 @@ get<Schema>('theme').then((theme) => {
 set<Schema>('theme').then(() => console.log('theme changed succesfully'));
 ```
 
-See the complete [API Docs](https://harskhandeparkar.github.io/tauri-settings/).
+See the complete [API Docs](https://harshkhandeparkar.github.io/tauri-settings/).
 
 #### SettingsManager
 `SettingsManager` is a class that can be used not only to set and get settings but it is meant to be a complete settings *manager*.
@@ -128,7 +128,7 @@ settingsManager.initialize().then(() => {
 await settingsManager.syncCache();
 ```
 
-See the complete [API Docs](https://harskhandeparkar.github.io/tauri-settings/).
+See the complete [API Docs](https://harshkhandeparkar.github.io/tauri-settings/).
 
 ### Differences From `electron-settings`
 #### Asynchronous
@@ -141,7 +141,7 @@ Even though synchronous `fs` API is not available, the caching feature of [`Sett
 
 #### Config
 `electron-settings` exports a [`configure()`](https://electron-settings.js.org/index.html#configure) method to configure some of the options such as the fileName.
-However, `tauri-settings` doesn't export such a variable due to various reasons. Instead each API method such as `get` and `set`, as well as the `SettingsManager` class have an optional `options` parameter (See [API Docs](https://harskhandeparkar.github.io/tauri-settings/)).
+However, `tauri-settings` doesn't export such a variable due to various reasons. Instead each API method such as `get` and `set`, as well as the `SettingsManager` class have an optional `options` parameter (See [API Docs](https://harshkhandeparkar.github.io/tauri-settings/)).
 
 Currently the `dir` option is unsupported since there is no easy way to join or get paths in tauri at the moment. Although, in the future, when work on https://github.com/tauri-apps/tauri/issues/2233 is complete, the `dir` option will be supported.
 
