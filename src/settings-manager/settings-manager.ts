@@ -8,8 +8,17 @@ import { get } from '../settings/get';
 import { set } from '../settings/set';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
+  /**
+   * @internal
+   */
   settings: SettingsSchema;
+  /**
+   * The default values for the settings
+   */
   default: SettingsSchema;
+  /**
+   * @internal
+   */
   path: string;
 
   constructor(defaultSettings: SettingsSchema) {
@@ -32,6 +41,9 @@ export class SettingsManager<SettingsSchema extends {} = any> {
     return this.settings;
   }
 
+  /**
+   * @internal
+   */
   protected async saveSettings() {
     await saveSettings<SettingsSchema>(this.settings, this.path);
   }

@@ -3,11 +3,17 @@ import { BaseDirectory, createDir, readDir, readTextFile, writeFile } from '@tau
 
 import { SETTINGS_FILE } from '../constants';
 
+/**
+ * @internal
+ */
 export enum STATUS {
   FILE_EXISTS = 'file_exists',
   FILE_CREATED = 'file_created'
 }
 
+/**
+ * @internal
+ */
 export async function ensureSettingsFile(): Promise<{
   status: STATUS,
   path: string,
