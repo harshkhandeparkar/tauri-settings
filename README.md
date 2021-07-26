@@ -18,6 +18,16 @@ npm install tauri-settings
 yarn add tauri-settings
 ```
 
+#### Install The Tauri API
+If you haven't installed `@tauri-apps/api` then you will have to install it using npm or yarn as this package internally uses the API.
+```shell
+# using npm
+npm install @tauri-apps/api
+
+# using yarn
+yarn add @tauri-apps/api
+```
+
 #### Enable Tauri APIs
 The following APIs need to be added to the Tauri [allowlist](https://tauri.studio/en/docs/api/config#tauri.allowlist).
 ```json
