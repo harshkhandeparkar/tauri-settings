@@ -115,3 +115,15 @@ await settingsManager.syncCache();
 ```
 
 See the complete [API Docs](https://harskhandeparkar.github.io/tauri-settings/).
+
+### Differences From `electron-settings`
+#### Asynchronous
+Since the Tauri [`fs` API](https://tauri.studio/en/docs/api/js/modules/fs) is asynchronous, the API methods exported by `tauri-settings` are also asynchronous. Methods `setSync`, `getSync`, and `hasSync` from `electron-settings` are not available.
+
+Even though synchronous `fs` API is not available, the caching feature of [`SettingsManager`](#settingsmanager) can be used to synchronously set and read the settings.
+
+#### Dot Notation
+`electron-settings` allows you to access settings by using [dot notation](https://electron-settings.js.org/index.html#keypath). This feature is currently not available in `tauri-settings`.
+
+****
+#### Thank You
