@@ -1,11 +1,8 @@
+import { ConfigOptions } from '../config/config';
 import { STATUS } from '../fs/ensure-settings-file';
 
-import { getSettings } from '../fs/get-settings';
-import { saveSettings } from '../fs/save-settings';
-
-import { has } from '../settings/has';
-import { get } from '../settings/get';
-import { set } from '../settings/set';
+import { getSettings, saveSettings } from '../fs/load-save';
+import { has, get, set } from '../settings/getter-setter';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
   /**
@@ -20,9 +17,11 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @internal
    */
   path: string;
+  options: ConfigOptions;
 
-  constructor(defaultSettings: SettingsSchema) {
+  constructor(defaultSettings: SettingsSchema, options: ConfigOptions = {}) {
     this.default = { ...defaultSettings };
+    this.options = { ...options };
   }
 
   /**
@@ -30,12 +29,15 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @returns The entire settings object
    */
   async initialize(): Promise<SettingsSchema> {
-    const currentSettings = await getSettings<SettingsSchema>();
+    const currentSettings = await getSettings<SettingsSchema>(this.options);
     this.path = currentSettings.path;
 
     if (currentSettings.status === STATUS.FILE_CREATED) {
       this.settings = { ...this.default };
       await this.saveSettings();
+    }
+    else if (currentSettings.status === STATUS.FILE_EXISTS) {
+      this.settings = { ...currentSettings.settings };
     }
 
     return this.settings;
@@ -45,7 +47,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @internal
    */
   protected async saveSettings() {
-    await saveSettings<SettingsSchema>(this.settings, this.path);
+    await saveSettings<SettingsSchema>(this.settings, this.path, this.options);
   }
 
   /**
@@ -85,7 +87,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @param key The key for the setting
    */
   async has(key: string | number | symbol): Promise<boolean> {
-    return await has<SettingsSchema>(key);
+    return await has<SettingsSchema>(key, this.options);
   }
 
   /**
@@ -95,7 +97,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    */
   async get<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K): Promise<SettingsSchema[K]> {
     if (await this.has(key)) {
-      const value = await get<SettingsSchema, K>(key);
+      const value = await get<SettingsSchema, K>(key, this.options);
 
       // to also update cache
       this.setCache(key, value);
@@ -115,7 +117,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
     // to also update cache
     this.setCache(key, value);
 
-    return await set<SettingsSchema, K>(key, value);
+    return await set<SettingsSchema, K>(key, value, this.options);
   }
 
   /**

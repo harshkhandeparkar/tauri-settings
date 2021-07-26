@@ -1,7 +1,7 @@
 import { appDir, resolvePath } from '@tauri-apps/api/path';
 import { BaseDirectory, createDir, readDir, readTextFile, writeFile } from '@tauri-apps/api/fs';
 
-import { SETTINGS_FILE } from '../constants';
+import { ConfigOptions, parseOptions } from '../config/config';
 
 /**
  * @internal
@@ -14,13 +14,15 @@ export enum STATUS {
 /**
  * @internal
  */
-export async function ensureSettingsFile(): Promise<{
+export async function ensureSettingsFile(options: ConfigOptions = {}): Promise<{
   status: STATUS,
   path: string,
-  content: string
+  content: string,
 }> {
-  const settingsFilePath = await resolvePath(SETTINGS_FILE, BaseDirectory.App);
+  const finalConfig = parseOptions(options);
+  const settingsFilePath = await resolvePath(finalConfig.fileName, BaseDirectory.App);
 
+  // create appDir()
   try {
     await readDir(await appDir());
   }
@@ -48,14 +50,14 @@ export async function ensureSettingsFile(): Promise<{
 
       try {
       await writeFile({
-        contents: JSON.stringify({}),
+        contents: JSON.stringify({}, null, finalConfig.prettify ? finalConfig.numSpaces : 0),
         path: settingsFilePath
       })
 
       return {
         status: STATUS.FILE_CREATED,
         path: settingsFilePath,
-        content: JSON.stringify({})
+        content: JSON.stringify({}, null, finalConfig.prettify ? finalConfig.numSpaces : 0)
       }
     }
     catch (e) {
