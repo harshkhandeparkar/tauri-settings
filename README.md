@@ -57,11 +57,12 @@ Using both the standalone methods and `SettingsManager` together can cause unexp
 
 #### Standalone Functions
 `tauri-settings` exports the following API methods to directly set or get settings for quick usage. Alternatively you can also use [`SettingsManager`](#settingsmanager).
+Each of the following methods has an `options` parameter. See the [Config](#config) to learn more.
 
-- `async has<SettingsSchema>(key)`: Async function that resolves with a boolean which is true if the given key exists in the settings.
-- `async get<SettingsSchema>(key)`: Async function that resolves with the value of the setting corresponding to the given key.
-- `async set<SettingsSchema>(key, value)`: Async function that sets the value of a given setting. Resolves with the entire settings object.
-- `async getAll<SettingsSchema>()`: Async function that resolves with the entire settings object.
+- `async has<SettingsSchema>(key, options = {})`: Async function that resolves with a boolean which is true if the given key exists in the settings.
+- `async get<SettingsSchema>(key, options = {})`: Async function that resolves with the value of the setting corresponding to the given key.
+- `async set<SettingsSchema>(key, value, options = {})`: Async function that sets the value of a given setting. Resolves with the entire settings object.
+- `async getAll<SettingsSchema>(, options = {})`: Async function that resolves with the entire settings object.
 
 
 #### Examples
@@ -109,6 +110,9 @@ const settingsManager = new SettingsManager<Schema>(
   { // defaults
     theme: 'light',
     startFullscreen: false
+  },
+  { // options
+    fileName: 'customization-settings'
   }
 )
 
@@ -134,6 +138,12 @@ Even though synchronous `fs` API is not available, the caching feature of [`Sett
 
 #### Dot Notation
 `electron-settings` allows you to access settings by using [dot notation](https://electron-settings.js.org/index.html#keypath). This feature is currently not available in `tauri-settings`.
+
+#### Config
+`electron-settings` exports a [`configure()`](https://electron-settings.js.org/index.html#configure) method to configure some of the options such as the fileName.
+However, `tauri-settings` doesn't export such a variable due to various reasons. Instead each API method such as `get` and `set`, as well as the `SettingsManager` class have an optional `options` parameter (See [API Docs](https://harskhandeparkar.github.io/tauri-settings/)).
+
+Currently the `dir` option is unsupported since there is no easy way to join or get paths in tauri at the moment. Although, in the future, when work on https://github.com/tauri-apps/tauri/issues/2233 is complete, the `dir` option will be supported.
 
 ****
 #### Thank You

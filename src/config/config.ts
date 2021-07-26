@@ -8,7 +8,7 @@ export interface IConfig {
    */
   fileName: string;
   /**
-   * NOTES: Currently Unsupported. See
+   * NOTES: Currently Unsupported. See https://github.com/harshkhandeparkar/tauri-settings#config.
    * Path to the directory in which the settings file is to be created.
    * Default: User's app directory. See https://tauri.studio/en/docs/api/js/modules/path#appdir
    */
