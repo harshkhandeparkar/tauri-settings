@@ -1,5 +1,3 @@
-export { has } from './settings/has';
-export { get } from './settings/get';
-export { set } from './settings/set';
-export { getSettings as getAll } from './fs/get-settings';
+export { has, get, set } from './settings//getter-setter';
+export { getSettings as getAll } from './fs/load-save';
 export { SettingsManager } from './settings-manager/settings-manager';
