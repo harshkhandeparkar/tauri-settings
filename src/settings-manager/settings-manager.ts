@@ -36,6 +36,9 @@ export class SettingsManager<SettingsSchema extends {} = any> {
       this.settings = { ...this.default };
       await this.saveSettings();
     }
+    else if (currentSettings.status === STATUS.FILE_EXISTS) {
+      this.settings = { ...currentSettings.settings };
+    }
 
     return this.settings;
   }
