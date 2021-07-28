@@ -30,7 +30,7 @@ yarn add @tauri-apps/api
 
 #### Enable Tauri APIs
 The following APIs need to be added to the Tauri [allowlist](https://tauri.studio/en/docs/api/config#tauri.allowlist).
-```json
+```jsonc
 {
   "allowlist": {
     "fs": { // see https://tauri.studio/en/docs/api/config#tauri.allowlist.fs
