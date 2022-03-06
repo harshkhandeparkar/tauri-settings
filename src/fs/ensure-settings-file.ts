@@ -1,4 +1,4 @@
-import { appDir, resolvePath } from '@tauri-apps/api/path';
+import { appDir, join } from '@tauri-apps/api/path';
 import { BaseDirectory, createDir, readDir, readTextFile, writeFile } from '@tauri-apps/api/fs';
 
 import { ConfigOptions, parseOptions } from '../config/config';
@@ -20,7 +20,7 @@ export async function ensureSettingsFile(options: ConfigOptions = {}): Promise<{
   content: string,
 }> {
   const finalConfig = parseOptions(options);
-  const settingsFilePath = await resolvePath(finalConfig.fileName, BaseDirectory.App);
+  const settingsFilePath = await join(await appDir(), finalConfig.fileName);
 
   // create appDir()
   try {
