@@ -36,7 +36,7 @@ The following APIs need to be added to the Tauri [allowlist](https://tauri.studi
     "fs": { // see https://tauri.studio/en/docs/api/config#tauri.allowlist.fs
       "createDir": true,
       "readDir": true,
-      "readTextFile": true,
+      "readFile": true,
       "writeFile": true,
       "scope": ["$APPCONFIG", "$APPCONFIG/*"]
     },
