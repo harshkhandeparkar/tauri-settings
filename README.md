@@ -37,8 +37,12 @@ The following APIs need to be added to the Tauri [allowlist](https://tauri.studi
       "createDir": true,
       "readDir": true,
       "readTextFile": true,
-      "writeFile": true
-    }
+      "writeFile": true,
+      "scope": ["$APPCONFIG", "$APPCONFIG/*"]
+    },
+    "path": {
+      "all": "true"
+     }
   }
 }
 ```
