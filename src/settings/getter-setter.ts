@@ -1,28 +1,23 @@
 import { ConfigOptions } from '../config/config';
 import { getSettings, saveSettings } from '../fs/load-save';
-
-/**
- * Checks whether a key exists in the settings.
- * @param key The key for the setting
- */
-export async function has
-  <SettingsSchema extends {} = any>
-  (key: string | number | symbol, options: ConfigOptions = {}): Promise<boolean>
-{
-  return (key in (await getSettings<SettingsSchema>(options)).settings);
-}
+import { getDotNotation, setDotNotation } from '../utils/dot-notation';
+import type { Path, PathValue } from '../types/dot-notation';
 
 /**
  * Get the value of a particular setting.
  * @param key The key for the setting
- * @returns The value
+ * @returns The value or undefined if the key does not exist
  */
 export async function get
-  <SettingsSchema extends {} = any, K  extends keyof SettingsSchema = keyof SettingsSchema>
-  (key: K, options: ConfigOptions = {}): Promise<SettingsSchema[K]>
-{
-  if (await has<SettingsSchema>(key)) return (await getSettings<SettingsSchema>(options)).settings[key];
-  else throw 'Error: key does not exist.'
+  <SettingsSchema, K extends Path<SettingsSchema>>
+  (key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K> | undefined> {
+  if (typeof key !== 'string') throw 'Error: key must be a string';
+  try {
+    const settings = (await getSettings<SettingsSchema>(options)).settings;
+    return getDotNotation(settings, key);
+  } catch (error) {
+    return undefined;
+  }
 }
 
 /**
@@ -32,12 +27,13 @@ export async function get
  * @returns The entire settings object
  */
 export async function set
-<SettingsSchema extends {} = any, K extends keyof SettingsSchema = keyof SettingsSchema>
-(key: K, value: SettingsSchema[K], options: ConfigOptions = {}): Promise<SettingsSchema>
-{
-  const settings = await getSettings<SettingsSchema>(options);
+  <SettingsSchema, K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>
+  (key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema> {
+  if (typeof key !== 'string') throw 'Error: key must be a string';
 
-  settings.settings[key] = value;
+  const settings = await getSettings<SettingsSchema>(options);
+  setDotNotation(settings.settings, key, value);
+
   await saveSettings<SettingsSchema>(settings.settings, settings.path, options);
 
   return settings.settings;
