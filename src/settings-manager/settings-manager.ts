@@ -2,7 +2,7 @@ import { ConfigOptions } from '../config/config';
 import { STATUS } from '../fs/ensure-settings-file';
 
 import { getSettings, saveSettings } from '../fs/load-save';
-import { get, set } from '../settings/getter-setter';
+import { get, set, has } from '../settings/getter-setter';
 import { getDotNotation, setDotNotation } from '../utils/dot-notation';
 import type { Path, PathValue } from '../types/dot-notation';
 
@@ -53,18 +53,22 @@ export class SettingsManager<SettingsSchema extends {} = any> {
   }
 
   /**
+   * Checks whether a key exists in the settings cache.
+   * @param key The key for the setting
+   */
+  hasCache<K extends Path<SettingsSchema>>(key: K): boolean {
+    return getDotNotation(this.settings, key) !== undefined;
+  }
+
+  /**
    * Sets the value of a setting from the cache.
    * @param key The key for the setting
-   * @returns The value of the setting or undefined if the key does not exist
+   * @returns The value of the setting
    */
   getCache<K extends Path<SettingsSchema>>(key: K): PathValue<SettingsSchema, K> {
-    if (typeof key !== 'string') throw 'Error: key must be a string';
+    if (this.hasCache(key)) throw 'Error: key does not exist';
 
-    try {
-      return getDotNotation(this.settings, key);
-    } catch (error) {
-      return undefined;
-    }
+    return getDotNotation<SettingsSchema, K>(this.settings, key);
   }
 
   /**
@@ -74,9 +78,9 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @returns The entire settings object
    */
   setCache<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): V {
-    if (typeof key !== 'string') throw 'Error: key must be a string';
+    if (this.hasCache(key)) throw 'Error: key does not exist';
 
-    setDotNotation(this.settings, key, value);
+    setDotNotation<SettingsSchema, K>(this.settings, key, value);
 
     return value;
   }
@@ -84,19 +88,15 @@ export class SettingsManager<SettingsSchema extends {} = any> {
   /**
    * Gets the value of a setting directly from the storage. Also updates cache.
    * @param key The key for the setting
-   * @returns The value of the setting or undefined if the key does not exist
+   * @returns The value of the setting
    */
   async get<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
-    try {
-      const value = await get<SettingsSchema, K>(key, this.options);
+    const value = await get<SettingsSchema, K>(key, this.options);
 
-      // to also update cache
-      this.setCache(key, value);
+    // to also update cache
+    this.setCache(key, value);
 
-      return value;
-    } catch (error) {
-      return undefined;
-    }
+    return value;
   }
 
   /**
