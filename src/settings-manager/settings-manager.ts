@@ -2,7 +2,9 @@ import { ConfigOptions } from '../config/config';
 import { STATUS } from '../fs/ensure-settings-file';
 
 import { getSettings, saveSettings } from '../fs/load-save';
-import { has, get, set } from '../settings/getter-setter';
+import { get, set } from '../settings/getter-setter';
+import { getDotNotation, setDotNotation } from '../utils/dot-notation';
+import type { Path, PathValue } from '../types/dot-notation';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
   /**
@@ -54,8 +56,8 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * Checks whether a key exists in the settings cache.
    * @param key The key for the setting
    */
-  hasCache(key: string | number | symbol): boolean {
-    return key in this.settings;
+  hasCache<K extends Path<SettingsSchema>>(key: K): boolean {
+    return getDotNotation(this.settings, key) !== undefined;
   }
 
   /**
@@ -63,11 +65,10 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @param key The key for the setting
    * @returns The value of the setting
    */
-  getCache<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K): SettingsSchema[K] {
-    if (this.hasCache(key)) {
-      return this.settings[key];
-    }
-    else throw 'Error: key does not exist';
+  getCache<K extends Path<SettingsSchema>>(key: K): PathValue<SettingsSchema, K> {
+    if (!this.hasCache(key)) throw 'Error: key does not exist';
+
+    return getDotNotation<SettingsSchema, K>(this.settings, key);
   }
 
   /**
@@ -76,18 +77,12 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @param value The new value for the setting
    * @returns The entire settings object
    */
-  setCache<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K, value: SettingsSchema[K]): SettingsSchema[K] {
-    this.settings[key] = value;
+  setCache<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): V {
+    if (!this.hasCache(key)) throw 'Error: key does not exist';
+
+    setDotNotation<SettingsSchema, K>(this.settings, key, value);
 
     return value;
-  }
-
-  /**
-   * Checks whether a key exists in the settings directly from the storage.
-   * @param key The key for the setting
-   */
-  async has(key: string | number | symbol): Promise<boolean> {
-    return await has<SettingsSchema>(key, this.options);
   }
 
   /**
@@ -95,16 +90,13 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @param key The key for the setting
    * @returns The value of the setting
    */
-  async get<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K): Promise<SettingsSchema[K]> {
-    if (await this.has(key)) {
-      const value = await get<SettingsSchema, K>(key, this.options);
+  async get<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
+    const value = await get<SettingsSchema, K>(key, this.options);
 
-      // to also update cache
-      this.setCache(key, value);
+    // to also update cache
+    this.setCache(key, value);
 
-      return value;
-    }
-    else throw 'Error: key does not exist';
+    return value;
   }
 
   /**
@@ -113,11 +105,11 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @param value The new value for the setting
    * @returns The entire settings object
    */
-  async set<K extends keyof SettingsSchema = keyof SettingsSchema>(key: K, value: SettingsSchema[K]): Promise<SettingsSchema> {
+  async set<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<SettingsSchema> {
     // to also update cache
     this.setCache(key, value);
 
-    return await set<SettingsSchema, K>(key, value, this.options);
+    return await set<SettingsSchema, K, V>(key, value, this.options);
   }
 
   /**
