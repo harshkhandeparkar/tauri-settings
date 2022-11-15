@@ -2,7 +2,7 @@ import { ConfigOptions } from '../config/config';
 import { STATUS } from '../fs/ensure-settings-file';
 
 import { getSettings, saveSettings } from '../fs/load-save';
-import { get, set, has } from '../settings/getter-setter';
+import { get, set } from '../settings/getter-setter';
 import { getDotNotation, setDotNotation } from '../utils/dot-notation';
 import type { Path, PathValue } from '../types/dot-notation';
 
@@ -66,7 +66,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @returns The value of the setting
    */
   getCache<K extends Path<SettingsSchema>>(key: K): PathValue<SettingsSchema, K> {
-    if (this.hasCache(key)) throw 'Error: key does not exist';
+    if (!this.hasCache(key)) throw 'Error: key does not exist';
 
     return getDotNotation<SettingsSchema, K>(this.settings, key);
   }
@@ -78,7 +78,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @returns The entire settings object
    */
   setCache<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): V {
-    if (this.hasCache(key)) throw 'Error: key does not exist';
+    if (!this.hasCache(key)) throw 'Error: key does not exist';
 
     setDotNotation<SettingsSchema, K>(this.settings, key, value);
 

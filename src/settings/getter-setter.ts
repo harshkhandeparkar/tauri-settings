@@ -23,7 +23,7 @@ export async function has
 export async function get
   <SettingsSchema, K extends Path<SettingsSchema>>
   (key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K>> {
-  if (await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
+  if (!await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
   const settings = (await getSettings<SettingsSchema>(options)).settings;
   return getDotNotation<SettingsSchema, K>(settings, key);
 }
@@ -37,7 +37,7 @@ export async function get
 export async function set
   <SettingsSchema, K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>
   (key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema> {
-  if (await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
+  if (!await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
 
   const settings = await getSettings<SettingsSchema>(options);
   setDotNotation<SettingsSchema, K>(settings.settings, key, value);
