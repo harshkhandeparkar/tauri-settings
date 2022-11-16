@@ -57,7 +57,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
    * @param key The key for the setting
    */
   hasCache<K extends Path<SettingsSchema>>(key: K): boolean {
-    return getDotNotation(this.settings, key) !== undefined;
+    return getDotNotation(this.settings, key) !== null;
   }
 
   /**
