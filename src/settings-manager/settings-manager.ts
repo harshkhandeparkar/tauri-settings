@@ -54,7 +54,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 
   /**
    * Checks whether a key exists in the settings cache.
-   * @param key The key for the setting
+   * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
    */
   hasCache<K extends Path<SettingsSchema>>(key: K): boolean {
     return getDotNotation(this.settings, key) !== null;
@@ -62,7 +62,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 
   /**
    * Sets the value of a setting from the cache.
-   * @param key The key for the setting
+   * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
    * @returns The value of the setting
    */
   getCache<K extends Path<SettingsSchema>>(key: K): PathValue<SettingsSchema, K> {
@@ -73,7 +73,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 
   /**
    * Sets the value for a setting. Only updates cache.
-   * @param key The key for the setting
+   * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
    * @param value The new value for the setting
    * @returns The entire settings object
    */
@@ -87,7 +87,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 
   /**
    * Gets the value of a setting directly from the storage. Also updates cache.
-   * @param key The key for the setting
+   * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
    * @returns The value of the setting
    */
   async get<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
@@ -101,7 +101,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 
   /**
    * Sets the value for a setting directly to the storage. Also updates cache.
-   * @param key The key for the setting
+   * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
    * @param value The new value for the setting
    * @returns The entire settings object
    */

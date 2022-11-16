@@ -68,6 +68,7 @@ Each of the following methods has an `options` parameter. See the [Config](#conf
 - `async set<SettingsSchema>(key, value, options = {})`: Async function that sets the value of a given setting. Resolves with the entire settings object.
 - `async getAll<SettingsSchema>(, options = {})`: Async function that resolves with the entire settings object.
 
+Here `key` uses [dot notation](#dot-notation).
 
 #### Examples
 ```ts
@@ -98,6 +99,8 @@ The caching feature stores a copy of the settings on the RAM and does not direct
 
 The cached settings can be accessed by using the `hasCache`, `getCache` or `setCache` methods.
 The cache can be synced (written to persistent storage) at any time or the persistent storage can be accessed at any time using the `has`, `get` and `set` methods.
+
+[Dot notation](#dot-notation) is also supported here.
 
 `SettingsManager` class can also be initialized with the `SettingsSchema` generic. (see [Usage](#usage))
 
@@ -141,7 +144,30 @@ Since the Tauri [`fs` API](https://tauri.studio/en/docs/api/js/modules/fs) is as
 Even though synchronous `fs` API is not available, the caching feature of [`SettingsManager`](#settingsmanager) can be used to synchronously set and read the settings.
 
 #### Dot Notation
-`electron-settings` allows you to access settings by using [dot notation](https://electron-settings.js.org/index.html#keypath). This feature is currently not available in `tauri-settings`.
+`electron-settings` allows you to access settings by using [dot notation](https://electron-settings.js.org/index.html#keypath).
+`tauri-settings` supports (Thanks to https://github.com/harshkhandeparkar/tauri-settings/pull/3) the above feature without the array notation `key.array[4]`.
+
+Example:
+If the settings schema looks like this:
+```js
+{
+  theme: {
+    mode: 'dark',
+    accent: 'red'
+  }
+}
+```
+`get('theme.mode')` will return `dark`.
+
+The following will NOT work:
+```js
+{
+  search: {
+    recents: ['keyword1', 'keyword2', 'keyword3']
+  }
+}
+```
+`get('search.recents[3]')` will return `null` whereas `get('search.recents')` will return the entire `recents` array.
 
 #### Config
 `electron-settings` exports a [`configure()`](https://electron-settings.js.org/index.html#configure) method to configure some of the options such as the fileName.
