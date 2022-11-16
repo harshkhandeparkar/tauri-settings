@@ -1,5 +1,5 @@
 import { appConfigDir, join } from '@tauri-apps/api/path';
-import { BaseDirectory, createDir, readDir, readTextFile, writeFile } from '@tauri-apps/api/fs';
+import { createDir, readDir, readTextFile, writeFile } from '@tauri-apps/api/fs';
 
 import { ConfigOptions, parseOptions } from '../config/config';
 
@@ -19,49 +19,56 @@ export async function ensureSettingsFile(options: ConfigOptions = {}): Promise<{
   path: string,
   content: string,
 }> {
-  const finalConfig = parseOptions(options);
-  const settingsFilePath = await join(await appConfigDir(), finalConfig.fileName);
-
-  // create appConfigDir()
   try {
-    await readDir(await appConfigDir());
-  }
-  catch (e) {
-    // doesn't exist
+    const finalConfig = parseOptions(options);
+    const finalDir = finalConfig.dir ?? await appConfigDir();
+
+    const settingsFilePath = await join(finalDir, finalConfig.fileName);
+
+    // create appConfigDir()
     try {
-      await createDir(await appConfigDir());
+      await readDir(finalDir);
     }
     catch (e) {
-      throw e;
-    }
-  }
-
-  try {
-    const content = await readTextFile(settingsFilePath);
-
-    return {
-      status: STATUS.FILE_EXISTS,
-      path: settingsFilePath,
-      content
-    }
-  }
-  catch(e) {
-    // doesn't exist
-
+      // doesn't exist
       try {
-      await writeFile({
-        contents: JSON.stringify({}, null, finalConfig.prettify ? finalConfig.numSpaces : 0),
-        path: settingsFilePath
-      })
-
-      return {
-        status: STATUS.FILE_CREATED,
-        path: settingsFilePath,
-        content: JSON.stringify({}, null, finalConfig.prettify ? finalConfig.numSpaces : 0)
+        await createDir(finalDir, {recursive: true});
+      }
+      catch (e) {
+        throw e;
       }
     }
-    catch (e) {
-      throw e;
+
+    try {
+      const content = await readTextFile(settingsFilePath);
+
+      return {
+        status: STATUS.FILE_EXISTS,
+        path: settingsFilePath,
+        content
+      }
     }
+    catch(e) {
+      // doesn't exist
+
+        try {
+        await writeFile({
+          contents: JSON.stringify({}, null, finalConfig.prettify ? finalConfig.numSpaces : 0),
+          path: settingsFilePath
+        })
+
+        return {
+          status: STATUS.FILE_CREATED,
+          path: settingsFilePath,
+          content: JSON.stringify({}, null, finalConfig.prettify ? finalConfig.numSpaces : 0)
+        }
+      }
+      catch (e) {
+        throw e;
+      }
+    }
+  }
+  catch (e) {
+    throw e;
   }
 }
