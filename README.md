@@ -173,7 +173,7 @@ The following will NOT work:
 `electron-settings` exports a [`configure()`](https://electron-settings.js.org/index.html#configure) method to configure some of the options such as the fileName.
 However, `tauri-settings` doesn't export such a variable due to various reasons. Instead each API method such as `get` and `set`, as well as the `SettingsManager` class have an optional `options` parameter (See [API Docs](https://harshkhandeparkar.github.io/tauri-settings/)).
 
-Currently the `dir` option is ~~unsupported since there is no easy way to join or get paths in tauri at the moment. Although, in the future, when work on https://github.com/tauri-apps/tauri/issues/2233 is complete, the `dir` option will be supported.
+Currently the `dir` option is ~~unsupported since there is no easy way to join or get paths in tauri at the moment. Although, in the future, when work on https://github.com/tauri-apps/tauri/issues/2233 is complete,~~ the `dir` option will be supported.
 
 ****
 #### Thank You
