@@ -9,12 +9,17 @@ export async function saveSettings
   <SettingsSchema extends any>
   (newSettings: SettingsSchema, path: string, options: ConfigOptions)
 {
-  const finalConfig = parseOptions(options);
+  try {
+    const finalConfig = parseOptions(options);
 
-  return await writeFile({
-    contents: JSON.stringify(newSettings, null, finalConfig.prettify ? finalConfig.numSpaces : 0),
-    path
-  })
+    return await writeFile({
+      contents: JSON.stringify(newSettings, null, finalConfig.prettify ? finalConfig.numSpaces : 0),
+      path
+    })
+  }
+  catch (e) {
+    throw e;
+  }
 }
 
 
