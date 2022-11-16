@@ -7,12 +7,20 @@ import type { Path, PathValue } from '../types/dot-notation';
  * Checks whether a key exists in the settings.
  * @param key The key for the setting
  */
-export async function has
-  <SettingsSchema, K extends Path<SettingsSchema>>
-  (key: K, options: ConfigOptions = {}): Promise<boolean> {
-  const settings = (await getSettings<SettingsSchema>(options)).settings;
-  const value = getDotNotation(settings, key);
-  return value !== undefined;
+export async function has<
+  SettingsSchema,
+  K extends Path<SettingsSchema> = Path<SettingsSchema>
+> (key: K, options: ConfigOptions = {}): Promise<boolean>
+{
+  try {
+    const settings = (await getSettings<SettingsSchema>(options)).settings;
+    const value = getDotNotation(settings, key);
+
+    return value !== null;
+  }
+  catch (e) {
+    throw e;
+  }
 }
 
 /**
@@ -20,12 +28,20 @@ export async function has
  * @param key The key for the setting
  * @returns The value of the setting
  */
-export async function get
-  <SettingsSchema, K extends Path<SettingsSchema>>
-  (key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K>> {
+export async function get<
+  SettingsSchema,
+  K extends Path<SettingsSchema> = Path<SettingsSchema>
+> (key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K>>
+{
   if (!await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
-  const settings = (await getSettings<SettingsSchema>(options)).settings;
-  return getDotNotation<SettingsSchema, K>(settings, key);
+
+  try {
+    const settings = (await getSettings<SettingsSchema>(options)).settings;
+    return getDotNotation<SettingsSchema, K>(settings, key);
+  }
+  catch (e) {
+    throw e;
+  }
 }
 
 /**
@@ -34,15 +50,23 @@ export async function get
  * @param value The new value
  * @returns The entire settings object
  */
-export async function set
-  <SettingsSchema, K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>
-  (key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema> {
+export async function set<
+  SettingsSchema,
+  K extends Path<SettingsSchema> = Path<SettingsSchema>,
+  V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
+> (key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema>
+{
   if (!await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
 
-  const settings = await getSettings<SettingsSchema>(options);
-  setDotNotation<SettingsSchema, K>(settings.settings, key, value);
+  try {
+    const settings = await getSettings<SettingsSchema>(options);
+    setDotNotation<SettingsSchema, K>(settings.settings, key, value);
 
-  await saveSettings<SettingsSchema>(settings.settings, settings.path, options);
+    await saveSettings<SettingsSchema>(settings.settings, settings.path, options);
 
-  return settings.settings;
+    return settings.settings;
+  }
+  catch (e) {
+    throw e;
+  }
 }
