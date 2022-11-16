@@ -1,5 +1,5 @@
 ## Tauri Settings
-A user settings manager for [Tauri](https://tauri.studio) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings).
+A user settings manager for [Tauri](https://tauri.app) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings).
 
 ### Table of Contents
 - [Installation And Usage](#installation-and-usage)
@@ -29,11 +29,11 @@ yarn add @tauri-apps/api
 ```
 
 #### Enable Tauri APIs
-The following APIs need to be added to the Tauri [allowlist](https://tauri.studio/en/docs/api/config#tauri.allowlist).
+The following APIs need to be added to the Tauri [allowlist](https://tauri.app/v1/api/config/#allowlistconfig).
 ```jsonc
 {
   "allowlist": {
-    "fs": { // see https://tauri.studio/en/docs/api/config#tauri.allowlist.fs
+    "fs": { // see https://tauri.app/v1/api/config/#fsallowlistconfig
       "createDir": true,
       "readDir": true,
       "readFile": true,
@@ -139,7 +139,7 @@ See the complete [API Docs](https://harshkhandeparkar.github.io/tauri-settings/)
 
 ### Differences From `electron-settings`
 #### Asynchronous
-Since the Tauri [`fs` API](https://tauri.studio/en/docs/api/js/modules/fs) is asynchronous, the API methods exported by `tauri-settings` are also asynchronous. Methods `setSync`, `getSync`, and `hasSync` from `electron-settings` are not available.
+Since the Tauri [`fs` API](https://tauri.app/v1/api/js/fs) is asynchronous, the API methods exported by `tauri-settings` are also asynchronous. Methods `setSync`, `getSync`, and `hasSync` from `electron-settings` are not available.
 
 Even though synchronous `fs` API is not available, the caching feature of [`SettingsManager`](#settingsmanager) can be used to synchronously set and read the settings.
 
@@ -173,7 +173,7 @@ The following will NOT work:
 `electron-settings` exports a [`configure()`](https://electron-settings.js.org/index.html#configure) method to configure some of the options such as the fileName.
 However, `tauri-settings` doesn't export such a variable due to various reasons. Instead each API method such as `get` and `set`, as well as the `SettingsManager` class have an optional `options` parameter (See [API Docs](https://harshkhandeparkar.github.io/tauri-settings/)).
 
-Currently the `dir` option is unsupported since there is no easy way to join or get paths in tauri at the moment. Although, in the future, when work on https://github.com/tauri-apps/tauri/issues/2233 is complete, the `dir` option will be supported.
+Currently the `dir` option is ~~unsupported since there is no easy way to join or get paths in tauri at the moment. Although, in the future, when work on https://github.com/tauri-apps/tauri/issues/2233 is complete, the `dir` option will be supported.
 
 ****
 #### Thank You
