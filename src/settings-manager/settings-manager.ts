@@ -39,7 +39,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
       await this.saveSettings();
     }
     else if (currentSettings.status === STATUS.FILE_EXISTS) {
-      this.settings = { ...currentSettings.settings };
+      this.settings = { ...this.default, ...currentSettings.settings };
     }
 
     return this.settings;
