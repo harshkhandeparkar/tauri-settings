@@ -41,7 +41,7 @@ The following APIs need to be added to the Tauri [allowlist](https://tauri.app/v
       "scope": ["$APPCONFIG", "$APPCONFIG/*"]
     },
     "path": {
-      "all": "true"
+      "all": true
      }
   }
 }
