@@ -1,6 +1,6 @@
 {
   "name": "tauri-settings",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A user settings manager for Tauri inspired by electron-settings.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
