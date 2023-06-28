@@ -24,5 +24,5 @@ module.exports = {
   entryPoints: [join(__dirname, '..', 'src', 'index.ts')],
   out: [join(__dirname, '..', 'docs')],
   readme: 'none',
-  theme: 'minimal'
+  theme: 'default'
 }
