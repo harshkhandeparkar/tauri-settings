@@ -105,3 +105,16 @@ dist
 
 TODO.txt
 docs
+/.vs
+.DS_Store
+.Thumbs.db
+*.sublime*
+.idea/
+debug.log
+package-lock.json
+.vscode/settings.json
+yarn.lock
+
+/target
+Cargo.lock
+node_modules/
