@@ -14,7 +14,6 @@ pub enum ConfigError {
 
 impl Config {
 	pub fn new(
-		&self,
 		app_config: &tauri::Config,
 		file_name: Option<String>,
 		directory: Option<String>,

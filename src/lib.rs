@@ -1,22 +1,18 @@
+use config::Config;
 use tauri::{
-    plugin::{Builder, TauriPlugin}, Manager, Runtime,
+	plugin::{Builder, TauriPlugin}, Manager, Runtime,
 };
-
-use std::{collections::HashMap, sync::Mutex};
 
 mod config;
 mod fs;
+mod handlers;
 
-#[derive(Default)]
-struct MyState(Mutex<HashMap<String, String>>);
-
-/// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-    Builder::new("settings")
-        .invoke_handler(tauri::generate_handler![])
-        .setup(|app| {
-            app.manage(MyState::default());
-            Ok(())
-        })
-        .build()
+	Builder::new("settings")
+		.invoke_handler(tauri::generate_handler![handlers::get])
+		.setup(|app| {
+			app.manage(Config::new(&app.config(), None, None, None, None));
+			Ok(())
+		})
+		.build()
 }
