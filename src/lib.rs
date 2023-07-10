@@ -1,6 +1,6 @@
 use config::Config;
 use tauri::{
-	plugin::{Builder, TauriPlugin}, Manager, Runtime,
+	plugin::{Builder, TauriPlugin}, Manager, Runtime
 };
 
 mod config;
@@ -11,7 +11,9 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![handlers::get])
 		.setup(|app| {
-			app.manage(Config::new(&app.config(), None, None, None, None));
+			let plugin_state = Config::new(&app.config(), None, None, None, None)?;
+
+			app.manage(plugin_state);
 			Ok(())
 		})
 		.build()
