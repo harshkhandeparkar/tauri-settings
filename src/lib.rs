@@ -9,7 +9,7 @@ mod handlers;
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
 	Builder::new("settings")
-		.invoke_handler(tauri::generate_handler![handlers::get])
+		.invoke_handler(tauri::generate_handler![handlers::get, handlers::set])
 		.setup(|app| {
 			let plugin_state = Config::new(&app.config(), None, None, None, None)?;
 
