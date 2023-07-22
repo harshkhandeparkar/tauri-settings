@@ -25,7 +25,7 @@ pub fn set<R: Runtime>(
 	state: State<'_, Config>,
 	key: &str,
 	value: Value
-) -> Result<(), String> {
+) -> Result<Value, String> {
 	let config = state.inner();
 	let settings_json = load_settings_json(config).map_err(|err| err.to_string())?;
 
@@ -33,7 +33,7 @@ pub fn set<R: Runtime>(
 
 	settings[key] = value;
 
-	save_settings_json(settings, config).map_err(|err| err.to_string())?;
+	save_settings_json(settings.clone(), config).map_err(|err| err.to_string())?;
 
-	Ok(())
+	Ok(settings)
 }
