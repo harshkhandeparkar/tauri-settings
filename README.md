@@ -17,7 +17,7 @@
 <!-- UPDATE -->
 <div align="center">
   <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings">
-    <img width="140" alt="image" src="https://user-images.githubusercontent.com/86282911/206632284-cb260f57-c612-4ab5-b92b-2172c341ab23.png">
+    <img width="140" alt="image" src="./img/tauri-settings-logo-circular.png">
   </a>
 
   <h3 align="center">Tauri Plugin Settings</h3>
@@ -46,13 +46,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-<!-- UPDATE -->
-<div align="center">
-  <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings">
-    <img width="80%" alt="image" src="https://user-images.githubusercontent.com/86282911/206632547-a3b34b47-e7ae-4186-a1e6-ecda7ddb38e6.png">
-  </a>
-</div>
-
 _Detailed explaination of the project goes here_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -68,12 +61,6 @@ _Detailed explaination of the project goes here_
 ### Usage
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space.
 
-<div align="center">
-  <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings">
-    <img width="80%" alt="image" src="https://user-images.githubusercontent.com/86282911/206632640-40dc440e-5ef3-4893-be48-618f2bd85f37.png">
-  </a>
-</div>
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
@@ -83,6 +70,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 * [Choose an Open Source License](https://choosealicense.com)
 * [Img Shields](https://shields.io)
 * [@proffapt's README](https://github.com/proffapt/myREADME/)
+* [Canva](https://canva.com)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
