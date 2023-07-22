@@ -1,25 +1,26 @@
 <script>
-  import { invoke } from "@tauri-apps/api/tauri"
+  import { get, set } from 'tauri-plugin-settings-api';
 
-  let greetMsg = "loading name...";
+  let new_name = '';
+  let name = '';
 
-  function change_name() {
-    invoke('plugin:settings|get', { key: 'name' }).then(console.log).catch(console.log)
+  async function load_name() {
+    name = await get('name');
   }
 
-  let new_name = "";
-  function set_name() {
-    invoke('plugin:settings|set', { key: 'name', value: new_name }).then(console.log).catch(console.log)
+  async function set_name() {
+    await set('name', new_name)
+
+    await load_name()
   }
 
-  change_name()
-  console.log('testaddo')
+  load_name()
 </script>
 
 <div>
-  <p>{greetMsg}</p>
-
   <div class="row">
+    <p>{name === "" ? "Loading name..." : `Hello ${name}!`}</p>
+
     <input id="greet-input" placeholder="Enter a name..." bind:value={new_name} />
     <button on:click={set_name}>
       Greet
