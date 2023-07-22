@@ -1,8 +1,9 @@
 [package]
 name = "tauri-plugin-settings"
-version = "0.0.0"
-authors = [ "You" ]
-description = ""
+version = "1.0.0"
+authors = [ "Harsh Khandeparkar" ]
+keywords = [ "tauri", "tauri-plugin", "tauri-settings" ]
+description = "A Tauri user settings manager plugin inspired by electron-settings."
 edition = "2021"
 rust-version = "1.60"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
