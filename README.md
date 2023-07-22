@@ -38,7 +38,11 @@
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
-
+- [About The Project](#about-the-project)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Usage](#usage)
+- [Acknowledgements](#acknowledgments)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
