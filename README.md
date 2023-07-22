@@ -56,7 +56,6 @@ _Detailed explaination of the project goes here_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
 <!-- USAGE EXAMPLES -->
 ### Usage
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space.
@@ -68,7 +67,6 @@ Use this space to show useful examples of how a project can be used. Additional 
 </div>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- ACKNOWLEDGMENTS -->
