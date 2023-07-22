@@ -16,10 +16,7 @@ pub fn has<R: Runtime>(
 
 	let value = settings[key].clone();
 
-	match value {
-		Value::Null => Ok(false),
-		_ => Ok(true),
-	}
+	Ok(value.is_null())
 }
 
 #[tauri::command]
