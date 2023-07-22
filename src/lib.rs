@@ -6,6 +6,7 @@ use tauri::{
 mod config;
 mod fs;
 mod handlers;
+mod dot_notation;
 
 pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 	Builder::new("settings")
