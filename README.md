@@ -2,11 +2,15 @@
 
 <!-- PROJECT SHIELDS -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links-->
+<div align="center">
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+
+</div>
 
 <!-- PROJECT LOGO -->
 <br />
@@ -20,7 +24,7 @@
 
   <p align="center">
   <!-- UPDATE -->
-    <i>Project one liner slogan goes here</i>
+    <p>Tauri settings manager plugin inspired by electron-settings.</p>
     <br />
     <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings"><strong>Explore the docs »</strong></a>
     <br />
@@ -41,7 +45,7 @@
 <!-- UPDATE -->
 <div align="center">
   <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings">
-    <img width="700" alt="image" src="https://user-images.githubusercontent.com/86282911/206632547-a3b34b47-e7ae-4186-a1e6-ecda7ddb38e6.png">
+    <img width="80%" alt="image" src="https://user-images.githubusercontent.com/86282911/206632547-a3b34b47-e7ae-4186-a1e6-ecda7ddb38e6.png">
   </a>
 </div>
 
@@ -62,7 +66,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 <div align="center">
   <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings">
-    <img width="1006" alt="image" src="https://user-images.githubusercontent.com/86282911/206632640-40dc440e-5ef3-4893-be48-618f2bd85f37.png">
+    <img width="80%" alt="image" src="https://user-images.githubusercontent.com/86282911/206632640-40dc440e-5ef3-4893-be48-618f2bd85f37.png">
   </a>
 </div>
 
