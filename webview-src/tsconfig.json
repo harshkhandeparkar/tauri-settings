@@ -10,7 +10,8 @@
     },
     "declaration": true,
     "declarationDir": "../webview-dist",
-    "rootDir": "./"
+    "rootDir": "./",
+    "lib": ["ES2015"]
   },
   "include": ["./"]
 }
