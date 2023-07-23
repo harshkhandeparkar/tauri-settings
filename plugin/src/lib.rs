@@ -8,6 +8,7 @@ mod config;
 mod dot_notation;
 mod fs;
 mod handlers;
+mod settings;
 #[cfg(test)]
 mod test;
 

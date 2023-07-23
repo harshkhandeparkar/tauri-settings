@@ -3,8 +3,7 @@ use tauri::{AppHandle, Runtime, State};
 
 use crate::{
 	config::Config,
-	dot_notation::{get_dot_notation, set_dot_notation},
-	fs::{load_settings_json, save_settings_json},
+	settings,
 };
 
 #[tauri::command]
@@ -14,13 +13,7 @@ pub fn has<R: Runtime>(
 	key: &str,
 ) -> Result<bool, String> {
 	let config = state.inner();
-	let settings_json = load_settings_json(config).map_err(|err| err.to_string())?;
-
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
-
-	let value = get_dot_notation(&settings, key.into());
-
-	Ok(value.is_null())
+	settings::has(config, key)
 }
 
 #[tauri::command]
@@ -30,11 +23,7 @@ pub fn get<R: Runtime>(
 	key: &str,
 ) -> Result<Value, String> {
 	let config = state.inner();
-	let settings_json = load_settings_json(config).map_err(|err| err.to_string())?;
-
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
-
-	Ok(get_dot_notation(&settings, key.into()))
+	settings::get(config, key)
 }
 
 #[tauri::command]
@@ -45,12 +34,5 @@ pub fn set<R: Runtime>(
 	value: Value,
 ) -> Result<Value, String> {
 	let config = state.inner();
-	let settings_json = load_settings_json(config).map_err(|err| err.to_string())?;
-
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
-
-	let new_settings = set_dot_notation(settings, key.into(), value);
-	save_settings_json(new_settings.clone(), config).map_err(|err| err.to_string())?;
-
-	Ok(new_settings)
+	settings::set(config, key, value)
 }
