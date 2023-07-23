@@ -64,8 +64,10 @@ fn set_dot_notation_works() {
 	let data: Value = set_dot_notation(&data, "name".into(), "John Lark".into()).unwrap();
 	let data: Value = set_dot_notation(&data, "age".into(), 40.into()).unwrap();
 	let data: Value = set_dot_notation(&data, "preferences.theme".into(), "light".into()).unwrap();
-	let data: Value = set_dot_notation(&data, "preferences.open_on_start".into(), 0.into()).unwrap();
-	let data: Value = set_dot_notation(&data, "preferences.fullscreen".into(), true.into()).unwrap();
+	let data: Value =
+		set_dot_notation(&data, "preferences.open_on_start".into(), 0.into()).unwrap();
+	let data: Value =
+		set_dot_notation(&data, "preferences.fullscreen".into(), true.into()).unwrap();
 	let data: Value = set_dot_notation(
 		&data,
 		"preferences.run_out_of_names.another_setting".into(),

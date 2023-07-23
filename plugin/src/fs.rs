@@ -11,7 +11,7 @@ pub fn ensure_settings_file(config: &Config) -> Result<bool, std::io::Error> {
 		}
 
 		fs::write(settings_file_path, "{}")?;
-		return Ok(true)
+		return Ok(true);
 	}
 
 	Ok(false)
@@ -23,7 +23,10 @@ pub fn load_settings_json(config: &Config) -> Result<(String, String, bool), Box
 	let settings_file_path = Path::new(&config.directory).join(&config.file_name);
 	let settings_json = fs::read_to_string(&settings_file_path)?;
 
-	let settings_file_path: String = settings_file_path.to_str().unwrap_or(&config.file_name).to_string();
+	let settings_file_path: String = settings_file_path
+		.to_str()
+		.unwrap_or(&config.file_name)
+		.to_string();
 
 	Ok((settings_json, settings_file_path, was_created))
 }
