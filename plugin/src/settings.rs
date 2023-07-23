@@ -18,7 +18,7 @@ pub fn has(config: &Config, key: &str) -> Result<bool, String> {
 
 	let value: Value = get_dot_notation(&settings, key.into()).map_err(|err| err.to_string())?;
 
-	Ok(value.is_null())
+	Ok(!value.is_null())
 }
 
 pub fn get(config: &Config, key: &str) -> Result<Value, String> {
