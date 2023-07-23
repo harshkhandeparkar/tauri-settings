@@ -7,6 +7,8 @@ mod config;
 mod fs;
 mod handlers;
 mod dot_notation;
+#[cfg(test)]
+mod test;
 
 pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 	Builder::new("settings")
