@@ -2,7 +2,7 @@ import { ConfigOptions, parseOptions } from '../config/config';
 import { getSettings, saveSettings } from '../fs/load-save';
 import { getDotNotation, setDotNotation } from '../utils/dot-notation';
 import type { Path, PathValue } from '../types/dot-notation';
-import { invoke } from '@tauri-apps/api';
+import { has as invokeHas, get as invokeGet, set as invokeSet } from '../plugin/handlers';
 
 /**
  * Checks whether a key exists in the settings.
@@ -17,10 +17,10 @@ export async function has<
 
   try {
     if (config.usePlugin) {
-      return await invoke('plugin:settings|has', { key });
+      return await invokeHas(key as string);
     }
     else {
-      const settings = (await getSettings<SettingsSchema>(config)).settings;
+      const { settings } = await getSettings<SettingsSchema>(config);
       const value = getDotNotation(settings, key);
 
       return value !== null;
@@ -45,10 +45,10 @@ export async function get<
 
   try {
     if (config.usePlugin) {
-      return await invoke('plugin:settings|get', { key });
+      return await invokeGet(key as string);
     }
     else {
-      const settings = (await getSettings<SettingsSchema>(config)).settings;
+      const { settings } = await getSettings<SettingsSchema>(config);
       return getDotNotation<SettingsSchema, K>(settings, key);
     }
   }
@@ -73,7 +73,7 @@ export async function set<
 
   try {
     if (config.usePlugin) {
-      return invoke('plugin:settings|set', { key, value })
+      return await invokeSet(key as string, value);
     }
     else {
       const settings = await getSettings<SettingsSchema>(config);
