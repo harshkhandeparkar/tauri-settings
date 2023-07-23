@@ -112,10 +112,3 @@ docs
 .idea/
 debug.log
 .vscode/settings.json
-yarn.lock
-
-/target
-Cargo.lock
-node_modules/
-
-webview-dist
