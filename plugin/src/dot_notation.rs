@@ -20,7 +20,7 @@ where
 	Ok(value)
 }
 
-pub fn set_dot_notation<S, T>(settings: S, path: String, new_value: Value) -> Result<T, Box<dyn Error>>
+pub fn set_dot_notation<S, T>(settings: &S, path: String, new_value: Value) -> Result<T, Box<dyn Error>>
 where
 	S: Sized + Serialize + DeserializeOwned + Default,
 	T: Sized + Serialize + DeserializeOwned + Default,
