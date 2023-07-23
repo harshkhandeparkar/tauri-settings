@@ -7,13 +7,11 @@ import { ConfigOptions, IConfig, parseOptions } from '../config/config';
  */
 export async function saveSettings
   <SettingsSchema extends any>
-  (newSettings: SettingsSchema, path: string, options: ConfigOptions)
+  (newSettings: SettingsSchema, path: string, config: IConfig)
 {
   try {
-    const finalConfig = parseOptions(options);
-
     return await writeFile({
-      contents: JSON.stringify(newSettings, null, finalConfig.prettify ? finalConfig.numSpaces : 0),
+      contents: JSON.stringify(newSettings, null, config.prettify ? config.numSpaces : 0),
       path
     })
   }

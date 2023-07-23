@@ -79,7 +79,7 @@ export async function set<
       const settings = await getSettings<SettingsSchema>(config);
       setDotNotation<SettingsSchema, K>(settings.settings, key, value);
 
-      await saveSettings<SettingsSchema>(settings.settings, settings.path, options);
+      await saveSettings<SettingsSchema>(settings.settings, settings.path, config);
 
       return settings.settings;
     }
