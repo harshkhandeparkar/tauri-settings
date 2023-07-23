@@ -16,22 +16,22 @@
 <br />
 <!-- UPDATE -->
 <div align="center">
-  <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings">
+  <a href="https://github.com/harshkhandeparkar/tauri-settings">
     <img width="140" alt="image" src="./img/tauri-settings-logo-circular.png">
   </a>
 
-  <h3 align="center">Tauri Plugin Settings</h3>
+  <h3 align="center">Tauri Settings</h3>
 
   <p align="center">
   <!-- UPDATE -->
-    <p>A user settings manager plugin for Tauri inspired by electron-settings.</p>
+    <p>A user settings manager library for Tauri inspired by electron-settings.</p>
     <br />
-    <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/harshkhandeparkar/tauri-settings"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/harshkhandeparkar/tauri-settings">Tauri Settings</a>
     ·
-    <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings/issues">Report Bug / Request Feature</a>
+    <a href="https://github.com/harshkhandeparkar/tauri-settings/issues">Report Bug / Request Feature</a>
   </p>
 </div>
 
@@ -46,7 +46,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-`tauri-plugin-settings` is a user settings manager plugin for [Tauri](https://tauri.app) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings). This plugin can be used standalone or as a backend for the [tauri-settings](https://github.com/harshkhandeparkar/tauri-settings) library.
+`tauri-settings` is a user settings manager library for [Tauri](https://tauri.app) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -76,13 +76,13 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/harshkhandeparkar/tauri-plugin-settings.svg?style=for-the-badge
-[contributors-url]: https://github.com/harshkhandeparkar/tauri-plugin-settings/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/harshkhandeparkar/tauri-plugin-settings.svg?style=for-the-badge
-[forks-url]: https://github.com/harshkhandeparkar/tauri-plugin-settings/network/members
-[stars-shield]: https://img.shields.io/github/stars/harshkhandeparkar/tauri-plugin-settings.svg?style=for-the-badge
-[stars-url]: https://github.com/harshkhandeparkar/tauri-plugin-settings/stargazers
-[issues-shield]: https://img.shields.io/github/issues/harshkhandeparkar/tauri-plugin-settings.svg?style=for-the-badge
-[issues-url]: https://github.com/harshkhandeparkar/tauri-plugin-settings/issues
-[license-shield]: https://img.shields.io/github/license/harshkhandeparkar/tauri-plugin-settings.svg?style=for-the-badge
-[license-url]: https://github.com/harshkhandeparkar/tauri-plugin-settings/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
+[contributors-url]: https://github.com/harshkhandeparkar/tauri-settings/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
+[forks-url]: https://github.com/harshkhandeparkar/tauri-settings/network/members
+[stars-shield]: https://img.shields.io/github/stars/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
+[stars-url]: https://github.com/harshkhandeparkar/tauri-settings/stargazers
+[issues-shield]: https://img.shields.io/github/issues/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
+[issues-url]: https://github.com/harshkhandeparkar/tauri-settings/issues
+[license-shield]: https://img.shields.io/github/license/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
+[license-url]: https://github.com/harshkhandeparkar/tauri-settings/blob/master/LICENSE.txt
