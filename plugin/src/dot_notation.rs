@@ -3,10 +3,10 @@ use serde_json::Value;
 pub fn get_dot_notation(settings: &Value, path: String) -> Value {
 	let keys = path.split('.');
 
-	let value = settings.clone();
+	let mut value = settings.clone();
 
 	for key in keys {
-		let value = value[key];
+		value = value[key].clone();
 	}
 
 	value

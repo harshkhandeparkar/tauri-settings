@@ -14,7 +14,7 @@ pub fn has<R: Runtime>(
 
 	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
 
-	let value = get_dot_notation(settings, key.into());
+	let value = get_dot_notation(&settings, key.into());
 
 	Ok(value.is_null())
 }
@@ -30,7 +30,7 @@ pub fn get<R: Runtime>(
 
 	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
 
-	Ok(get_dot_notation(settings, key.into()))
+	Ok(get_dot_notation(&settings, key.into()))
 }
 
 #[tauri::command]
