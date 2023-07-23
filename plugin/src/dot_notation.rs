@@ -1,12 +1,12 @@
 use serde_json::Value;
 
-pub fn get_dot_notation(settings: Value, path: String) -> Value {
+pub fn get_dot_notation(settings: &Value, path: String) -> Value {
 	let keys = path.split('.');
 
-	let mut value = settings.clone();
+	let value = settings.clone();
 
 	for key in keys {
-		value = value[key].clone();
+		let value = value[key];
 	}
 
 	value
