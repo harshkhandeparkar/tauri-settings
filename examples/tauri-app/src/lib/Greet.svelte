@@ -1,5 +1,5 @@
 <script>
-  import { get, set } from 'tauri-plugin-settings-api';
+  import { get, set } from 'tauri-settings';
 
   let new_name = '';
   let name = '';

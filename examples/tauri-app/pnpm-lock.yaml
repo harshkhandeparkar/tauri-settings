@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  tauri-plugin-settings-api:
-    specifier: link:../../
-    version: link:../..
+  tauri-settings:
+    specifier: ^0.3.4
+    version: 0.3.4
 
 devDependencies:
   '@sveltejs/vite-plugin-svelte':
@@ -506,6 +506,10 @@ packages:
     resolution: {integrity: sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==}
     engines: {node: '>= 8'}
     dev: true
+
+  /tauri-settings@0.3.4:
+    resolution: {integrity: sha512-ToFF+TFsCS4yp1Gijmb0dR+vlV4AK69itvNVDf+gTCw1eopjgOAU+AmjVbKxS3WQgCIdEF1QV03MFGdyL/lE/A==}
+    dev: false
 
   /vite@3.0.2:
     resolution: {integrity: sha512-TAqydxW/w0U5AoL5AsD9DApTvGb2iNbGs3sN4u2VdT1GFkQVUfgUldt+t08TZgi23uIauh1TUOQJALduo9GXqw==}
