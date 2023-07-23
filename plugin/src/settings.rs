@@ -11,32 +11,31 @@ use crate::{
 
 pub trait SettingsSchema: Sized + Serialize + DeserializeOwned + Default + Copy {}
 
-pub fn has(config: &Config, key: &str) -> Result<bool, String> {
-	let (settings_json, _) = load_settings_json(config).map_err(|err| err.to_string())?;
+pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
+	let (settings_json, _) = load_settings_json(config)?;
 
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
+	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	let value: Value = get_dot_notation(&settings, key.into()).map_err(|err| err.to_string())?;
+	let value: Value = get_dot_notation(&settings, key.into())?;
 
 	Ok(!value.is_null())
 }
 
-pub fn get(config: &Config, key: &str) -> Result<Value, String> {
-	let (settings_json, _) = load_settings_json(config).map_err(|err| err.to_string())?;
+pub fn get(config: &Config, key: &str) -> Result<Value, Box<dyn Error>> {
+	let (settings_json, _) = load_settings_json(config)?;
 
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
+	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	get_dot_notation(&settings, key.into()).map_err(|err| err.to_string())
+	get_dot_notation(&settings, key.into())
 }
 
-pub fn set(config: &Config, key: &str, value: Value) -> Result<Value, String> {
-	let (settings_json, _) = load_settings_json(config).map_err(|err| err.to_string())?;
+pub fn set(config: &Config, key: &str, new_value: Value) -> Result<Value, Box<dyn Error>> {
+	let (settings_json, _) = load_settings_json(config)?;
 
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
+	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	let new_settings =
-		set_dot_notation(&settings, key.into(), value).map_err(|err| err.to_string())?;
-	save_settings_json(&new_settings, config).map_err(|err| err.to_string())?;
+	let new_settings = set_dot_notation(&settings, key.into(), new_value)?;
+	save_settings_json(&new_settings, config)?;
 
 	Ok(new_settings)
 }
@@ -92,5 +91,26 @@ impl<S: SettingsSchema> SettingsManager<S> {
 
 		self.settings = new_settings;
 		Ok(new_settings)
+	}
+
+	pub fn get(&mut self, key: &str) -> Result<Value, Box<dyn Error>> {
+		let value = get(&self.config, key)?;
+
+		self.set_cache(key, value.clone())?;
+
+		Ok(value)
+	}
+
+	pub fn set(&mut self, key: &str, new_value: Value) -> Result<S, Box<dyn Error>> {
+		let new_settings: S = from_value(set(&self.config, key, new_value)?)?;
+		self.settings = new_settings;
+
+		Ok(new_settings)
+	}
+
+	pub fn sync_cache(&self) -> Result<S, Box<dyn Error>> {
+		save_settings_json(&self.settings, &self.config)?;
+
+		Ok(self.settings)
 	}
 }
