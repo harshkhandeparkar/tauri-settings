@@ -1,0 +1,44 @@
+name: Generate API Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - plugin
+
+jobs:
+  gen_docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: docs
+
+      - name: Reset Branch
+        run: |
+          git fetch origin
+          git reset --hard 'origin/${{ github.ref_name }}'
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'pnpm'
+
+      - name: Generate docs
+        run: |
+          pnpm install
+          pnpm run doc
+
+      - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          add: 'docs -f'
+          commit: --signoff
+          message: 'docs: updated API documentation'
+          push: origin docs -f
