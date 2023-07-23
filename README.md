@@ -25,10 +25,6 @@
   <p align="center">
   <!-- UPDATE -->
     <p>A user settings manager library for Tauri inspired by electron-settings.</p>
-    <br />
-    <a href="https://github.com/harshkhandeparkar/tauri-settings"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
     <a href="https://github.com/harshkhandeparkar/tauri-settings">Tauri Settings</a>
     ·
     <a href="https://github.com/harshkhandeparkar/tauri-settings/issues">Report Bug / Request Feature</a>
