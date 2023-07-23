@@ -6,7 +6,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --config config/jest.config.js",
     "dev": "tsc -w",
     "doc": "typedoc --options config/typedoc.js",
     "npm-publish": "yarn test && yarn build && yarn doc && yarn publish"
