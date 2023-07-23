@@ -1,6 +1,6 @@
 {
   "name": "tauri-settings",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A user settings manager for Tauri inspired by electron-settings.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "test": "jest --config config/jest.config.js",
     "dev": "tsc -w",
     "doc": "typedoc --options config/typedoc.js",
-    "npm-publish": "pnpm run test && pnpm run build && pnpm publish"
+    "npm-publish": "pnpm run test && pnpm run build && pnpm publish --no-git-checks"
   },
   "repository": {
     "type": "git",
