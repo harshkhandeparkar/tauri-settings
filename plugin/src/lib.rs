@@ -17,7 +17,9 @@ pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 		.invoke_handler(tauri::generate_handler![
 			handlers::has,
 			handlers::get,
-			handlers::set
+			handlers::set,
+			handlers::read_settings,
+			handlers::overwrite_settings
 		])
 		.setup(|app| {
 			let plugin_state =
