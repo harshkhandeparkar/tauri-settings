@@ -8,22 +8,22 @@ import { invoke } from '@tauri-apps/api';
  * @internal
  */
 export async function saveSettings
-  <SettingsSchema extends any>
-  (newSettings: SettingsSchema, path: string, config: IConfig): Promise<void> {
-  try {
-    if (config.usePlugin) {
-      await overwrite_settings(newSettings);
-    }
-    else {
-      await writeFile({
-        contents: JSON.stringify(newSettings, null, config.prettify ? config.numSpaces : 0),
-        path
-      })
-    }
-  }
-  catch (e) {
-    throw e;
-  }
+	<SettingsSchema extends any>
+	(newSettings: SettingsSchema, path: string, config: IConfig): Promise<void> {
+	try {
+		if (config.usePlugin) {
+			await overwrite_settings(newSettings);
+		}
+		else {
+			await writeFile({
+				contents: JSON.stringify(newSettings, null, config.prettify ? config.numSpaces : 0),
+				path
+			})
+		}
+	}
+	catch (e) {
+		throw e;
+	}
 }
 
 
@@ -32,29 +32,29 @@ export async function saveSettings
  * @returns The entire settings object.
  */
 export async function getSettings
-  <SettingsSchema extends any>
-  (config: IConfig): Promise<{ settings: SettingsSchema, path: string, status: STATUS }> {
-  try {
-    if (config.usePlugin) {
-      let [settings, path, was_created] = await read_settings();
+	<SettingsSchema extends any>
+	(config: IConfig): Promise<{ settings: SettingsSchema, path: string, status: STATUS }> {
+	try {
+		if (config.usePlugin) {
+			let [settings, path, was_created] = await read_settings();
 
-      return {
-        settings,
-        path: path,
-        status: was_created ? STATUS.FILE_CREATED : STATUS.FILE_EXISTS,
-      }
-    }
-    else {
-      const settingsFile = await ensureSettingsFile(config);
+			return {
+				settings,
+				path: path,
+				status: was_created ? STATUS.FILE_CREATED : STATUS.FILE_EXISTS,
+			}
+		}
+		else {
+			const settingsFile = await ensureSettingsFile(config);
 
-      return {
-        settings: JSON.parse(settingsFile.content) as SettingsSchema,
-        path: settingsFile.path,
-        status: settingsFile.status
-      }
-    }
-  }
-  catch (e) {
-    throw e;
-  }
+			return {
+				settings: JSON.parse(settingsFile.content) as SettingsSchema,
+				path: settingsFile.path,
+				status: settingsFile.status
+			}
+		}
+	}
+	catch (e) {
+		throw e;
+	}
 }

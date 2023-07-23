@@ -9,26 +9,25 @@ import { has as invokeHas, get as invokeGet, set as invokeSet } from '../plugin/
  * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
  */
 export async function has<
-  SettingsSchema,
-  K extends Path<SettingsSchema> = Path<SettingsSchema>
-> (key: K, options: ConfigOptions = {}): Promise<boolean>
-{
-  const config = parseOptions(options);
+	SettingsSchema,
+	K extends Path<SettingsSchema> = Path<SettingsSchema>
+	>(key: K, options: ConfigOptions = {}): Promise<boolean> {
+	const config = parseOptions(options);
 
-  try {
-    if (config.usePlugin) {
-      return await invokeHas(key as string);
-    }
-    else {
-      const { settings } = await getSettings<SettingsSchema>(config);
-      const value = getDotNotation(settings, key);
+	try {
+		if (config.usePlugin) {
+			return await invokeHas(key as string);
+		}
+		else {
+			const { settings } = await getSettings<SettingsSchema>(config);
+			const value = getDotNotation(settings, key);
 
-      return value !== null;
-    }
-  }
-  catch (e) {
-    throw e;
-  }
+			return value !== null;
+		}
+	}
+	catch (e) {
+		throw e;
+	}
 }
 
 /**
@@ -37,24 +36,23 @@ export async function has<
  * @returns The value of the setting
  */
 export async function get<
-  SettingsSchema,
-  K extends Path<SettingsSchema> = Path<SettingsSchema>
-> (key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K>>
-{
-  const config = parseOptions(options);
+	SettingsSchema,
+	K extends Path<SettingsSchema> = Path<SettingsSchema>
+	>(key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K>> {
+	const config = parseOptions(options);
 
-  try {
-    if (config.usePlugin) {
-      return await invokeGet(key as string);
-    }
-    else {
-      const { settings } = await getSettings<SettingsSchema>(config);
-      return getDotNotation<SettingsSchema, K>(settings, key);
-    }
-  }
-  catch (e) {
-    throw e;
-  }
+	try {
+		if (config.usePlugin) {
+			return await invokeGet(key as string);
+		}
+		else {
+			const { settings } = await getSettings<SettingsSchema>(config);
+			return getDotNotation<SettingsSchema, K>(settings, key);
+		}
+	}
+	catch (e) {
+		throw e;
+	}
 }
 
 /**
@@ -64,27 +62,26 @@ export async function get<
  * @returns The entire settings object
  */
 export async function set<
-  SettingsSchema,
-  K extends Path<SettingsSchema> = Path<SettingsSchema>,
-  V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
-> (key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema>
-{
-  const config = parseOptions(options);
+	SettingsSchema,
+	K extends Path<SettingsSchema> = Path<SettingsSchema>,
+	V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
+	>(key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema> {
+	const config = parseOptions(options);
 
-  try {
-    if (config.usePlugin) {
-      return await invokeSet(key as string, value);
-    }
-    else {
-      const settings = await getSettings<SettingsSchema>(config);
-      setDotNotation<SettingsSchema, K>(settings.settings, key, value);
+	try {
+		if (config.usePlugin) {
+			return await invokeSet(key as string, value);
+		}
+		else {
+			const settings = await getSettings<SettingsSchema>(config);
+			setDotNotation<SettingsSchema, K>(settings.settings, key, value);
 
-      await saveSettings<SettingsSchema>(settings.settings, settings.path, config);
+			await saveSettings<SettingsSchema>(settings.settings, settings.path, config);
 
-      return settings.settings;
-    }
-  }
-  catch (e) {
-    throw e;
-  }
+			return settings.settings;
+		}
+	}
+	catch (e) {
+		throw e;
+	}
 }
