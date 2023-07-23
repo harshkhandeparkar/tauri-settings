@@ -1,7 +1,7 @@
 import { appConfigDir, join } from '@tauri-apps/api/path';
 import { createDir, readDir, readTextFile, writeFile } from '@tauri-apps/api/fs';
 
-import { ConfigOptions, parseOptions } from '../config/config';
+import { IConfig, parseOptions } from '../config/config';
 
 /**
  * @internal
@@ -14,13 +14,13 @@ export enum STATUS {
 /**
  * @internal
  */
-export async function ensureSettingsFile(options: ConfigOptions = {}): Promise<{
+export async function ensureSettingsFile(config: IConfig): Promise<{
   status: STATUS,
   path: string,
   content: string,
 }> {
   try {
-    const finalConfig = parseOptions(options);
+    const finalConfig = parseOptions(config);
     const finalDir = finalConfig.dir ?? await appConfigDir();
 
     const settingsFilePath = await join(finalDir, finalConfig.fileName);

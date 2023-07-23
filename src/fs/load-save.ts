@@ -1,6 +1,6 @@
 import { ensureSettingsFile, STATUS } from './ensure-settings-file';
 import { writeFile } from '@tauri-apps/api/fs';
-import { ConfigOptions, parseOptions } from '../config/config';
+import { ConfigOptions, IConfig, parseOptions } from '../config/config';
 
 /**
  * @internal
@@ -29,10 +29,10 @@ export async function saveSettings
  */
 export async function getSettings
   <SettingsSchema extends any>
-  (options: ConfigOptions = {}): Promise<{settings: SettingsSchema, path: string, status: STATUS}>
+  (config: IConfig): Promise<{ settings: SettingsSchema, path: string, status: STATUS }>
 {
   try {
-    const settingsFile = await ensureSettingsFile(options);
+    const settingsFile = await ensureSettingsFile(config);
 
     return {
       settings: JSON.parse(settingsFile.content) as SettingsSchema,

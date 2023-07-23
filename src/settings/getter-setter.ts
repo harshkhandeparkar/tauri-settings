@@ -1,7 +1,8 @@
-import { ConfigOptions } from '../config/config';
+import { ConfigOptions, parseOptions } from '../config/config';
 import { getSettings, saveSettings } from '../fs/load-save';
 import { getDotNotation, setDotNotation } from '../utils/dot-notation';
 import type { Path, PathValue } from '../types/dot-notation';
+import { invoke } from '@tauri-apps/api';
 
 /**
  * Checks whether a key exists in the settings.
@@ -12,11 +13,18 @@ export async function has<
   K extends Path<SettingsSchema> = Path<SettingsSchema>
 > (key: K, options: ConfigOptions = {}): Promise<boolean>
 {
-  try {
-    const settings = (await getSettings<SettingsSchema>(options)).settings;
-    const value = getDotNotation(settings, key);
+  const config = parseOptions(options);
 
-    return value !== null;
+  try {
+    if (config.usePlugin) {
+      return await invoke('plugin:settings|has', { key });
+    }
+    else {
+      const settings = (await getSettings<SettingsSchema>(config)).settings;
+      const value = getDotNotation(settings, key);
+
+      return value !== null;
+    }
   }
   catch (e) {
     throw e;
@@ -33,11 +41,16 @@ export async function get<
   K extends Path<SettingsSchema> = Path<SettingsSchema>
 > (key: K, options: ConfigOptions = {}): Promise<PathValue<SettingsSchema, K>>
 {
-  if (!await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
+  const config = parseOptions(options);
 
   try {
-    const settings = (await getSettings<SettingsSchema>(options)).settings;
-    return getDotNotation<SettingsSchema, K>(settings, key);
+    if (config.usePlugin) {
+      return await invoke('plugin:settings|get', { key });
+    }
+    else {
+      const settings = (await getSettings<SettingsSchema>(config)).settings;
+      return getDotNotation<SettingsSchema, K>(settings, key);
+    }
   }
   catch (e) {
     throw e;
@@ -56,15 +69,20 @@ export async function set<
   V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
 > (key: K, value: V, options: ConfigOptions = {}): Promise<SettingsSchema>
 {
-  if (!await has<SettingsSchema, K>(key)) throw 'Error: key does not exist';
+  const config = parseOptions(options);
 
   try {
-    const settings = await getSettings<SettingsSchema>(options);
-    setDotNotation<SettingsSchema, K>(settings.settings, key, value);
+    if (config.usePlugin) {
+      return invoke('plugin:settings|set', { key, value })
+    }
+    else {
+      const settings = await getSettings<SettingsSchema>(config);
+      setDotNotation<SettingsSchema, K>(settings.settings, key, value);
 
-    await saveSettings<SettingsSchema>(settings.settings, settings.path, options);
+      await saveSettings<SettingsSchema>(settings.settings, settings.path, options);
 
-    return settings.settings;
+      return settings.settings;
+    }
   }
   catch (e) {
     throw e;
