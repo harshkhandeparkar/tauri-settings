@@ -5,9 +5,9 @@
 <div align="center">
 
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+[![Build Workflow][build-workflow-shield]][build-workflow-url]
+[![Docs Workflow][docs-workflow-shield]][docs-workflow-url]
+[![NPM Version][npm-shield]][npm-url]
 [![MIT License][license-shield]][license-url]
 
 </div>
@@ -78,11 +78,11 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 [contributors-shield]: https://img.shields.io/github/contributors/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
 [contributors-url]: https://github.com/harshkhandeparkar/tauri-settings/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
-[forks-url]: https://github.com/harshkhandeparkar/tauri-settings/network/members
-[stars-shield]: https://img.shields.io/github/stars/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
-[stars-url]: https://github.com/harshkhandeparkar/tauri-settings/stargazers
-[issues-shield]: https://img.shields.io/github/issues/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
-[issues-url]: https://github.com/harshkhandeparkar/tauri-settings/issues
 [license-shield]: https://img.shields.io/github/license/harshkhandeparkar/tauri-settings.svg?style=for-the-badge
 [license-url]: https://github.com/harshkhandeparkar/tauri-settings/blob/master/LICENSE.txt
+[build-workflow-shield]: https://img.shields.io/github/actions/workflow/status/harshkhandeparkar/tauri-settings/test_and_lint.yml?style=for-the-badge
+[build-workflow-url]: https://github.com/harshkhandeparkar/tauri-settings/actions/workflows/test_and_lint.yml
+[docs-workflow-shield]: https://img.shields.io/github/actions/workflow/status/harshkhandeparkar/tauri-settings/docs.yml?style=for-the-badge&label=Docs&color=blue
+[docs-workflow-url]: https://harshkhandeparkar.github.io/tauri-settings
+[npm-shield]: https://img.shields.io/npm/v/tauri-settings?style=for-the-badge
+[npm-url]: https://www.npmjs.com/package/tauri-settings
