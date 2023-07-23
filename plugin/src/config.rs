@@ -1,4 +1,3 @@
-use tauri;
 use tauri::api::path;
 
 #[derive(Debug, Default)]
