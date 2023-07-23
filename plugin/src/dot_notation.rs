@@ -1,21 +1,33 @@
-use serde_json::Value;
+use std::error::Error;
 
-pub fn get_dot_notation(settings: &Value, path: String) -> Value {
+use serde::{de::DeserializeOwned, Serialize};
+use serde_json::{from_value, to_value, Value};
+
+pub fn get_dot_notation<S, T>(settings: &S, path: String) -> Result<T, Box<dyn Error>>
+where
+	S: Sized + Serialize + DeserializeOwned + Default,
+	T: Sized + Serialize + DeserializeOwned + Default,
+{
 	let keys = path.split('.');
 
-	let mut value = settings.clone();
+	let mut traverse = to_value(settings)?;
 
 	for key in keys {
-		value = value[key].clone();
+		traverse = traverse[key].clone();
 	}
 
-	value
+	let value: T = from_value(traverse)?;
+	Ok(value)
 }
 
-pub fn set_dot_notation(settings: Value, path: String, new_value: Value) -> Value {
+pub fn set_dot_notation<S, T>(settings: S, path: String, new_value: Value) -> Result<T, Box<dyn Error>>
+where
+	S: Sized + Serialize + DeserializeOwned + Default,
+	T: Sized + Serialize + DeserializeOwned + Default,
+{
 	let keys = path.split('.');
 
-	let mut new_settings = settings.clone();
+	let mut new_settings = to_value(settings)?;
 	let mut traverse = &mut new_settings;
 
 	for key in keys {
@@ -24,5 +36,6 @@ pub fn set_dot_notation(settings: Value, path: String, new_value: Value) -> Valu
 
 	*traverse = new_value;
 
-	new_settings
+	let new_settings: T = from_value(new_settings)?;
+	Ok(new_settings)
 }
