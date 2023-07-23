@@ -10,7 +10,7 @@ pub fn ensure_settings_file(config: &Config) -> Result<bool, std::io::Error> {
 			fs::create_dir_all(settings_dir_path)?;
 		}
 
-		fs::write(settings_file_path, "{}");
+		fs::write(settings_file_path, "{}")?;
 		return Ok(true)
 	}
 
