@@ -43,11 +43,11 @@ fn get_updated_dummy_data() -> Value {
 fn get_dot_notation_works() {
 	let data: Value = get_dummy_data();
 
-	let get_name = get_dot_notation(&data, "name".into());
-	let get_age = get_dot_notation(&data, "age".into());
-	let get_theme = get_dot_notation(&data, "preferences.theme".into());
-	let get_startup = get_dot_notation(&data, "preferences.open_on_start".into());
-	let get_null = get_dot_notation(&data, "preferences.fullscreen".into());
+	let get_name: Value = get_dot_notation(&data, "name".into()).unwrap();
+	let get_age: Value = get_dot_notation(&data, "age".into()).unwrap();
+	let get_theme: Value = get_dot_notation(&data, "preferences.theme".into()).unwrap();
+	let get_startup: Value = get_dot_notation(&data, "preferences.open_on_start".into()).unwrap();
+	let get_null: Value = get_dot_notation(&data, "preferences.fullscreen".into()).unwrap();
 
 	assert_eq!(get_name, "John Doe");
 	assert_eq!(get_age, 43);
@@ -61,22 +61,24 @@ fn set_dot_notation_works() {
 	let data: Value = get_dummy_data();
 	let updated_data: Value = get_updated_dummy_data();
 
-	let data = set_dot_notation(data, "name".into(), "John Lark".into());
-	let data = set_dot_notation(data, "age".into(), 40.into());
-	let data = set_dot_notation(data, "preferences.theme".into(), "light".into());
-	let data = set_dot_notation(data, "preferences.open_on_start".into(), 0.into());
-	let data = set_dot_notation(data, "preferences.fullscreen".into(), true.into());
-	let data = set_dot_notation(
+	let data: Value = set_dot_notation(data, "name".into(), "John Lark".into()).unwrap();
+	let data: Value = set_dot_notation(data, "age".into(), 40.into()).unwrap();
+	let data: Value = set_dot_notation(data, "preferences.theme".into(), "light".into()).unwrap();
+	let data: Value = set_dot_notation(data, "preferences.open_on_start".into(), 0.into()).unwrap();
+	let data: Value = set_dot_notation(data, "preferences.fullscreen".into(), true.into()).unwrap();
+	let data: Value = set_dot_notation(
 		data,
 		"preferences.run_out_of_names.another_setting".into(),
 		12.into(),
-	);
-	let data = set_dot_notation(
+	)
+	.unwrap();
+	let data: Value = set_dot_notation(
 		data,
 		"recently_opened".into(),
 		vec!["file1", "file2"].into(),
-	);
-	let data = set_dot_notation(data, "test.test_path".into(), "ok".into());
+	)
+	.unwrap();
+	let data: Value = set_dot_notation(data, "test.test_path".into(), "ok".into()).unwrap();
 
 	assert_eq!(data, updated_data);
 }
