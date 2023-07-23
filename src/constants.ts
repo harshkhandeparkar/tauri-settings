@@ -4,5 +4,6 @@ export const CONFIG_DEFAULTS: IConfig = {
   fileName: 'settings',
   dir: null,
   prettify: false,
-  numSpaces: 2
+  numSpaces: 2,
+  usePlugin: true
 }
