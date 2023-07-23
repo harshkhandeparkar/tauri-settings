@@ -12,7 +12,7 @@ use crate::{
 pub trait SettingsSchema: Sized + Serialize + DeserializeOwned + Default + Copy {}
 
 pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
-	let (settings_json, _) = load_settings_json(config)?;
+	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
@@ -22,7 +22,7 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 }
 
 pub fn get(config: &Config, key: &str) -> Result<Value, Box<dyn Error>> {
-	let (settings_json, _) = load_settings_json(config)?;
+	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
@@ -30,7 +30,7 @@ pub fn get(config: &Config, key: &str) -> Result<Value, Box<dyn Error>> {
 }
 
 pub fn set(config: &Config, key: &str, new_value: Value) -> Result<Value, Box<dyn Error>> {
-	let (settings_json, _) = load_settings_json(config)?;
+	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
@@ -62,7 +62,7 @@ impl<S: SettingsSchema> SettingsManager<S> {
 	}
 
 	pub fn initialize(&mut self) -> Result<(), Box<dyn Error>> {
-		let (current_settings_json, was_created) = load_settings_json(&self.config)?;
+		let (current_settings_json, _, was_created) = load_settings_json(&self.config)?;
 
 		if was_created {
 			save_settings_json(&self.settings, &self.config)?;

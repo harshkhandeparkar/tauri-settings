@@ -17,14 +17,15 @@ pub fn ensure_settings_file(config: &Config) -> Result<bool, std::io::Error> {
 	Ok(false)
 }
 
-pub fn load_settings_json(config: &Config) -> Result<(String, bool), Box<dyn Error>> {
+pub fn load_settings_json(config: &Config) -> Result<(String, String, bool), Box<dyn Error>> {
 	let was_created = ensure_settings_file(config)?;
 
 	let settings_file_path = Path::new(&config.directory).join(&config.file_name);
+	let settings_json = fs::read_to_string(&settings_file_path)?;
 
-	let settings_json = fs::read_to_string(settings_file_path)?;
+	let settings_file_path: String = settings_file_path.to_str().unwrap_or(&config.file_name).to_string();
 
-	Ok((settings_json, was_created))
+	Ok((settings_json, settings_file_path, was_created))
 }
 
 pub fn save_settings_json<T: ?Sized + serde::Serialize>(

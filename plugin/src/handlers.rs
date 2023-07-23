@@ -54,11 +54,11 @@ pub fn overwrite_settings<R: Runtime>(
 pub fn read_settings<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, Config>,
-) -> Result<(Value, bool), String> {
+) -> Result<(Value, String, bool), String> {
 	let config = state.inner();
-	let (settings_json, was_created) = load_settings_json(config).map_err(|err| err.to_string())?;
+	let (settings_json, settings_file_path, was_created) = load_settings_json(config).map_err(|err| err.to_string())?;
 
 	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
 
-	Ok((settings, was_created))
+	Ok((settings, settings_file_path, was_created))
 }
