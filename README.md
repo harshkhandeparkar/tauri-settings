@@ -24,7 +24,7 @@
 
   <p align="center">
   <!-- UPDATE -->
-    <p>Tauri settings manager plugin inspired by electron-settings.</p>
+    <p>A user settings manager plugin for Tauri inspired by electron-settings.</p>
     <br />
     <a href="https://github.com/harshkhandeparkar/tauri-plugin-settings"><strong>Explore the docs »</strong></a>
     <br />
@@ -46,7 +46,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-_Detailed explaination of the project goes here_
+`tauri-plugin-settings` is a user settings manager plugin for [Tauri](https://tauri.app) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings). This plugin can be used standalone or as a backend for the [tauri-settings](https://github.com/harshkhandeparkar/tauri-settings) library.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
