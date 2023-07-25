@@ -22,11 +22,6 @@ export interface IConfig {
 	 * Default: 2
 	 */
 	numSpaces: number;
-	/**
-	 * Whether to use the tauri-plugin-settings plugin as a backend for the library. (Recommended)
-	 * Default: true
-	 */
-	usePlugin: boolean;
 }
 
 export type ConfigOptions = IConfig | {};

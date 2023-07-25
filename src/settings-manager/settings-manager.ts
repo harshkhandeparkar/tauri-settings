@@ -1,7 +1,6 @@
 import { ConfigOptions, IConfig, parseOptions } from '../config/config';
-import { STATUS } from '../fs/ensure-settings-file';
 
-import { getSettings, saveSettings } from '../fs/load-save';
+import { getSettings, saveSettings } from '../settings/load-save';
 import { get, set } from '../settings/getter-setter';
 import { getDotNotation, setDotNotation } from '../utils/dot-notation';
 import type { Path, PathValue } from '../types/dot-notation';
@@ -34,11 +33,11 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 		const currentSettings = await getSettings<SettingsSchema>(this.config);
 		this.path = currentSettings.path;
 
-		if (currentSettings.status === STATUS.FILE_CREATED) {
+		if (currentSettings.was_created) {
 			this.settings = { ...this.default };
 			await this.saveSettings();
 		}
-		else if (currentSettings.status === STATUS.FILE_EXISTS) {
+		else {
 			this.settings = { ...this.default, ...currentSettings.settings };
 		}
 
@@ -49,7 +48,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @internal
 	 */
 	protected async saveSettings() {
-		await saveSettings<SettingsSchema>(this.settings, this.path, this.config);
+		await saveSettings<SettingsSchema>(this.settings, this.config);
 	}
 
 	/**

@@ -1,6 +1,4 @@
 import { ConfigOptions, parseOptions } from '../config/config';
-import { getSettings, saveSettings } from '../fs/load-save';
-import { getDotNotation, setDotNotation } from '../utils/dot-notation';
 import type { Path, PathValue } from '../types/dot-notation';
 import { has as invokeHas, get as invokeGet, set as invokeSet } from '../plugin/handlers';
 
@@ -15,15 +13,7 @@ export async function has<
 	const config = parseOptions(options);
 
 	try {
-		if (config.usePlugin) {
-			return await invokeHas(key as string);
-		}
-		else {
-			const { settings } = await getSettings<SettingsSchema>(config);
-			const value = getDotNotation(settings, key);
-
-			return value !== null;
-		}
+		return await invokeHas(key as string);
 	}
 	catch (e) {
 		throw e;
@@ -42,13 +32,7 @@ export async function get<
 	const config = parseOptions(options);
 
 	try {
-		if (config.usePlugin) {
-			return await invokeGet(key as string);
-		}
-		else {
-			const { settings } = await getSettings<SettingsSchema>(config);
-			return getDotNotation<SettingsSchema, K>(settings, key);
-		}
+		return await invokeGet(key as string);
 	}
 	catch (e) {
 		throw e;
@@ -69,17 +53,7 @@ export async function set<
 	const config = parseOptions(options);
 
 	try {
-		if (config.usePlugin) {
-			return await invokeSet(key as string, value);
-		}
-		else {
-			const settings = await getSettings<SettingsSchema>(config);
-			setDotNotation<SettingsSchema, K>(settings.settings, key, value);
-
-			await saveSettings<SettingsSchema>(settings.settings, settings.path, config);
-
-			return settings.settings;
-		}
+		return await invokeSet(key as string, value);
 	}
 	catch (e) {
 		throw e;
