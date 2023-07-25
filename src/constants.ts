@@ -1,4 +1,4 @@
-import { IConfig } from './config/config';
+import { IConfig } from './utils/config';
 
 export const CONFIG_DEFAULTS: IConfig = {
 	fileName: 'settings',

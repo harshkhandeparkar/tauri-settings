@@ -1,4 +1,4 @@
-import { IConfig } from '../config/config';
+import { IConfig } from '../utils/config';
 import { overwrite_settings, read_settings } from '../plugin/handlers';
 
 /**

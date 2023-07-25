@@ -1,4 +1,4 @@
-import { ConfigOptions, IConfig, parseOptions } from '../config/config';
+import { ConfigOptions, IConfig, parseOptions } from '../utils/config';
 
 import { getSettings, saveSettings } from '../settings/load-save';
 import { get, set } from '../settings/getter-setter';
