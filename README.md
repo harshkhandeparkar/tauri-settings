@@ -16,6 +16,9 @@ npm install tauri-settings
 
 # using yarn
 yarn add tauri-settings
+
+# using pnpm
+pnpm add tauri-settings
 ```
 
 #### Install The Tauri API
