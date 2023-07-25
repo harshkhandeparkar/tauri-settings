@@ -37,7 +37,11 @@ pub fn save_settings_json<T: ?Sized + serde::Serialize>(
 ) -> Result<(), Box<dyn Error>> {
 	let settings_file_path = Path::new(&config.directory).join(&config.file_name);
 
-	let settings_json = serde_json::to_string(&settings)?;
+	let settings_json = if config.prettify {
+		serde_json::to_string_pretty(&settings)?
+	} else {
+		serde_json::to_string(&settings)?
+	};
 
 	fs::write(settings_file_path, settings_json)?;
 	Ok(())
