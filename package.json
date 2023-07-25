@@ -8,7 +8,7 @@
     "build": "tsc -p config/tsconfig.json",
     "test": "jest --config config/jest.config.js",
     "dev": "tsc -p config/tsconfig.json -w",
-    "doc": "typedoc --options config/typedoc.js",
+    "doc": "typedoc --options config/typedoc.js --tsconfig config/tsconfig.json",
     "npm-publish": "pnpm run test && pnpm run build && pnpm publish --no-git-checks"
   },
   "repository": {
