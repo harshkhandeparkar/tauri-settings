@@ -1,5 +1,5 @@
 import { IConfig } from '../utils/config';
-import { overwrite_settings, read_settings } from '../plugin/handlers';
+import { overwrite_settings, read_settings } from '../utils/handlers';
 
 /**
  * @internal

@@ -1,6 +1,6 @@
 import { ConfigOptions, parseOptions } from '../utils/config';
 import type { Path, PathValue } from '../utils/dot-notation';
-import { has as invokeHas, get as invokeGet, set as invokeSet } from '../plugin/handlers';
+import { has as invokeHas, get as invokeGet, set as invokeSet } from '../utils/handlers';
 
 /**
  * Checks whether a key exists in the settings.
