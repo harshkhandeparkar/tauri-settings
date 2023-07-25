@@ -1,4 +1,4 @@
-import { IConfig } from '../utils/config';
+import { IConfigOptions } from '../utils/config';
 import { overwrite_settings, read_settings } from '../utils/handlers';
 
 /**
@@ -6,9 +6,9 @@ import { overwrite_settings, read_settings } from '../utils/handlers';
  */
 export async function saveSettings
 	<SettingsSchema extends any>
-	(newSettings: SettingsSchema, config: IConfig): Promise<void> {
+	(newSettings: SettingsSchema, customConfig: IConfigOptions): Promise<void> {
 	try {
-		await overwrite_settings(newSettings);
+		await overwrite_settings(newSettings, customConfig);
 	}
 	catch (e) {
 		throw e;
@@ -22,9 +22,9 @@ export async function saveSettings
  */
 export async function getSettings
 	<SettingsSchema extends any>
-	(config: IConfig): Promise<{ settings: SettingsSchema, path: string, was_created: boolean }> {
+	(customConfig?: IConfigOptions): Promise<{ settings: SettingsSchema, path: string, was_created: boolean }> {
 	try {
-		let [settings, path, was_created] = await read_settings();
+		let [settings, path, was_created] = await read_settings(customConfig);
 
 		return {
 			settings,

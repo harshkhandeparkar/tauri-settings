@@ -1,4 +1,4 @@
-import { ConfigOptions, IConfig, parseOptions } from '../utils/config';
+import { IConfigOptions } from '../utils/config';
 
 import { getSettings, saveSettings } from './load-save';
 import { get, set } from './getter-setter';
@@ -13,15 +13,11 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * The default values for the settings
 	 */
 	default: SettingsSchema;
-	/**
-	 * @internal
-	 */
-	path: string;
-	config: IConfig;
+	customConfig?: IConfigOptions;
 
-	constructor(defaultSettings: SettingsSchema, options: ConfigOptions = {}) {
+	constructor(defaultSettings: SettingsSchema, customConfig?: IConfigOptions) {
 		this.default = { ...defaultSettings };
-		this.config = parseOptions(options);
+		this.customConfig = customConfig
 	}
 
 	/**
@@ -29,8 +25,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The entire settings object
 	 */
 	async initialize(): Promise<SettingsSchema> {
-		const currentSettings = await getSettings<SettingsSchema>(this.config);
-		this.path = currentSettings.path;
+		const currentSettings = await getSettings<SettingsSchema>(this.customConfig);
 
 		if (currentSettings.was_created) {
 			this.settings = { ...this.default };
@@ -47,7 +42,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @internal
 	 */
 	protected async saveSettings() {
-		await saveSettings<SettingsSchema>(this.settings, this.config);
+		await saveSettings<SettingsSchema>(this.settings, this.customConfig);
 	}
 
 	/**
@@ -89,7 +84,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The value of the setting
 	 */
 	async get<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
-		const value = await get<SettingsSchema, K>(key, this.config);
+		const value = await get<SettingsSchema, K>(key, this.customConfig);
 
 		// to also update cache
 		this.setCache(key, value);
@@ -107,7 +102,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 		// to also update cache
 		this.setCache(key, value);
 
-		return await set<SettingsSchema, K, V>(key, value, this.config);
+		return await set<SettingsSchema, K, V>(key, value, this.customConfig);
 	}
 
 	/**
