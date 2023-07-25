@@ -61,7 +61,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	getCache<K extends Path<SettingsSchema>>(key: K): PathValue<SettingsSchema, K> {
 		if (!this.hasCache(key)) throw 'Error: key does not exist';
 
-		return getDotNotation<SettingsSchema, K>(this.settings, key);
+		return getDotNotation<SettingsSchema, K>(this.settings, key) as PathValue<SettingsSchema, K>;
 	}
 
 	/**

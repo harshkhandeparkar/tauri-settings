@@ -6,7 +6,7 @@ import { overwrite_settings, read_settings } from '../utils/handlers';
  */
 export async function saveSettings
 	<SettingsSchema extends any>
-	(newSettings: SettingsSchema, customConfig: IConfigOptions): Promise<void> {
+	(newSettings: SettingsSchema, customConfig?: IConfigOptions): Promise<void> {
 	try {
 		await overwrite_settings(newSettings, customConfig);
 	}
