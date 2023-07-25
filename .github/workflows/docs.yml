@@ -30,10 +30,21 @@ jobs:
           node-version: 18.x
           cache: 'pnpm'
 
-      - name: Generate docs
+      - name: Generate JS docs
         run: |
           pnpm install
           pnpm run doc
+
+      - name: Install Rust and Dependencies
+        run: |
+          sudo apt install libwebkit2gtk-4.0-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+          rustup update stable && rustup default stable
+
+      - name: Generate Rust Docs
+        run: |
+          pushd plugin/
+          cargo doc --no-deps
+          mv target/doc/ ../docs/rust/
 
       - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
         with:
