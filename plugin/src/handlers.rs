@@ -12,8 +12,9 @@ pub fn has<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, Config>,
 	key: &str,
+	custom_config: Option<Config>,
 ) -> Result<bool, String> {
-	let config = state.inner();
+	let config = &custom_config.unwrap_or_else(|| state.inner().clone());
 	settings::has(config, key).map_err(|err| err.to_string())
 }
 
@@ -22,8 +23,9 @@ pub fn get<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, Config>,
 	key: &str,
+	custom_config: Option<Config>,
 ) -> Result<Value, String> {
-	let config = state.inner();
+	let config = &custom_config.unwrap_or_else(|| state.inner().clone());
 	settings::get(config, key).map_err(|err| err.to_string())
 }
 
@@ -33,8 +35,9 @@ pub fn set<R: Runtime>(
 	state: State<'_, Config>,
 	key: &str,
 	value: Value,
+	custom_config: Option<Config>,
 ) -> Result<Value, String> {
-	let config = state.inner();
+	let config = &custom_config.unwrap_or_else(|| state.inner().clone());
 	settings::set(config, key, value).map_err(|err| err.to_string())
 }
 
@@ -43,8 +46,9 @@ pub fn overwrite_settings<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, Config>,
 	new_settings: Value,
+	custom_config: Option<Config>,
 ) -> Result<(), String> {
-	let config = state.inner();
+	let config = &custom_config.unwrap_or_else(|| state.inner().clone());
 	save_settings_json(&new_settings, &config).map_err(|err| err.to_string())?;
 
 	Ok(())
@@ -54,8 +58,9 @@ pub fn overwrite_settings<R: Runtime>(
 pub fn read_settings<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, Config>,
+	custom_config: Option<Config>,
 ) -> Result<(Value, String, bool), String> {
-	let config = state.inner();
+	let config = &custom_config.unwrap_or_else(|| state.inner().clone());
 	let (settings_json, settings_file_path, was_created) =
 		load_settings_json(config).map_err(|err| err.to_string())?;
 

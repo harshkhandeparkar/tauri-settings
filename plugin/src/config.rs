@@ -1,6 +1,6 @@
 use tauri::api::path;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, serde::Deserialize, Clone)]
 pub struct Config {
 	pub file_name: String,
 	pub directory: String,
