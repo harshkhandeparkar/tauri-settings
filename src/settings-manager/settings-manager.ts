@@ -2,8 +2,7 @@ import { ConfigOptions, IConfig, parseOptions } from '../config/config';
 
 import { getSettings, saveSettings } from '../settings/load-save';
 import { get, set } from '../settings/getter-setter';
-import { getDotNotation, setDotNotation } from '../utils/dot-notation';
-import type { Path, PathValue } from '../types/dot-notation';
+import { getDotNotation, setDotNotation, Path, PathValue } from '../utils/dot-notation';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
 	/**

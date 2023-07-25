@@ -1,5 +1,5 @@
 import { ConfigOptions, parseOptions } from '../config/config';
-import type { Path, PathValue } from '../types/dot-notation';
+import type { Path, PathValue } from '../utils/dot-notation';
 import { has as invokeHas, get as invokeGet, set as invokeSet } from '../plugin/handlers';
 
 /**
