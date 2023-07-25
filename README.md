@@ -25,6 +25,8 @@
   <p align="center">
   <!-- UPDATE -->
     <p>A user settings manager library for Tauri inspired by electron-settings.</p>
+    <a href="https://www.npmjs.com/package/tauri-settings">NPM</a>
+    .
     <a href="https://harshkhandeparkar.github.io/tauri-settings/js">Javascript API Docs</a>
     ·
     <a href="https://harshkhandeparkar.github.io/tauri-settings/rust/tauri_plugin_settings">Rust API Docs</a>
