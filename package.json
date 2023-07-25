@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p config/tsconfig.json",
     "test": "jest --config config/jest.config.js",
-    "dev": "tsc -w",
+    "dev": "tsc -p config/tsconfig.json -w",
     "doc": "typedoc --options config/typedoc.js",
     "npm-publish": "pnpm run test && pnpm run build && pnpm publish --no-git-checks"
   },

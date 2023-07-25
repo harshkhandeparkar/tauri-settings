@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "../dist/",
     "module": "ES6",
     "declaration": true,
     "target": "es6",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowJs": true,
-    "lib": ["ES2016"],
+    "lib": [
+      "ES2016"
+    ],
     "skipLibCheck": true
   },
   "include": [
-    "./src/index.ts"
+    "../src/index.ts"
   ]
 }
