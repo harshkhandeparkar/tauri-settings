@@ -30,6 +30,21 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 	Ok(!value.is_null())
 }
 
+/// Returns the value corresponding to a key in the settings.
+///
+/// Here key supports dot notation. Eg: `preferences.theme`.
+/// ### Examples
+/// ```no_run
+/// # use tauri_plugin_settings::{Config, settings::get};
+/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// let theme: String = get(&config, "preferences.theme").unwrap();
+/// ```
+///
+/// ```no_run
+/// # use tauri_plugin_settings::{Config, settings::get};
+/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// let theme: Vec<String> = get(&config, "recently_opened").unwrap();
+/// ```
 pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
@@ -38,6 +53,15 @@ pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn
 	Ok(from_value(get_dot_notation(&settings, key)?)?)
 }
 
+/// Sets the value corresponding to a key in the settings.
+///
+/// Here key supports dot notation. Eg: `preferences.theme`.
+/// ### Examples
+/// ```no_run
+/// # use tauri_plugin_settings::{Config, settings::set};
+/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// set(&config, "preferences.theme", "dark").unwrap();
+/// ```
 pub fn set<V: Serialize>(
 	config: &Config,
 	key: &str,
