@@ -65,7 +65,7 @@ pub fn overwrite_settings<R: Runtime>(
 		.unwrap_or_else(|| Ok(state.inner().clone()))
 		.map_err(|err| err.to_string())?;
 
-	save_settings_json(&new_settings, &config).map_err(|err| err.to_string())?;
+	save_settings_json(&new_settings, config).map_err(|err| err.to_string())?;
 
 	Ok(())
 }

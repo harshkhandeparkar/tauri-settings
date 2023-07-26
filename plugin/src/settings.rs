@@ -16,25 +16,29 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	let value: Value = get_dot_notation(&settings, key.into())?;
+	let value: Value = get_dot_notation(&settings, key)?;
 
 	Ok(!value.is_null())
 }
 
-pub fn get(config: &Config, key: &str) -> Result<Value, Box<dyn Error>> {
+pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	get_dot_notation(&settings, key.into())
+	Ok(from_value(get_dot_notation(&settings, key)?)?)
 }
 
-pub fn set(config: &Config, key: &str, new_value: Value) -> Result<Value, Box<dyn Error>> {
+pub fn set<V: Serialize>(
+	config: &Config,
+	key: &str,
+	new_value: V,
+) -> Result<Value, Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	let new_settings = set_dot_notation(&settings, key.into(), new_value)?;
+	let new_settings = set_dot_notation(&settings, key, to_value(new_value)?)?;
 	save_settings_json(&new_settings, config)?;
 
 	Ok(new_settings)
@@ -82,25 +86,32 @@ impl<S: SettingsSchema> SettingsManager<S> {
 	}
 
 	pub fn get_cache<T: SettingsSchema>(&self, key: &str) -> Result<T, Box<dyn Error>> {
-		get_dot_notation(&self.settings, key.into())
+		get_dot_notation(&self.settings, key)
 	}
 
-	pub fn set_cache(&mut self, key: &str, new_value: Value) -> Result<S, Box<dyn Error>> {
-		let new_settings: S = set_dot_notation(&self.settings, key.into(), new_value)?;
+	pub fn set_cache<V: Serialize>(
+		&mut self,
+		key: &str,
+		new_value: V,
+	) -> Result<S, Box<dyn Error>> {
+		let new_settings: S = set_dot_notation(&self.settings, key, new_value)?;
 
 		self.settings = new_settings;
 		Ok(new_settings)
 	}
 
-	pub fn get(&mut self, key: &str) -> Result<Value, Box<dyn Error>> {
-		let value = get(&self.config, key)?;
+	pub fn get<V: Serialize + DeserializeOwned + Clone>(
+		&mut self,
+		key: &str,
+	) -> Result<V, Box<dyn Error>> {
+		let value: V = get(&self.config, key)?;
 
 		self.set_cache(key, value.clone())?;
 
 		Ok(value)
 	}
 
-	pub fn set(&mut self, key: &str, new_value: Value) -> Result<S, Box<dyn Error>> {
+	pub fn set<V: Serialize>(&mut self, key: &str, new_value: V) -> Result<S, Box<dyn Error>> {
 		let new_settings: S = from_value(set(&self.config, key, new_value)?)?;
 		self.settings = new_settings;
 

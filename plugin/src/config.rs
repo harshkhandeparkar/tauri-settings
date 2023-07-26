@@ -31,10 +31,10 @@ impl Config {
 	/// # let app_config = tauri::Config::default();
 	/// // Where app_config is tauri::Config
 	/// let config = Config::new(
-	/// 	&app_config,
-	/// 	Some("user-settings.json".into()), // File in which the settings are saved
-	/// 	None, 						// Config directory
-	/// 	Some(true),					// Whether to prettify the JSON
+	///     &app_config,
+	///     Some("user-settings.json".into()), // File in which the settings are saved
+	///     None, // Config directory
+	///     Some(true), // Whether to prettify the JSON
 	/// );
 	/// ```
 	pub fn new(

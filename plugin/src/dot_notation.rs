@@ -1,9 +1,9 @@
 use std::error::Error;
 
 use serde::{de::DeserializeOwned, Serialize};
-use serde_json::{from_value, to_value, Value};
+use serde_json::{from_value, to_value};
 
-pub fn get_dot_notation<S, T>(settings: &S, path: String) -> Result<T, Box<dyn Error>>
+pub fn get_dot_notation<S, T>(settings: &S, path: &str) -> Result<T, Box<dyn Error>>
 where
 	S: Sized + Serialize + DeserializeOwned + Default,
 	T: Sized + Serialize + DeserializeOwned + Default,
@@ -20,14 +20,15 @@ where
 	Ok(value)
 }
 
-pub fn set_dot_notation<S, T>(
+pub fn set_dot_notation<S, T, V>(
 	settings: &S,
-	path: String,
-	new_value: Value,
+	path: &str,
+	new_value: V,
 ) -> Result<T, Box<dyn Error>>
 where
 	S: Sized + Serialize + DeserializeOwned + Default,
 	T: Sized + Serialize + DeserializeOwned + Default,
+	V: Serialize,
 {
 	let keys = path.split('.');
 
@@ -38,7 +39,7 @@ where
 		traverse = &mut traverse[key];
 	}
 
-	*traverse = new_value;
+	*traverse = to_value(new_value)?;
 
 	let new_settings: T = from_value(new_settings)?;
 	Ok(new_settings)

@@ -7,10 +7,8 @@
 //! ##### Using the Plugin
 //! Initialize the Tauri plugin by using the `init` function in the `src-tauri/src/main.rs` file.
 //! ```
-//!	fn main() {
 //! tauri::Builder::default()
-//! 	.plugin(tauri_plugin_settings::init(None));
-//! }
+//!     .plugin(tauri_plugin_settings::init(None));
 //! ```
 //!
 //! Use the `tauri-settings` library in the frontend.
@@ -18,8 +16,8 @@
 //! import { get } from 'tauri-settings';
 //!
 //! get('theme').then((theme) => {
-//! 	console.log(`Changing theme to ${theme}.`);
-//! 	// change the theme
+//!     console.log(`Changing theme to ${theme}.`);
+//!     // change the theme
 //! })
 //! ```
 //! See the [README](https://github.com/harshkhandeparkar/tauri-settings#readme) for more information on how to install and use the `tauri-settings` library.
@@ -31,14 +29,16 @@
 //! # let app_config = tauri::Config::default();
 //! // Where app_config is tauri::Config
 //! let config = Config::new(
-//! 	&app_config,
-//! 	Some("user-settings.json".into()), // File in which the settings are saved
-//! 	None, 						// Config directory
-//! 	Some(true),					// Whether to prettify the JSON
+//!     &app_config,
+//!     Some("user-settings.json".into()), // File in which the settings are saved
+//!     None, // Config directory
+//!     Some(true), // Whether to prettify the JSON
 //! ).unwrap();
 //!
 //! // The returned value is a serde_json::value::Value
-//! let theme = get(&config, "theme").unwrap();
+//! let theme: String = get(&config, "theme").unwrap();
+//!
+//! set(&config, "open_fullscreen", true).unwrap();
 //! ```
 
 use tauri::{
@@ -61,7 +61,7 @@ mod test;
 /// ### Examples
 /// ```
 /// tauri::Builder::default()
-/// 	.plugin(tauri_plugin_settings::init(None));
+///     .plugin(tauri_plugin_settings::init(None));
 /// ```
 pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 	Builder::new("settings")
