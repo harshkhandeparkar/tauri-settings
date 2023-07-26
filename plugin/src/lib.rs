@@ -6,12 +6,10 @@
 //! #### Getting Started
 //! ##### Using the Plugin
 //! Initialize the Tauri plugin by using the `init` function in the `src-tauri/src/main.rs` file.
-//! ```ignore
+//! ```
 //!	fn main() {
 //! tauri::Builder::default()
-//! 	.plugin(tauri_plugin_settings::init(None))
-//! 	.run(tauri::generate_context!())
-//! 	.expect("failed to run app");
+//! 	.plugin(tauri_plugin_settings::init(None));
 //! }
 //! ```
 //!
@@ -29,12 +27,11 @@
 //! ##### Using Tauri Settings Directly in Rust
 //! ```
 //! use tauri_plugin_settings::{settings::{get, set}, config::Config};
-//! ```
 //!
-//! ```ignore
-//! // Where app is tauri::AppHandle
+//! # let app_config = tauri::Config::default();
+//! // Where app_config is tauri::Config
 //! let config = Config::new(
-//! 	&app.config(),
+//! 	&app_config,
 //! 	Some("user-settings.json".into()), // File in which the settings are saved
 //! 	None, 						// Config directory
 //! 	Some(true),					// Whether to prettify the JSON
@@ -61,13 +58,9 @@ mod test;
 /// Initializes the plugin.
 ///
 /// ### Examples
-/// ```ignore
-///	fn main() {
+/// ```
 /// tauri::Builder::default()
-/// 	.plugin(tauri_plugin_settings::init(None))
-/// 	.run(tauri::generate_context!())
-/// 	.expect("failed to run app");
-/// }
+/// 	.plugin(tauri_plugin_settings::init(None));
 /// ```
 pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 	Builder::new("settings")
