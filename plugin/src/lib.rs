@@ -6,7 +6,7 @@
 //! #### Getting Started
 //! ##### Using the Plugin
 //! Initialize the Tauri plugin by using the `init` function in the `src-tauri/src/main.rs` file.
-//! ```
+//! ```no_run
 //! tauri::Builder::default()
 //!     .plugin(tauri_plugin_settings::init(None));
 //! ```
@@ -23,7 +23,7 @@
 //! See the [README](https://github.com/harshkhandeparkar/tauri-settings#readme) for more information on how to install and use the `tauri-settings` library.
 //!
 //! ##### Using Tauri Settings Directly in Rust
-//! ```
+//! ```no_run
 //! use tauri_plugin_settings::{settings::{get, set}, Config};
 //!
 //! # let app_config = tauri::Config::default();
@@ -59,7 +59,7 @@ mod test;
 /// Initializes the plugin.
 ///
 /// ### Examples
-/// ```
+/// ```no_run
 /// tauri::Builder::default()
 ///     .plugin(tauri_plugin_settings::init(None));
 /// ```

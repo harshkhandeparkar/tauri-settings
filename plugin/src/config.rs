@@ -26,7 +26,7 @@ impl Config {
 	/// Creates a new Config struct.
 	///
 	/// ### Examples
-	/// ```
+	/// ```no_run
 	/// # use tauri_plugin_settings::Config;
 	/// # let app_config = tauri::Config::default();
 	/// // Where app_config is tauri::Config

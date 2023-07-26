@@ -11,6 +11,15 @@ use crate::{
 
 pub trait SettingsSchema: Sized + Serialize + DeserializeOwned + Default + Copy {}
 
+/// Checks if a key exists in the settings.
+///
+/// Here key supports dot notation. Eg: `preferences.theme`.
+/// ### Examples
+/// ```no_run
+/// # use tauri_plugin_settings::{Config, settings::has};
+/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// let theme_exists = has(&config, "preferences.theme").unwrap();
+/// ```
 pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
