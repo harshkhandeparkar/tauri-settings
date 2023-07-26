@@ -26,7 +26,7 @@
 //!
 //! ##### Using Tauri Settings Directly in Rust
 //! ```
-//! use tauri_plugin_settings::{settings::{get, set}, config::Config};
+//! use tauri_plugin_settings::{settings::{get, set}, Config};
 //!
 //! # let app_config = tauri::Config::default();
 //! // Where app_config is tauri::Config
@@ -41,13 +41,14 @@
 //! let theme = get(&config, "theme").unwrap();
 //! ```
 
-use config::Config;
 use tauri::{
 	plugin::{Builder, TauriPlugin},
 	Manager, Runtime,
 };
 
-pub mod config;
+pub use config::Config;
+
+mod config;
 mod dot_notation;
 mod fs;
 mod handlers;

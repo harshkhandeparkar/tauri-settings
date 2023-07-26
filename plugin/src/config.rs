@@ -27,7 +27,7 @@ impl Config {
 	///
 	/// ### Examples
 	/// ```
-	/// # use tauri_plugin_settings::config::Config;
+	/// # use tauri_plugin_settings::Config;
 	/// # let app_config = tauri::Config::default();
 	/// // Where app_config is tauri::Config
 	/// let config = Config::new(
