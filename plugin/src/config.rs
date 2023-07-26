@@ -3,10 +3,12 @@ use tauri::api::path;
 
 #[derive(Debug, Default, Clone)]
 pub struct Config {
+	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
 	pub file_name: String,
+	/// The directory in which the settings file will be stored. (Default: App config directory)
 	pub directory: String,
+	/// Whether to prettify the JSON output. (Default: `false`)
 	pub prettify: bool,
-	pub num_spaces: u8,
 }
 
 #[derive(Debug, Default, serde::Deserialize, Clone)]
@@ -14,7 +16,6 @@ pub struct ConfigOptions {
 	pub file_name: Option<String>,
 	pub directory: Option<String>,
 	pub prettify: Option<bool>,
-	pub num_spaces: Option<u8>,
 }
 
 impl Config {
@@ -23,7 +24,6 @@ impl Config {
 		file_name: Option<String>,
 		directory: Option<String>,
 		prettify: Option<bool>,
-		num_spaces: Option<u8>,
 	) -> Result<Config, Box<dyn Error>> {
 		let config_directory: String = directory.unwrap_or(
 			path::app_config_dir(app_config)
@@ -37,7 +37,6 @@ impl Config {
 			file_name: file_name.unwrap_or("settings.json".to_string()),
 			directory: config_directory,
 			prettify: prettify.unwrap_or(false),
-			num_spaces: num_spaces.unwrap_or(0),
 		})
 	}
 
@@ -50,7 +49,6 @@ impl Config {
 			options.file_name.clone(),
 			options.directory.clone(),
 			options.prettify,
-			options.num_spaces,
 		)
 	}
 }

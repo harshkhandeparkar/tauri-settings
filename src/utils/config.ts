@@ -15,9 +15,4 @@ export interface IConfigOptions {
 	 * Default: false
 	 */
 	prettify?: boolean;
-	/**
-	 * The number of spaces to use when prettifying the data. Will only work if the 'prettify' option is enabled.
-	 * Default: 2
-	 */
-	num_spaces?: number;
 }

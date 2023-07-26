@@ -38,7 +38,6 @@
 //! 	Some("user-settings.json"), // File in which the settings are saved
 //! 	None, 						// Config directory
 //! 	Some(true),					// Whether to prettify the JSON
-//! 	None,						// Number of spaces in the prettified JSON
 //! )
 //!
 //! // The returned value is a serde_json::value::Value
@@ -59,6 +58,17 @@ pub mod settings;
 #[cfg(test)]
 mod test;
 
+/// Initializes the plugin.
+///
+/// ### Examples
+/// ```rust
+///	fn main() {
+/// tauri::Builder::default()
+/// 	.plugin(tauri_plugin_settings::init())
+/// 	.run(tauri::generate_context!())
+/// 	.expect("failed to run app");
+/// }
+/// ```
 pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![
@@ -69,8 +79,7 @@ pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 			handlers::overwrite_settings
 		])
 		.setup(|app| {
-			let plugin_state =
-				config.unwrap_or(Config::new(&app.config(), None, None, None, None)?);
+			let plugin_state = config.unwrap_or(Config::new(&app.config(), None, None, None)?);
 
 			app.manage(plugin_state);
 			Ok(())

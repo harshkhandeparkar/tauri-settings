@@ -51,9 +51,8 @@ impl<S: SettingsSchema> SettingsManager<S> {
 		file_name: Option<String>,
 		directory: Option<String>,
 		prettify: Option<bool>,
-		num_spaces: Option<u8>,
 	) -> Result<SettingsManager<S>, Box<dyn Error>> {
-		let config = Config::new(app_config, file_name, directory, prettify, num_spaces)?;
+		let config = Config::new(app_config, file_name, directory, prettify)?;
 
 		Ok(SettingsManager {
 			settings: S::default(),
