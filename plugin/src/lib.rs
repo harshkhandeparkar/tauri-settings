@@ -6,10 +6,10 @@
 //! #### Getting Started
 //! ##### Using the Plugin
 //! Initialize the Tauri plugin by using the `init` function in the `src-tauri/src/main.rs` file.
-//! ```rust
+//! ```ignore
 //!	fn main() {
 //! tauri::Builder::default()
-//! 	.plugin(tauri_plugin_settings::init())
+//! 	.plugin(tauri_plugin_settings::init(None))
 //! 	.run(tauri::generate_context!())
 //! 	.expect("failed to run app");
 //! }
@@ -27,21 +27,21 @@
 //! See the [README](https://github.com/harshkhandeparkar/tauri-settings#readme) for more information on how to install and use the `tauri-settings` library.
 //!
 //! ##### Using Tauri Settings Directly in Rust
-//! ```rust
+//! ```
 //! use tauri_plugin_settings::{settings::{get, set}, config::Config};
 //! ```
 //!
-//! ```rust
+//! ```ignore
 //! // Where app is tauri::AppHandle
 //! let config = Config::new(
 //! 	&app.config(),
-//! 	Some("user-settings.json"), // File in which the settings are saved
+//! 	Some("user-settings.json".into()), // File in which the settings are saved
 //! 	None, 						// Config directory
 //! 	Some(true),					// Whether to prettify the JSON
-//! )
+//! ).unwrap();
 //!
 //! // The returned value is a serde_json::value::Value
-//! let theme = get(&config, "theme")?;
+//! let theme = get(&config, "theme").unwrap();
 //! ```
 
 use config::Config;
@@ -61,10 +61,10 @@ mod test;
 /// Initializes the plugin.
 ///
 /// ### Examples
-/// ```rust
+/// ```ignore
 ///	fn main() {
 /// tauri::Builder::default()
-/// 	.plugin(tauri_plugin_settings::init())
+/// 	.plugin(tauri_plugin_settings::init(None))
 /// 	.run(tauri::generate_context!())
 /// 	.expect("failed to run app");
 /// }
