@@ -6,11 +6,11 @@
 //! ### Tauri Settings
 //!  A user settings manager for [Tauri](https://tauri.app) inspired by `electron-settings`.
 //!
-//! This crate exports a Tauri [plugin](https://tauri.app/v1/guides/features/plugin) through the `init` function that can be used a backend for the accompanying Javascript library [`tauri-settings`](https://www.npmjs.com/package/tauri-settings) and also exports a `settings` module which can be used to load/save settings from Rust.
+//! This crate exports a Tauri [plugin](https://tauri.app/v1/guides/features/plugin) through the [`init`] function that can be used a backend for the accompanying Javascript library [`tauri-settings`](https://www.npmjs.com/package/tauri-settings) and also exports a [`settings`] module which can be used to load/save settings from Rust.
 //!
 //! #### Getting Started
 //! ##### Using the Plugin
-//! Initialize the Tauri plugin by using the `init` function in the `src-tauri/src/main.rs` file.
+//! Initialize the Tauri plugin by using the [`init`] function in the `src-tauri/src/main.rs` file.
 //! ```no_run
 //! tauri::Builder::default()
 //!     .plugin(tauri_plugin_settings::init(None));
@@ -40,7 +40,6 @@
 //!     Some(true), // Whether to prettify the JSON
 //! ).unwrap();
 //!
-//! // The returned value is a serde_json::value::Value
 //! let theme: String = get(&config, "theme").unwrap();
 //!
 //! set(&config, "open_fullscreen", true).unwrap();
