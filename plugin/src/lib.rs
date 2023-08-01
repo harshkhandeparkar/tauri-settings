@@ -1,3 +1,8 @@
+#![doc(html_favicon_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png")]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png")]
+#![doc(html_no_source)]
+
+
 //! ### Tauri Settings
 //!  A user settings manager for [Tauri](https://tauri.app) inspired by `electron-settings`.
 //!
