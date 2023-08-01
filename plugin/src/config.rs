@@ -58,7 +58,7 @@ impl Config {
 		})
 	}
 
-	pub fn from_config_options(
+	pub (crate) fn from_config_options(
 		app_config: &tauri::Config,
 		options: &ConfigOptions,
 	) -> Result<Config, Box<dyn Error>> {
