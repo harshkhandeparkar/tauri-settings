@@ -77,6 +77,7 @@ pub fn set<V: Serialize>(
 	Ok(new_settings)
 }
 
+///
 pub struct SettingsManager<S: SettingsSchema> {
 	settings: S,
 	config: Config,
