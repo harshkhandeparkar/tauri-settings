@@ -2,7 +2,6 @@
 #![doc(html_logo_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png")]
 #![doc(html_no_source)]
 
-
 //! ### Tauri Settings
 //!  A user settings manager for [Tauri](https://tauri.app) inspired by `electron-settings`.
 //!
@@ -45,6 +44,7 @@
 //! set(&config, "open_fullscreen", true).unwrap();
 //! ```
 
+use std::sync::Mutex;
 use tauri::{
 	plugin::{Builder, TauriPlugin},
 	Manager, Runtime,
@@ -59,6 +59,8 @@ mod handlers;
 pub mod settings;
 #[cfg(test)]
 mod test;
+
+pub type PluginState = Mutex<Config>;
 
 /// Initializes the plugin.
 ///
@@ -77,7 +79,9 @@ pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 			handlers::overwrite_settings
 		])
 		.setup(|app| {
-			let plugin_state = config.unwrap_or(Config::new(&app.config(), None, None, None)?);
+			let plugin_state = Mutex::new(
+				config.unwrap_or(Config::new(&app.config(), None, None, None)?)
+			);
 
 			app.manage(plugin_state);
 			Ok(())
