@@ -60,7 +60,7 @@ pub mod settings;
 #[cfg(test)]
 mod test;
 
-pub type PluginState = Mutex<Config>;
+pub (crate) type PluginState = Mutex<Config>;
 
 /// Initializes the plugin.
 ///
