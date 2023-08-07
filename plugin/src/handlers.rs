@@ -5,7 +5,7 @@ use crate::{
 	config::{Config, ConfigOptions},
 	dot_notation::{get_dot_notation, set_dot_notation},
 	fs::{load_settings_json, save_settings_json},
-	settings, PluginState, PluginStateConfig,
+	settings, PluginState,
 };
 
 #[tauri::command]
