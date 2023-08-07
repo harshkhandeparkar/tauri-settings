@@ -2,10 +2,9 @@ use serde_json::Value;
 use tauri::{AppHandle, Runtime, State};
 
 use crate::{
-	PluginState,
 	config::{Config, ConfigOptions},
 	fs::{load_settings_json, save_settings_json},
-	settings,
+	settings, PluginState,
 };
 
 #[tauri::command]

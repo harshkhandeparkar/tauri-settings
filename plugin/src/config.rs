@@ -2,6 +2,7 @@ use std::error::Error;
 use tauri::api::path;
 
 #[derive(Debug, Default, Clone)]
+
 /// Configuration for the tauri settings plugin.
 pub struct Config {
 	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
@@ -58,7 +59,7 @@ impl Config {
 		})
 	}
 
-	pub (crate) fn from_config_options(
+	pub(crate) fn from_config_options(
 		app_config: &tauri::Config,
 		options: &ConfigOptions,
 	) -> Result<Config, Box<dyn Error>> {

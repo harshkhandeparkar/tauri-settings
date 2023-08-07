@@ -1,5 +1,9 @@
-#![doc(html_favicon_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png")]
-#![doc(html_logo_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png")]
+#![doc(
+	html_favicon_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png"
+)]
+#![doc(
+	html_logo_url = "https://raw.githubusercontent.com/harshkhandeparkar/tauri-settings/plugin/img/tauri-settings-logo-circular.png"
+)]
 #![doc(html_no_source)]
 
 //! ### Tauri Settings
@@ -60,7 +64,7 @@ pub mod settings;
 #[cfg(test)]
 mod test;
 
-pub (crate) type PluginState = Mutex<Config>;
+pub(crate) type PluginState = Mutex<Config>;
 
 /// Initializes the plugin.
 ///
@@ -79,9 +83,8 @@ pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 			handlers::overwrite_settings
 		])
 		.setup(|app| {
-			let plugin_state = Mutex::new(
-				config.unwrap_or(Config::new(&app.config(), None, None, None)?)
-			);
+			let plugin_state =
+				Mutex::new(config.unwrap_or(Config::new(&app.config(), None, None, None)?));
 
 			app.manage(plugin_state);
 			Ok(())
