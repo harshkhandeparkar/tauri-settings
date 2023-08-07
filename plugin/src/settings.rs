@@ -6,7 +6,7 @@ use serde_json::{from_value, to_value, Value};
 use crate::{
 	config::Config,
 	dot_notation::{get_dot_notation, set_dot_notation},
-	fs::{load_settings_json, save_settings_json},
+	fs::{load_settings_file, save_settings_json},
 };
 
 pub trait SettingsSchema: Serialize + DeserializeOwned + Default + Clone {}
@@ -27,12 +27,9 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 }
 
 pub(crate) fn _has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> {
-	let (settings_json, _, _) = load_settings_json(config)?;
-
-	let settings: Value = serde_json::from_str(&settings_json)?;
+	let (settings, _, _) = load_settings_file(config)?;
 
 	let value: Value = get_dot_notation(&settings, key)?;
-
 	Ok((!value.is_null(), settings))
 }
 
@@ -58,9 +55,7 @@ pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn
 }
 
 pub fn _get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
-	let (settings_json, _, _) = load_settings_json(config)?;
-
-	let settings: Value = serde_json::from_str(&settings_json)?;
+	let (settings, _, _) = load_settings_file(config)?;
 
 	Ok((from_value(get_dot_notation(&settings, key)?)?, settings))
 }
@@ -79,9 +74,7 @@ pub fn set<V: Serialize>(
 	key: &str,
 	new_value: V,
 ) -> Result<Value, Box<dyn Error>> {
-	let (settings_json, _, _) = load_settings_json(config)?;
-
-	let settings: Value = serde_json::from_str(&settings_json)?;
+	let (settings, _, _) = load_settings_file(config)?;
 
 	let new_settings = set_dot_notation(&settings, key, to_value(new_value)?)?;
 	save_settings_json(&new_settings, config)?;

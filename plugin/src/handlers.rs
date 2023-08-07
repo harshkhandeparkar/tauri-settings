@@ -4,7 +4,7 @@ use tauri::{AppHandle, Runtime, State};
 use crate::{
 	config::{Config, ConfigOptions},
 	dot_notation::{get_dot_notation, set_dot_notation},
-	fs::{load_settings_json, save_settings_json},
+	fs::{load_settings_file, save_settings_json},
 	settings, PluginState, PluginStateConfig,
 };
 
@@ -20,14 +20,14 @@ pub(crate) fn add_config<R: Runtime>(
 	let config =
 		Config::from_config_options(&app.config(), &config).map_err(|err| err.to_string())?;
 
-	let (settings_json, _, was_created) =
-		load_settings_json(&config).map_err(|err| err.to_string())?;
+	let (loaded_settings, _, was_created) =
+		load_settings_file(&config).map_err(|err| err.to_string())?;
 
 	let settings: Value = if was_created {
 		save_settings_json(&default_settings, &config).map_err(|err| err.to_string())?;
 		default_settings
 	} else {
-		serde_json::from_str(&settings_json).map_err(|err| err.to_string())?
+		loaded_settings
 	};
 
 	let config_id = state.add_config(PluginStateConfig {
@@ -181,8 +181,7 @@ pub(crate) fn file_to_cache<R: Runtime>(
 		.get_config_mut(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	let (settings_json, _, _) = load_settings_json(&state.config).map_err(|err| err.to_string())?;
-	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
+	let (settings, _, _) = load_settings_file(&state.config).map_err(|err| err.to_string())?;
 
 	state.settings_cache = settings;
 
