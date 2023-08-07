@@ -57,7 +57,7 @@ pub mod settings;
 mod test;
 
 use serde_json::Value;
-use std::sync::Mutex;
+use std::{collections::HashMap, sync::Mutex, error::Error};
 use tauri::{
 	plugin::{Builder, TauriPlugin},
 	Manager, Runtime,
@@ -67,9 +67,41 @@ pub use config::{Config, ConfigOptions};
 
 pub(crate) struct PluginStateConfig {
 	config: Config,
-	settings: Value,
+	settings_cache: Value,
 }
-pub(crate) type PluginState = Mutex<PluginStateConfig>;
+pub(crate) struct PluginStateData {
+	last_config_id: u32,
+	configs: HashMap<u32, PluginStateConfig>,
+}
+
+impl PluginStateData {
+	pub(crate) fn add_config(&mut self, config: PluginStateConfig) -> u32 {
+		self.last_config_id += 1;
+		self.configs.insert(self.last_config_id, config);
+
+		self.last_config_id
+	}
+
+	pub(crate) fn get_config_mut(&mut self, id: u32) -> Result<&mut PluginStateConfig, Box<dyn Error>> {
+		self.configs.get_mut(&id).ok_or("Error: Config does not exist.".into())
+	}
+
+	pub(crate) fn get_config(&self, id: u32) -> Result<&PluginStateConfig, Box<dyn Error>> {
+		self.configs.get(&id).ok_or("Error: Config does not exist.".into())
+	}
+
+	pub(crate) fn new(initial_config: PluginStateConfig) -> PluginStateData {
+		let mut configs: HashMap<u32, PluginStateConfig> = HashMap::new();
+		configs.insert(0, initial_config);
+
+		PluginStateData {
+			last_config_id: 0,
+			configs,
+		}
+	}
+}
+
+pub(crate) type PluginState = Mutex<PluginStateData>;
 
 /// Initializes the plugin.
 ///
@@ -90,6 +122,7 @@ pub(crate) type PluginState = Mutex<PluginStateConfig>;
 pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![
+			handlers::add_config,
 			handlers::has,
 			handlers::get,
 			handlers::set,
@@ -110,10 +143,10 @@ pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> 
 			let initial_settings: Value =
 				serde_json::from_str(&initial_settings_json).map_err(|err| err.to_string())?;
 
-			app.manage::<PluginState>(Mutex::new(PluginStateConfig {
+			app.manage::<PluginState>(Mutex::new(PluginStateData::new(PluginStateConfig {
 				config,
-				settings: initial_settings,
-			}));
+				settings_cache: initial_settings,
+			})));
 			Ok(())
 		})
 		.build()

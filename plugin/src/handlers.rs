@@ -5,30 +5,54 @@ use crate::{
 	config::{Config, ConfigOptions},
 	dot_notation::{get_dot_notation, set_dot_notation},
 	fs::{load_settings_json, save_settings_json},
-	settings, PluginState,
+	settings, PluginState, PluginStateConfig,
 };
 
 #[tauri::command]
-pub(crate) fn has<R: Runtime>(
+pub(crate) fn add_config<R: Runtime>(
 	app: AppHandle<R>,
 	state: State<'_, PluginState>,
+	config: ConfigOptions,
+	default_settings: Value,
+) -> Result<(u32, Value), String> {
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
+
+	let config =
+		Config::from_config_options(&app.config(), &config).map_err(|err| err.to_string())?;
+
+	let (settings_json, _, was_created) =
+		load_settings_json(&config).map_err(|err| err.to_string())?;
+
+	let settings: Value = if was_created {
+		save_settings_json(&default_settings, &config).map_err(|err| err.to_string())?;
+		default_settings
+	} else {
+		serde_json::from_str(&settings_json).map_err(|err| err.to_string())?
+	};
+
+	let config_id = state.add_config(PluginStateConfig {
+		config,
+		settings_cache: settings.clone(),
+	});
+
+	Ok((config_id, settings))
+}
+
+#[tauri::command]
+pub(crate) fn has<R: Runtime>(
+	_app: AppHandle<R>,
+	state: State<'_, PluginState>,
 	key: &str,
-	custom_config: Option<ConfigOptions>,
+	config_id: Option<u32>,
 ) -> Result<bool, String> {
-	let config = &custom_config
-		.as_ref()
-		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config_mut(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	let (exists, new_settings) = settings::_has(config, key).map_err(|err| err.to_string())?;
-	if let None = custom_config {
-		state
-			.inner()
-			.lock()
-			.map_err(|err| err.to_string())?
-			.settings = new_settings.clone();
-	}
+	let (exists, new_settings) =
+		settings::_has(&state.config, key).map_err(|err| err.to_string())?;
+	state.settings_cache = new_settings;
 
 	Ok(exists)
 }
@@ -38,39 +62,34 @@ pub(crate) fn has_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
+	config_id: Option<u32>,
 ) -> Result<bool, String> {
-	let settings_cache = &state
-		.inner()
-		.lock()
-		.map_err(|err| err.to_string())?
-		.settings;
+	let state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config(config_id.unwrap_or(0))
+		.map_err(|err| err.to_string())?;
 
-	let value: Value = get_dot_notation(settings_cache, key).map_err(|err| err.to_string())?;
+	let value: Value =
+		get_dot_notation(&state.settings_cache, key).map_err(|err| err.to_string())?;
 
 	Ok(!value.is_null())
 }
 
 #[tauri::command]
 pub(crate) fn get<R: Runtime>(
-	app: AppHandle<R>,
+	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
-	custom_config: Option<ConfigOptions>,
+	config_id: Option<u32>,
 ) -> Result<Value, String> {
-	let config = &custom_config
-		.as_ref()
-		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config_mut(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	let (value, new_settings) = settings::_get(config, key).map_err(|err| err.to_string())?;
-	if let None = custom_config {
-		state
-			.inner()
-			.lock()
-			.map_err(|err| err.to_string())?
-			.settings = new_settings.clone();
-	}
+	let (value, new_settings) =
+		settings::_get(&state.config, key).map_err(|err| err.to_string())?;
+	state.settings_cache = new_settings;
 
 	Ok(value)
 }
@@ -80,40 +99,34 @@ pub(crate) fn get_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
+	config_id: Option<u32>,
 ) -> Result<Value, String> {
-	let settings_cache = &state
-		.inner()
-		.lock()
-		.map_err(|err| err.to_string())?
-		.settings;
+	let state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config(config_id.unwrap_or(0))
+		.map_err(|err| err.to_string())?;
 
-	let value: Value = get_dot_notation(settings_cache, key).map_err(|err| err.to_string())?;
+	let value: Value =
+		get_dot_notation(&state.settings_cache, key).map_err(|err| err.to_string())?;
 
 	Ok(value)
 }
 
 #[tauri::command]
 pub(crate) fn set<R: Runtime>(
-	app: AppHandle<R>,
+	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
 	value: Value,
-	custom_config: Option<ConfigOptions>,
+	config_id: Option<u32>,
 ) -> Result<Value, String> {
-	let config = &custom_config
-		.as_ref()
-		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config_mut(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	let new_settings = settings::set(config, key, value).map_err(|err| err.to_string())?;
-	if let None = custom_config {
-		state
-			.inner()
-			.lock()
-			.map_err(|err| err.to_string())?
-			.settings = new_settings.clone();
-	}
+	let new_settings = settings::set(&state.config, key, value).map_err(|err| err.to_string())?;
+	state.settings_cache = new_settings.clone();
 
 	Ok(new_settings)
 }
@@ -124,15 +137,15 @@ pub(crate) fn set_cache<R: Runtime>(
 	state: State<'_, PluginState>,
 	key: &str,
 	new_value: Value,
+	config_id: Option<u32>
 ) -> Result<Value, String> {
-	let settings_cache = &state
-		.inner()
-		.lock()
-		.map_err(|err| err.to_string())?
-		.settings;
+	let state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config(config_id.unwrap_or(0))
+		.map_err(|err| err.to_string())?;
 
 	let new_settings = set_dot_notation(
-		settings_cache,
+		&state.settings_cache,
 		key,
 		to_value(new_value).map_err(|err| err.to_string())?,
 	)
@@ -145,10 +158,14 @@ pub(crate) fn set_cache<R: Runtime>(
 pub(crate) fn cache_to_file<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
+	config_id: Option<u32>
 ) -> Result<(), String> {
-	let state = &state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config(config_id.unwrap_or(0))
+		.map_err(|err| err.to_string())?;
 
-	save_settings_json(&state.settings, &state.config).map_err(|err| err.to_string())?;
+	save_settings_json(&state.settings_cache, &state.config).map_err(|err| err.to_string())?;
 
 	Ok(())
 }
@@ -157,13 +174,17 @@ pub(crate) fn cache_to_file<R: Runtime>(
 pub(crate) fn file_to_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
+	config_id: Option<u32>,
 ) -> Result<(), String> {
-	let state = &mut state.inner().lock().map_err(|err| err.to_string())?;
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
+	let state = state
+		.get_config_mut(config_id.unwrap_or(0))
+		.map_err(|err| err.to_string())?;
 
 	let (settings_json, _, _) = load_settings_json(&state.config).map_err(|err| err.to_string())?;
 	let settings: Value = serde_json::from_str(&settings_json).map_err(|err| err.to_string())?;
 
-	state.settings = settings;
+	state.settings_cache = settings;
 
 	Ok(())
 }
