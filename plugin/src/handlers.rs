@@ -9,7 +9,7 @@ use crate::{
 };
 
 #[tauri::command]
-pub fn has<R: Runtime>(
+pub(crate) fn has<R: Runtime>(
 	app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
@@ -34,7 +34,7 @@ pub fn has<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn has_cache<R: Runtime>(
+pub(crate) fn has_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
@@ -51,7 +51,7 @@ pub fn has_cache<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn get<R: Runtime>(
+pub(crate) fn get<R: Runtime>(
 	app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
@@ -76,7 +76,7 @@ pub fn get<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn get_cache<R: Runtime>(
+pub(crate) fn get_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
@@ -93,7 +93,7 @@ pub fn get_cache<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn set<R: Runtime>(
+pub(crate) fn set<R: Runtime>(
 	app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
@@ -119,7 +119,7 @@ pub fn set<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn set_cache<R: Runtime>(
+pub(crate) fn set_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
@@ -142,7 +142,7 @@ pub fn set_cache<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn cache_to_file<R: Runtime>(
+pub(crate) fn cache_to_file<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 ) -> Result<(), String> {
@@ -154,7 +154,7 @@ pub fn cache_to_file<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn file_to_cache<R: Runtime>(
+pub(crate) fn file_to_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 ) -> Result<(), String> {

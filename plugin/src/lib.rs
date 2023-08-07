@@ -65,7 +65,7 @@ use tauri::{
 
 pub use config::{Config, ConfigOptions};
 
-pub struct PluginStateConfig {
+pub(crate) struct PluginStateConfig {
 	config: Config,
 	settings: Value,
 }

@@ -13,6 +13,7 @@ pub struct Config {
 	pub prettify: bool,
 }
 
+/// Configuration options for the tauri settings plugin.
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct ConfigOptions {
 	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
