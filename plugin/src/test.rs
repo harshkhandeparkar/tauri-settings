@@ -1,3 +1,5 @@
+//! Tests for the crate.
+
 use crate::dot_notation::{get_dot_notation, set_dot_notation};
 use serde_json::Value;
 

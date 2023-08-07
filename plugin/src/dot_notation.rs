@@ -1,3 +1,5 @@
+//! Helper functions for getting and setting values using dot notation.
+
 use std::error::Error;
 
 use serde::{de::DeserializeOwned, Serialize};

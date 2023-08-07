@@ -1,3 +1,5 @@
+//! Helper functions for loading and saving settings files.
+
 use serde_json::Value;
 
 use crate::config::Config;

@@ -1,3 +1,5 @@
+//! Configuration for the plugin.
+
 use std::error::Error;
 use tauri::api::path;
 

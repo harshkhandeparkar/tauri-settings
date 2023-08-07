@@ -1,3 +1,5 @@
+//! Tauri plugin handlers/commands.
+
 use serde_json::{to_value, Value};
 use tauri::{AppHandle, Runtime, State};
 
