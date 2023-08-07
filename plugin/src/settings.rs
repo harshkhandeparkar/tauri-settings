@@ -9,8 +9,6 @@ use crate::{
 	fs::{load_settings_file, save_settings_json},
 };
 
-pub trait SettingsSchema: Serialize + DeserializeOwned + Default + Clone {}
-
 /// Checks if a key exists in the settings.
 ///
 /// Here key supports dot notation. Eg: `preferences.theme`.
@@ -54,7 +52,7 @@ pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn
 	Ok(value)
 }
 
-pub fn _get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
+pub(crate) fn _get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
 	let (settings, _, _) = load_settings_file(config)?;
 
 	Ok((from_value(get_dot_notation(&settings, key)?)?, settings))
