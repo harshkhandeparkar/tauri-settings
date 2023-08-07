@@ -57,7 +57,7 @@ pub mod settings;
 mod test;
 
 use serde_json::Value;
-use std::{collections::HashMap, sync::Mutex, error::Error};
+use std::{collections::HashMap, error::Error, sync::Mutex};
 use tauri::{
 	plugin::{Builder, TauriPlugin},
 	Manager, Runtime,
@@ -82,12 +82,19 @@ impl PluginStateData {
 		self.last_config_id
 	}
 
-	pub(crate) fn get_config_mut(&mut self, id: u32) -> Result<&mut PluginStateConfig, Box<dyn Error>> {
-		self.configs.get_mut(&id).ok_or("Error: Config does not exist.".into())
+	pub(crate) fn get_config_mut(
+		&mut self,
+		id: u32,
+	) -> Result<&mut PluginStateConfig, Box<dyn Error>> {
+		self.configs
+			.get_mut(&id)
+			.ok_or("Error: Config does not exist.".into())
 	}
 
 	pub(crate) fn get_config(&self, id: u32) -> Result<&PluginStateConfig, Box<dyn Error>> {
-		self.configs.get(&id).ok_or("Error: Config does not exist.".into())
+		self.configs
+			.get(&id)
+			.ok_or("Error: Config does not exist.".into())
 	}
 
 	pub(crate) fn new(initial_config: PluginStateConfig) -> PluginStateData {

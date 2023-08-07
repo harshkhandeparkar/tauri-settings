@@ -137,7 +137,7 @@ pub(crate) fn set_cache<R: Runtime>(
 	state: State<'_, PluginState>,
 	key: &str,
 	new_value: Value,
-	config_id: Option<u32>
+	config_id: Option<u32>,
 ) -> Result<Value, String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 	let state = state
@@ -158,7 +158,7 @@ pub(crate) fn set_cache<R: Runtime>(
 pub(crate) fn cache_to_file<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
-	config_id: Option<u32>
+	config_id: Option<u32>,
 ) -> Result<(), String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 	let state = state
