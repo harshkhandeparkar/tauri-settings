@@ -27,7 +27,7 @@ pub fn has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> 
 
 	let value: Value = get_dot_notation(&settings, key)?;
 
-	Ok((!value.is_null(), value))
+	Ok((!value.is_null(), settings))
 }
 
 /// Returns the value corresponding to a key in the settings.
