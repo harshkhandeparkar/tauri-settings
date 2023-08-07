@@ -20,14 +20,14 @@ pub trait SettingsSchema: Serialize + DeserializeOwned + Default + Clone {}
 /// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme_exists = has(&config, "preferences.theme").unwrap();
 /// ```
-pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
+pub fn has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
 	let value: Value = get_dot_notation(&settings, key)?;
 
-	Ok(!value.is_null())
+	Ok((!value.is_null(), value))
 }
 
 /// Returns the value corresponding to a key in the settings.
@@ -45,12 +45,12 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 /// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme: Vec<String> = get(&config, "recently_opened").unwrap();
 /// ```
-pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn Error>> {
+pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
 
-	Ok(from_value(get_dot_notation(&settings, key)?)?)
+	Ok((from_value(get_dot_notation(&settings, key)?)?, settings))
 }
 
 /// Sets the value corresponding to a key in the settings.

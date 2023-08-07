@@ -15,11 +15,17 @@ pub fn has<R: Runtime>(
 	custom_config: Option<ConfigOptions>,
 ) -> Result<bool, String> {
 	let config = &custom_config
+		.as_ref()
 		.map(|options| Config::from_config_options(&app.config(), &options))
 		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
-	settings::has(config, key).map_err(|err| err.to_string())
+	let (exists, new_settings) = settings::has(config, key).map_err(|err| err.to_string())?;
+	if let None = custom_config {
+		state.inner().lock().map_err(|err| err.to_string())?.settings = new_settings.clone();
+	}
+
+	Ok(exists)
 }
 
 #[tauri::command]
@@ -30,11 +36,17 @@ pub fn get<R: Runtime>(
 	custom_config: Option<ConfigOptions>,
 ) -> Result<Value, String> {
 	let config = &custom_config
+		.as_ref()
 		.map(|options| Config::from_config_options(&app.config(), &options))
 		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
-	settings::get(config, key).map_err(|err| err.to_string())
+	let (value, new_settings) = settings::get(config, key).map_err(|err| err.to_string())?;
+	if let None = custom_config {
+		state.inner().lock().map_err(|err| err.to_string())?.settings = new_settings.clone();
+	}
+
+	Ok(value)
 }
 
 #[tauri::command]
@@ -46,11 +58,17 @@ pub fn set<R: Runtime>(
 	custom_config: Option<ConfigOptions>,
 ) -> Result<Value, String> {
 	let config = &custom_config
+		.as_ref()
 		.map(|options| Config::from_config_options(&app.config(), &options))
 		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
-	settings::set(config, key, value).map_err(|err| err.to_string())
+	let new_settings = settings::set(config, key, value).map_err(|err| err.to_string())?;
+	if let None = custom_config {
+		state.inner().lock().map_err(|err| err.to_string())?.settings = new_settings.clone();
+	}
+
+	Ok(new_settings)
 }
 
 #[tauri::command]

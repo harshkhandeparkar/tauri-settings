@@ -101,7 +101,7 @@ pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> 
 				.map(|options| Config::from_config_options(&app.config(), &options))
 				.unwrap_or_else(|| Config::new(&app.config(), None, None, None))?;
 
-			let (initial_settings_json, settings_file_path, was_created) =
+			let (initial_settings_json, _, _) =
 				fs::load_settings_json(&config).map_err(|err| err.to_string())?;
 
 			let initial_settings: Value =
