@@ -16,7 +16,7 @@ pub fn has<R: Runtime>(
 ) -> Result<bool, String> {
 	let config = &custom_config
 		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.clone()))
+		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
 	settings::has(config, key).map_err(|err| err.to_string())
@@ -31,7 +31,7 @@ pub fn get<R: Runtime>(
 ) -> Result<Value, String> {
 	let config = &custom_config
 		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.clone()))
+		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
 	settings::get(config, key).map_err(|err| err.to_string())
@@ -47,7 +47,7 @@ pub fn set<R: Runtime>(
 ) -> Result<Value, String> {
 	let config = &custom_config
 		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.clone()))
+		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
 	settings::set(config, key, value).map_err(|err| err.to_string())
@@ -62,7 +62,7 @@ pub fn overwrite_settings<R: Runtime>(
 ) -> Result<(), String> {
 	let config = &custom_config
 		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.clone()))
+		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
 	save_settings_json(&new_settings, config).map_err(|err| err.to_string())?;
@@ -78,7 +78,7 @@ pub fn read_settings<R: Runtime>(
 ) -> Result<(Value, String, bool), String> {
 	let config = &custom_config
 		.map(|options| Config::from_config_options(&app.config(), &options))
-		.unwrap_or_else(|| Ok(state.inner().lock()?.clone()))
+		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
 	let (settings_json, settings_file_path, was_created) =

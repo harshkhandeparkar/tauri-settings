@@ -56,6 +56,7 @@ pub mod settings;
 #[cfg(test)]
 mod test;
 
+use serde_json::Value;
 use std::sync::Mutex;
 use tauri::{
 	plugin::{Builder, TauriPlugin},
@@ -64,7 +65,11 @@ use tauri::{
 
 pub use config::{Config, ConfigOptions};
 
-pub(crate) type PluginState = Mutex<Config>;
+pub struct PluginStateConfig {
+	config: Config,
+	settings: Value,
+}
+pub(crate) type PluginState = Mutex<PluginStateConfig>;
 
 /// Initializes the plugin.
 ///
@@ -96,7 +101,16 @@ pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> 
 				.map(|options| Config::from_config_options(&app.config(), &options))
 				.unwrap_or_else(|| Config::new(&app.config(), None, None, None))?;
 
-			app.manage(config);
+			let (initial_settings_json, settings_file_path, was_created) =
+				fs::load_settings_json(&config).map_err(|err| err.to_string())?;
+
+			let initial_settings: Value =
+				serde_json::from_str(&initial_settings_json).map_err(|err| err.to_string())?;
+
+			app.manage::<PluginState>(Mutex::new(PluginStateConfig {
+				config,
+				settings: initial_settings,
+			}));
 			Ok(())
 		})
 		.build()
