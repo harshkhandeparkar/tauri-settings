@@ -21,7 +21,7 @@ pub fn has<R: Runtime>(
 		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
-	let (exists, new_settings) = settings::has(config, key).map_err(|err| err.to_string())?;
+	let (exists, new_settings) = settings::_has(config, key).map_err(|err| err.to_string())?;
 	if let None = custom_config {
 		state
 			.inner()
@@ -63,7 +63,7 @@ pub fn get<R: Runtime>(
 		.unwrap_or_else(|| Ok(state.inner().lock()?.config.clone()))
 		.map_err(|err| err.to_string())?;
 
-	let (value, new_settings) = settings::get(config, key).map_err(|err| err.to_string())?;
+	let (value, new_settings) = settings::_get(config, key).map_err(|err| err.to_string())?;
 	if let None = custom_config {
 		state
 			.inner()

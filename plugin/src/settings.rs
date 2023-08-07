@@ -20,7 +20,13 @@ pub trait SettingsSchema: Serialize + DeserializeOwned + Default + Clone {}
 /// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme_exists = has(&config, "preferences.theme").unwrap();
 /// ```
-pub fn has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> {
+pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
+	let (exists, _) = _has(config, key)?;
+
+	Ok(exists)
+}
+
+pub(crate) fn _has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
@@ -45,7 +51,13 @@ pub fn has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> 
 /// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme: Vec<String> = get(&config, "recently_opened").unwrap();
 /// ```
-pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
+pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn Error>> {
+	let (value, _) = _get(config, key)?;
+
+	Ok(value)
+}
+
+pub fn _get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
 	let (settings_json, _, _) = load_settings_json(config)?;
 
 	let settings: Value = serde_json::from_str(&settings_json)?;
