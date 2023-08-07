@@ -1,7 +1,7 @@
 use std::error::Error;
 use tauri::api::path;
 
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Clone)]
 
 /// Configuration for the tauri settings plugin.
 pub struct Config {
@@ -13,7 +13,7 @@ pub struct Config {
 	pub prettify: bool,
 }
 
-#[derive(Debug, Default, serde::Deserialize, Clone)]
+#[derive(Debug, serde::Deserialize, Clone)]
 pub struct ConfigOptions {
 	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
 	pub file_name: Option<String>,
@@ -21,6 +21,31 @@ pub struct ConfigOptions {
 	pub directory: Option<String>,
 	/// Whether to prettify the JSON output. (Default: `false`)
 	pub prettify: Option<bool>,
+}
+
+impl ConfigOptions {
+	/// Creates a new ConfigOptions struct.
+	///
+	/// ### Examples
+	/// ```no_run
+	/// # use tauri_plugin_settings::ConfigOptions;
+	/// let config = ConfigOptions::new(
+	///     Some("user-settings.json".into()), // File in which the settings are saved
+	///     None, // Config directory
+	///     Some(true), // Whether to prettify the JSON
+	/// );
+	/// ```
+	pub fn new(
+		file_name: Option<String>,
+		directory: Option<String>,
+		prettify: Option<bool>,
+	) -> ConfigOptions {
+		ConfigOptions {
+			file_name,
+			directory,
+			prettify,
+		}
+	}
 }
 
 impl Config {
@@ -59,7 +84,7 @@ impl Config {
 		})
 	}
 
-	pub(crate) fn from_config_options(
+	pub fn from_config_options(
 		app_config: &tauri::Config,
 		options: &ConfigOptions,
 	) -> Result<Config, Box<dyn Error>> {
@@ -69,5 +94,9 @@ impl Config {
 			options.directory.clone(),
 			options.prettify,
 		)
+	}
+
+	pub fn default(app_config: &tauri::Config) -> Result<Config, Box<dyn Error>> {
+		Config::new(app_config, None, None, None)
 	}
 }

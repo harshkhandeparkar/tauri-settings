@@ -48,14 +48,6 @@
 //! set(&config, "open_fullscreen", true).unwrap();
 //! ```
 
-use std::sync::Mutex;
-use tauri::{
-	plugin::{Builder, TauriPlugin},
-	Manager, Runtime,
-};
-
-pub use config::Config;
-
 mod config;
 mod dot_notation;
 mod fs;
@@ -63,6 +55,14 @@ mod handlers;
 pub mod settings;
 #[cfg(test)]
 mod test;
+
+use std::sync::Mutex;
+use tauri::{
+	plugin::{Builder, TauriPlugin},
+	Manager, Runtime,
+};
+
+pub use config::{Config, ConfigOptions};
 
 pub(crate) type PluginState = Mutex<Config>;
 
@@ -73,7 +73,16 @@ pub(crate) type PluginState = Mutex<Config>;
 /// tauri::Builder::default()
 ///     .plugin(tauri_plugin_settings::init(None));
 /// ```
-pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
+///
+/// ```no_run
+/// use tauri_plugin_settings::ConfigOptions;
+///
+/// let config = ConfigOptions::new(Some("preferences.json".into()), None, Some(true.into()));
+///
+/// tauri::Builder::default()
+///     .plugin(tauri_plugin_settings::init(Some(config)));
+/// ```
+pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![
 			handlers::has,
@@ -83,10 +92,11 @@ pub fn init<R: Runtime>(config: Option<Config>) -> TauriPlugin<R> {
 			handlers::overwrite_settings
 		])
 		.setup(|app| {
-			let plugin_state =
-				Mutex::new(config.unwrap_or(Config::new(&app.config(), None, None, None)?));
+			let config = custom_config
+				.map(|options| Config::from_config_options(&app.config(), &options))
+				.unwrap_or_else(|| Config::new(&app.config(), None, None, None))?;
 
-			app.manage(plugin_state);
+			app.manage(config);
 			Ok(())
 		})
 		.build()

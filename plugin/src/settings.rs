@@ -17,7 +17,7 @@ pub trait SettingsSchema: Sized + Serialize + DeserializeOwned + Default + Copy 
 /// ### Examples
 /// ```no_run
 /// # use tauri_plugin_settings::{Config, settings::has};
-/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme_exists = has(&config, "preferences.theme").unwrap();
 /// ```
 pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
@@ -36,13 +36,13 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 /// ### Examples
 /// ```no_run
 /// # use tauri_plugin_settings::{Config, settings::get};
-/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme: String = get(&config, "preferences.theme").unwrap();
 /// ```
 ///
 /// ```no_run
 /// # use tauri_plugin_settings::{Config, settings::get};
-/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// let theme: Vec<String> = get(&config, "recently_opened").unwrap();
 /// ```
 pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn Error>> {
@@ -59,7 +59,7 @@ pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn
 /// ### Examples
 /// ```no_run
 /// # use tauri_plugin_settings::{Config, settings::set};
-/// # let config = Config::new(&tauri::Config::default(), None, None, None).unwrap();
+/// # let config = Config::default(&tauri::Config::default()).unwrap();
 /// set(&config, "preferences.theme", "dark").unwrap();
 /// ```
 pub fn set<V: Serialize>(
