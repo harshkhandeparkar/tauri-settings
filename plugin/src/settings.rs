@@ -1,3 +1,5 @@
+//! Functions for getting and setting settings directly from Rust.
+
 use std::error::Error;
 
 use serde::{de::DeserializeOwned, Serialize};
