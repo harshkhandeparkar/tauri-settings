@@ -93,8 +93,11 @@ pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> 
 			handlers::has,
 			handlers::get,
 			handlers::set,
-			handlers::read_settings,
-			handlers::overwrite_settings
+			handlers::has_cache,
+			handlers::get_cache,
+			handlers::set_cache,
+			handlers::file_to_cache,
+			handlers::cache_to_file,
 		])
 		.setup(|app| {
 			let config = custom_config
