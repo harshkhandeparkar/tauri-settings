@@ -10,6 +10,15 @@ use crate::{
 	settings, PluginState, PluginStateConfig,
 };
 
+/// Adds a configuration to the plugin's state.
+///
+/// ### Arguments
+/// * `config`: Options for the configuration.
+/// * `default_settings`: The default values for the settings.
+///
+/// Returns a tuple with the following fields:
+/// * Configuration ID: An identifier for the configuration.
+/// * Settings: The value for the settings (loads settings from the file if it exists).
 #[tauri::command]
 pub(crate) fn add_config<R: Runtime>(
 	app: AppHandle<R>,
@@ -40,6 +49,11 @@ pub(crate) fn add_config<R: Runtime>(
 	Ok((config_id, settings))
 }
 
+/// Checks whether a key exists in the settings.
+///
+/// ### Arguments
+/// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 #[tauri::command]
 pub(crate) fn has<R: Runtime>(
 	_app: AppHandle<R>,
@@ -59,6 +73,11 @@ pub(crate) fn has<R: Runtime>(
 	Ok(exists)
 }
 
+/// Checks whether a key exists in the cached settings.
+///
+/// ### Arguments
+/// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 #[tauri::command]
 pub(crate) fn has_cache<R: Runtime>(
 	_app: AppHandle<R>,
@@ -77,6 +96,11 @@ pub(crate) fn has_cache<R: Runtime>(
 	Ok(!value.is_null())
 }
 
+/// Gets the value corresponding to a key in the settings.
+///
+/// ### Arguments
+/// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 #[tauri::command]
 pub(crate) fn get<R: Runtime>(
 	_app: AppHandle<R>,
@@ -96,6 +120,11 @@ pub(crate) fn get<R: Runtime>(
 	Ok(value)
 }
 
+/// Gets the value corresponding to a key in the cached settings.
+///
+/// ### Arguments
+/// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 #[tauri::command]
 pub(crate) fn get_cache<R: Runtime>(
 	_app: AppHandle<R>,
@@ -114,6 +143,12 @@ pub(crate) fn get_cache<R: Runtime>(
 	Ok(value)
 }
 
+/// Sets the value corresponding to a key in the settings. Creates the key path recursively if it doesn't exist.
+///
+/// ### Arguments
+/// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
+/// * `value`: The value to set.
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 #[tauri::command]
 pub(crate) fn set<R: Runtime>(
 	_app: AppHandle<R>,
@@ -132,6 +167,13 @@ pub(crate) fn set<R: Runtime>(
 
 	Ok(new_settings)
 }
+
+/// Sets the value corresponding to a key in the cached settings. Creates the key path recursively if it doesn't exist.
+///
+/// ### Arguments
+/// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
+/// * `value`: The value to set.
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 
 #[tauri::command]
 pub(crate) fn set_cache<R: Runtime>(
@@ -156,6 +198,11 @@ pub(crate) fn set_cache<R: Runtime>(
 	Ok(new_settings)
 }
 
+/// Syncs the cached settings to the settings file.
+///
+/// ### Arguments
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
+
 #[tauri::command]
 pub(crate) fn cache_to_file<R: Runtime>(
 	_app: AppHandle<R>,
@@ -172,6 +219,10 @@ pub(crate) fn cache_to_file<R: Runtime>(
 	Ok(())
 }
 
+/// Loads the settings from the settings file into the cached settings.
+///
+/// ### Arguments
+/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
 #[tauri::command]
 pub(crate) fn file_to_cache<R: Runtime>(
 	_app: AppHandle<R>,
