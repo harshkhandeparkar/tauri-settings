@@ -6,7 +6,7 @@ import { has as invokeHas, has_cache, get as invokeGet, get_cache, set as invoke
  * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
  */
 export async function has<
-	SettingsSchema,
+	SettingsSchema = {},
 	K extends Path<SettingsSchema> = Path<SettingsSchema>
 	>(key: K, configId?: number): Promise<boolean> {
 	try {
@@ -39,7 +39,7 @@ export async function hasCache<
  * @returns The value of the setting
  */
 export async function get<
-	SettingsSchema,
+	SettingsSchema = {},
 	K extends Path<SettingsSchema> = Path<SettingsSchema>
 	>(key: K, configId?: number): Promise<PathValue<SettingsSchema, K>> {
 	try {
@@ -74,12 +74,12 @@ export async function getCache<
  * @returns The entire settings object
  */
 export async function set<
-	SettingsSchema,
+	SettingsSchema = {},
 	K extends Path<SettingsSchema> = Path<SettingsSchema>,
 	V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
-	>(key: K, value: V, configId?: number): Promise<SettingsSchema> {
+	>(key: K, value: V, configId?: number): Promise<void> {
 	try {
-		return await invokeSet(key as string, value, configId);
+		await invokeSet(key as string, value, configId);
 	}
 	catch (e) {
 		throw e;
@@ -96,9 +96,9 @@ export async function setCache<
 	SettingsSchema,
 	K extends Path<SettingsSchema> = Path<SettingsSchema>,
 	V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
->(key: K, value: V, configId?: number): Promise<SettingsSchema> {
+	>(key: K, value: V, configId?: number): Promise<void> {
 	try {
-		return await set_cache(key as string, value, configId);
+		await set_cache(key as string, value, configId);
 	}
 	catch (e) {
 		throw e;
