@@ -54,7 +54,10 @@ pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn
 	Ok(value)
 }
 
-pub(crate) fn _get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<(V, Value), Box<dyn Error>> {
+pub(crate) fn _get<V: DeserializeOwned>(
+	config: &Config,
+	key: &str,
+) -> Result<(V, Value), Box<dyn Error>> {
 	let (settings, _, _) = load_settings_file(config)?;
 
 	Ok((from_value(get_dot_notation(&settings, key)?)?, settings))

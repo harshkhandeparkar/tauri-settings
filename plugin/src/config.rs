@@ -4,7 +4,6 @@ use std::error::Error;
 use tauri::api::path;
 
 #[derive(Debug, Clone)]
-
 /// Configuration for the tauri settings plugin.
 pub struct Config {
 	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
