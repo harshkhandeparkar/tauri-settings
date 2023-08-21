@@ -1,6 +1,6 @@
 //! Tauri plugin handlers/commands.
 
-use serde_json::{to_value, Value};
+use serde_json::Value;
 use tauri::{AppHandle, Runtime, State};
 
 use crate::{
@@ -43,7 +43,7 @@ pub(crate) fn add_config<R: Runtime>(
 
 	let config_id = state.add_config(PluginStateConfig {
 		config,
-		settings_cache: settings.clone(),
+		settings_cache: settings,
 	});
 
 	Ok(config_id)
@@ -163,7 +163,7 @@ pub(crate) fn set<R: Runtime>(
 		.map_err(|err| err.to_string())?;
 
 	let new_settings = settings::set(&state.config, key, value).map_err(|err| err.to_string())?;
-	state.settings_cache = new_settings.clone();
+	state.settings_cache = new_settings;
 
 	Ok(())
 }
@@ -182,17 +182,13 @@ pub(crate) fn set_cache<R: Runtime>(
 	value: Value,
 	config_id: Option<u32>,
 ) -> Result<(), String> {
-	let state = state.inner().lock().map_err(|err| err.to_string())?;
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
 	let state = state
-		.get_config(config_id.unwrap_or(0))
+		.get_config_mut(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	set_dot_notation(
-		&state.settings_cache,
-		key,
-		to_value(value).map_err(|err| err.to_string())?,
-	)
-	.map_err(|err| err.to_string())?;
+	state.settings_cache =
+		set_dot_notation(&state.settings_cache, key, value).map_err(|err| err.to_string())?;
 
 	Ok(())
 }
