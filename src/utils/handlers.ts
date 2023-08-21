@@ -1,22 +1,41 @@
 import { invoke } from '@tauri-apps/api';
 import { IConfigOptions } from './config';
 
-export async function has(key: string, customConfig?: IConfigOptions): Promise<boolean> {
-	return await invoke('plugin:settings|has', { key, customConfig });
+export async function add_config(
+	config: IConfigOptions,
+	defaultSettings: any
+): Promise<[config_id: number, settings: any]> {
+	return await invoke('plugin:settings|add_config', { config, defaultSettings });
 }
 
-export async function get(key: string, customConfig?: IConfigOptions): Promise<any> {
-	return await invoke('plugin:settings|get', { key, customConfig });
+export async function has(key: string, configId?: number): Promise<boolean> {
+	return await invoke('plugin:settings|has', { key, configId });
 }
 
-export async function set(key: string, value: any, customConfig?: IConfigOptions): Promise<any> {
-	return await invoke('plugin:settings|set', { key, value, customConfig });
+export async function has_cache(key: string, configId?: number): Promise<boolean> {
+	return await invoke('plugin:settings|has_cache', { key, configId });
 }
 
-export async function overwrite_settings(new_settings: any, customConfig?: IConfigOptions): Promise<void> {
-	await invoke('plugin:settings|overwrite_settings', { new_settings, customConfig });
+export async function get(key: string, configId?: number): Promise<any> {
+	return await invoke('plugin:settings|get_cache', { key, configId });
 }
 
-export async function read_settings(customConfig?: IConfigOptions): Promise<[settings: any, settings_file_path: string, was_created: boolean]> {
-	return await invoke('plugin:settings|read_settings', { customConfig });
+export async function get_cache(key: string, configId?: number): Promise<any> {
+	return await invoke('plugin:settings|get', { key, configId });
+}
+
+export async function set(key: string, value: any, configId?: number): Promise<any> {
+	return await invoke('plugin:settings|set', { key, value, configId });
+}
+
+export async function set_cache(key: string, value: any, configId?: number): Promise<any> {
+	return await invoke('plugin:settings|set_cache', { key, value, configId });
+}
+
+export async function cache_to_file(configId?: number): Promise<any> {
+	return await invoke('plugin:settings|cache_to_file', { configId });
+}
+
+export async function file_to_cache(configId?: number): Promise<any> {
+	return await invoke('plugin:settings|file_to_cache', { configId });
 }

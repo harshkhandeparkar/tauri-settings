@@ -1,6 +1,5 @@
-import { IConfigOptions } from '../utils/config';
 import type { Path, PathValue } from '../utils/dot-notation';
-import { has as invokeHas, get as invokeGet, set as invokeSet } from '../utils/handlers';
+import { has as invokeHas, has_cache, get as invokeGet, get_cache, set as invokeSet, set_cache } from '../utils/handlers';
 
 /**
  * Checks whether a key exists in the settings.
@@ -9,9 +8,25 @@ import { has as invokeHas, get as invokeGet, set as invokeSet } from '../utils/h
 export async function has<
 	SettingsSchema,
 	K extends Path<SettingsSchema> = Path<SettingsSchema>
-	>(key: K, customConfig?: IConfigOptions): Promise<boolean> {
+	>(key: K, configId?: number): Promise<boolean> {
 	try {
-		return await invokeHas(key as string, customConfig);
+		return await invokeHas(key as string, configId);
+	}
+	catch (e) {
+		throw e;
+	}
+}
+
+/**
+ * Checks whether a key exists in the cached settings.
+ * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
+ */
+export async function hasCache<
+	SettingsSchema,
+	K extends Path<SettingsSchema> = Path<SettingsSchema>
+>(key: K, configId?: number): Promise<boolean> {
+	try {
+		return await has_cache(key as string, configId);
 	}
 	catch (e) {
 		throw e;
@@ -26,9 +41,9 @@ export async function has<
 export async function get<
 	SettingsSchema,
 	K extends Path<SettingsSchema> = Path<SettingsSchema>
-	>(key: K, customConfig?: IConfigOptions): Promise<PathValue<SettingsSchema, K>> {
+	>(key: K, configId?: number): Promise<PathValue<SettingsSchema, K>> {
 	try {
-		return await invokeGet(key as string, customConfig);
+		return await invokeGet(key as string, configId);
 	}
 	catch (e) {
 		throw e;
@@ -36,7 +51,24 @@ export async function get<
 }
 
 /**
- * Sets the value of a particular setting
+ * Get the value of a particular setting in the cached settings.
+ * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
+ * @returns The value of the setting
+ */
+export async function getCache<
+	SettingsSchema,
+	K extends Path<SettingsSchema> = Path<SettingsSchema>
+>(key: K, configId?: number): Promise<PathValue<SettingsSchema, K>> {
+	try {
+		return await get_cache(key as string, configId);
+	}
+	catch (e) {
+		throw e;
+	}
+}
+
+/**
+ * Sets the value of a particular setting.
  * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
  * @param value The new value
  * @returns The entire settings object
@@ -45,9 +77,28 @@ export async function set<
 	SettingsSchema,
 	K extends Path<SettingsSchema> = Path<SettingsSchema>,
 	V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
-	>(key: K, value: V, customConfig?: IConfigOptions): Promise<SettingsSchema> {
+	>(key: K, value: V, configId?: number): Promise<SettingsSchema> {
 	try {
-		return await invokeSet(key as string, value, customConfig);
+		return await invokeSet(key as string, value, configId);
+	}
+	catch (e) {
+		throw e;
+	}
+}
+
+/**
+ * Sets the value of a particular setting in the cached settings.
+ * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
+ * @param value The new value
+ * @returns The entire settings object
+ */
+export async function setCache<
+	SettingsSchema,
+	K extends Path<SettingsSchema> = Path<SettingsSchema>,
+	V extends PathValue<SettingsSchema, K> = PathValue<SettingsSchema, K>
+>(key: K, value: V, configId?: number): Promise<SettingsSchema> {
+	try {
+		return await set_cache(key as string, value, configId);
 	}
 	catch (e) {
 		throw e;
