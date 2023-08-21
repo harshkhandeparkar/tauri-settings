@@ -25,7 +25,7 @@ pub(crate) fn add_config<R: Runtime>(
 	state: State<'_, PluginState>,
 	config: ConfigOptions,
 	default_settings: Value,
-) -> Result<(u32, Value), String> {
+) -> Result<u32, String> {
 	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
 
 	let config =
@@ -46,7 +46,7 @@ pub(crate) fn add_config<R: Runtime>(
 		settings_cache: settings.clone(),
 	});
 
-	Ok((config_id, settings))
+	Ok(config_id)
 }
 
 /// Checks whether a key exists in the settings.
@@ -156,7 +156,7 @@ pub(crate) fn set<R: Runtime>(
 	key: &str,
 	value: Value,
 	config_id: Option<u32>,
-) -> Result<Value, String> {
+) -> Result<(), String> {
 	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
 	let state = state
 		.get_config_mut(config_id.unwrap_or(0))
@@ -165,7 +165,7 @@ pub(crate) fn set<R: Runtime>(
 	let new_settings = settings::set(&state.config, key, value).map_err(|err| err.to_string())?;
 	state.settings_cache = new_settings.clone();
 
-	Ok(new_settings)
+	Ok(())
 }
 
 /// Sets the value corresponding to a key in the cached settings. Creates the key path recursively if it doesn't exist.
@@ -181,20 +181,20 @@ pub(crate) fn set_cache<R: Runtime>(
 	key: &str,
 	value: Value,
 	config_id: Option<u32>,
-) -> Result<Value, String> {
+) -> Result<(), String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 	let state = state
 		.get_config(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	let new_settings = set_dot_notation(
+	set_dot_notation(
 		&state.settings_cache,
 		key,
 		to_value(value).map_err(|err| err.to_string())?,
 	)
 	.map_err(|err| err.to_string())?;
 
-	Ok(new_settings)
+	Ok(())
 }
 
 /// Syncs the cached settings to the settings file.
