@@ -25,12 +25,10 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * Initializes a settings file with the defaults. If settings exist, load them.
 	 * @returns The entire settings object
 	 */
-	async initialize(): Promise<SettingsSchema> {
-		let [configId, currentSettings] = await add_config(this.config, this.default);
+	async initialize(): Promise<void> {
+		let configId = await add_config(this.config, this.default);
 
 		this.configId = configId;
-
-		return currentSettings;
 	}
 
 	/**
@@ -63,10 +61,9 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * Sets the value for a setting. Only updates cache.
 	 * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
 	 * @param value The new value for the setting
-	 * @returns The entire settings object
 	 */
-	async setCache<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<SettingsSchema> {
-		return setCache<SettingsSchema, K>(key, value, this.configId);
+	async setCache<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<void> {
+		await setCache<SettingsSchema, K>(key, value, this.configId);
 	}
 
 	/**
@@ -90,10 +87,9 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * Sets the value for a setting directly to the storage. Also updates cache.
 	 * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
 	 * @param value The new value for the setting
-	 * @returns The entire settings object
 	 */
-	async set<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<SettingsSchema> {
-		return set<SettingsSchema, K>(key, value, this.configId);
+	async set<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<void> {
+		await set<SettingsSchema, K>(key, value, this.configId);
 	}
 
 	/**
