@@ -174,13 +174,12 @@ pub(crate) fn set<R: Runtime>(
 /// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
 /// * `value`: The value to set.
 /// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
-
 #[tauri::command]
 pub(crate) fn set_cache<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
-	new_value: Value,
+	value: Value,
 	config_id: Option<u32>,
 ) -> Result<Value, String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
@@ -191,7 +190,7 @@ pub(crate) fn set_cache<R: Runtime>(
 	let new_settings = set_dot_notation(
 		&state.settings_cache,
 		key,
-		to_value(new_value).map_err(|err| err.to_string())?,
+		to_value(value).map_err(|err| err.to_string())?,
 	)
 	.map_err(|err| err.to_string())?;
 
