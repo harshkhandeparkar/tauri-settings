@@ -5,7 +5,7 @@ export async function add_config(
 	config: IConfigOptions,
 	defaultSettings: any
 ): Promise<number> {
-	return await invoke('plugin:settings|add_config', { config, defaultSettings });
+	return await invoke('plugin:settings|add_config', { config: { ...config, file_name: `${config.file_name}.json` }, defaultSettings });
 }
 
 export async function has(key: string, configId?: number): Promise<boolean> {
