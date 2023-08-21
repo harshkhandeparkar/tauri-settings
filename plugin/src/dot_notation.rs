@@ -13,7 +13,7 @@ use serde_json::{from_value, to_value};
 /// ```ignore
 /// let theme: &str = get_dot_notation(&settings, "preferences.theme");
 /// if theme == "dark" {
-/// 	// do something
+///     // do something
 /// }
 /// ```
 pub fn get_dot_notation<S, T>(settings: &S, path: &str) -> Result<T, Box<dyn Error>>
