@@ -4,7 +4,7 @@ import { IConfigOptions } from './config';
 export async function add_config(
 	config: IConfigOptions,
 	defaultSettings: any
-): Promise<[config_id: number, settings: any]> {
+): Promise<number> {
 	return await invoke('plugin:settings|add_config', { config, defaultSettings });
 }
 
@@ -17,18 +17,18 @@ export async function has_cache(key: string, configId?: number): Promise<boolean
 }
 
 export async function get(key: string, configId?: number): Promise<any> {
-	return await invoke('plugin:settings|get_cache', { key, configId });
-}
-
-export async function get_cache(key: string, configId?: number): Promise<any> {
 	return await invoke('plugin:settings|get', { key, configId });
 }
 
-export async function set(key: string, value: any, configId?: number): Promise<any> {
+export async function get_cache(key: string, configId?: number): Promise<any> {
+	return await invoke('plugin:settings|get_cache', { key, configId });
+}
+
+export async function set(key: string, value: any, configId?: number): Promise<void> {
 	return await invoke('plugin:settings|set', { key, value, configId });
 }
 
-export async function set_cache(key: string, value: any, configId?: number): Promise<any> {
+export async function set_cache(key: string, value: any, configId?: number): Promise<void> {
 	return await invoke('plugin:settings|set_cache', { key, value, configId });
 }
 
