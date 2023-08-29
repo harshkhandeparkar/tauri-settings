@@ -109,6 +109,8 @@ The cache can be synced (written to persistent storage) at any time or the persi
 
 #### Examples
 ```ts
+// TypeScript
+
 import { SettingsManager } from 'tauri-settings';
 
 type Schema = {
@@ -136,6 +138,34 @@ settingsManager.initialize().then(() => {
 
 // at a later time
 await settingsManager.syncCache();
+```
+
+```js
+// JavaScript
+
+import { SettingsManager } from 'tauri-settings';
+
+const settingsManager = new SettingsManager(
+  { // defaults
+    theme: 'light',
+    startFullscreen: false
+  },
+  { // options
+    fileName: 'customization-settings'
+  }
+);
+
+// checks whether the settings file exists and created it if not
+// loads the settings if it exists
+settingsManager.initialize().then(() => {
+  // there is no schema, so any key will be accepted
+  // the user needs to add their own validation scheme
+  settingsManager.setCache('theme', 'dark');
+}
+
+// at a later time
+await settingsManager.syncCache();
+
 ```
 
 See the complete [API Docs](https://harshkhandeparkar.github.io/tauri-settings/).
