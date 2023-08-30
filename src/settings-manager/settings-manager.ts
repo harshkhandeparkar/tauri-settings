@@ -61,7 +61,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
   }
 
   /**
-   * Sets the value of a setting from the cache.
+   * Gets the value of a setting from the cache.
    * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
    * @returns The value of the setting
    */
