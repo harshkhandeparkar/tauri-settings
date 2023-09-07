@@ -144,7 +144,8 @@ pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> 
 				.map(|options| Config::from_config_options(&app.config(), &options))
 				.unwrap_or_else(|| Config::new(&app.config(), None, None, None))?;
 
-			let (initial_settings, _, _) =
+			fs::ensure_settings_file(&config)?;
+			let initial_settings =
 				fs::load_settings_file(&config).map_err(|err| err.to_string())?;
 
 			app.manage::<PluginState>(Mutex::new(PluginStateData::new(PluginStateConfig {

@@ -6,7 +6,7 @@ use tauri::{AppHandle, Runtime, State};
 use crate::{
 	config::{Config, ConfigOptions},
 	dot_notation::{get_dot_notation, set_dot_notation},
-	fs::{load_settings_file, save_settings_json},
+	fs::{ensure_settings_file, load_settings_file, save_settings_json},
 	settings, PluginState, PluginStateConfig,
 };
 
@@ -31,8 +31,8 @@ pub(crate) fn add_config<R: Runtime>(
 	let config =
 		Config::from_config_options(&app.config(), &config).map_err(|err| err.to_string())?;
 
-	let (loaded_settings, _, was_created) =
-		load_settings_file(&config).map_err(|err| err.to_string())?;
+	let was_created = ensure_settings_file(&config).map_err(|err| err.to_string())?;
+	let loaded_settings = load_settings_file(&config).map_err(|err| err.to_string())?;
 
 	let settings: Value = if was_created {
 		save_settings_json(&default_settings, &config).map_err(|err| err.to_string())?;
@@ -229,7 +229,7 @@ pub(crate) fn file_to_cache<R: Runtime>(
 		.get_config_mut(config_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	let (settings, _, _) = load_settings_file(&state.config).map_err(|err| err.to_string())?;
+	let settings = load_settings_file(&state.config).map_err(|err| err.to_string())?;
 
 	state.settings_cache = settings;
 

@@ -1,6 +1,6 @@
 //! Configuration for the plugin.
 
-use std::error::Error;
+use std::{error::Error, path::PathBuf};
 use tauri::api::path;
 
 #[derive(Debug, Clone)]
@@ -8,8 +8,10 @@ use tauri::api::path;
 pub struct Config {
 	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
 	pub file_name: String,
+	/// Path to the settings file
+	pub file_path: PathBuf,
 	/// The directory in which the settings file will be stored. (Default: App config directory)
-	pub directory: String,
+	pub dir_path: PathBuf,
 	/// Whether to prettify the JSON output. (Default: `false`)
 	pub prettify: bool,
 }
@@ -20,7 +22,7 @@ pub struct ConfigOptions {
 	/// The name of the file in which the settings are stored (as JSON). (Default: `settings.json`)
 	pub file_name: Option<String>,
 	/// The directory in which the settings file will be stored. (Default: App config directory)
-	pub directory: Option<String>,
+	pub dir_path: Option<PathBuf>,
 	/// Whether to prettify the JSON output. (Default: `false`)
 	pub prettify: Option<bool>,
 }
@@ -39,12 +41,12 @@ impl ConfigOptions {
 	/// ```
 	pub fn new(
 		file_name: Option<String>,
-		directory: Option<String>,
+		dir_path: Option<PathBuf>,
 		prettify: Option<bool>,
 	) -> ConfigOptions {
 		ConfigOptions {
 			file_name,
-			directory,
+			dir_path,
 			prettify,
 		}
 	}
@@ -74,20 +76,20 @@ impl Config {
 	pub fn new(
 		app_config: &tauri::Config,
 		file_name: Option<String>,
-		directory: Option<String>,
+		dir_path: Option<PathBuf>,
 		prettify: Option<bool>,
 	) -> Result<Config, Box<dyn Error>> {
-		let config_directory: String = directory.unwrap_or(
-			path::app_config_dir(app_config)
-				.ok_or("Error: Default config directory not found.")?
-				.to_str()
-				.ok_or("Error parsing default config directory.")?
-				.to_string(),
+		let config_directory = dir_path.unwrap_or(
+			path::app_config_dir(app_config).ok_or("Error: Default config directory not found.")?,
 		);
 
+		let file_name = file_name.unwrap_or("settings.json".to_string());
+		let file_path = config_directory.join(&file_name);
+
 		Ok(Config {
-			file_name: file_name.unwrap_or("settings.json".to_string()),
-			directory: config_directory,
+			file_name,
+			file_path,
+			dir_path: config_directory,
 			prettify: prettify.unwrap_or(false),
 		})
 	}
@@ -111,7 +113,7 @@ impl Config {
 		Config::new(
 			app_config,
 			options.file_name.clone(),
-			options.directory.clone(),
+			options.dir_path.clone(),
 			options.prettify,
 		)
 	}

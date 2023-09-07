@@ -27,7 +27,7 @@ pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
 }
 
 pub(crate) fn _has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> {
-	let (settings, _, _) = load_settings_file(config)?;
+	let settings = load_settings_file(config)?;
 
 	let value: Value = get_dot_notation(&settings, key)?;
 	Ok((!value.is_null(), settings))
@@ -58,7 +58,7 @@ pub(crate) fn _get<V: DeserializeOwned>(
 	config: &Config,
 	key: &str,
 ) -> Result<(V, Value), Box<dyn Error>> {
-	let (settings, _, _) = load_settings_file(config)?;
+	let settings = load_settings_file(config)?;
 
 	Ok((from_value(get_dot_notation(&settings, key)?)?, settings))
 }
@@ -77,7 +77,7 @@ pub fn set<V: Serialize>(
 	key: &str,
 	new_value: V,
 ) -> Result<Value, Box<dyn Error>> {
-	let (settings, _, _) = load_settings_file(config)?;
+	let settings = load_settings_file(config)?;
 
 	let new_settings = set_dot_notation(&settings, key, to_value(new_value)?)?;
 	save_settings_json(&new_settings, config)?;
