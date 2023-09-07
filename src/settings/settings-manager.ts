@@ -52,8 +52,6 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The value of the setting
 	 */
 	async getCache<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
-		if (!this.hasCache(key)) throw 'Error: key does not exist';
-
 		return getCache<SettingsSchema, K>(key, this.configId);
 	}
 
