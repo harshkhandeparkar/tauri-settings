@@ -32,8 +32,10 @@ jobs:
 
       - name: Generate JS docs
         run: |
+          pushd package
           pnpm install
           pnpm run doc
+          popd
 
       - name: Install Rust and Dependencies
         run: |
@@ -45,6 +47,7 @@ jobs:
           pushd plugin/
           cargo doc --no-deps
           mv target/doc/ ../docs/rust/
+          popd
 
       - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
         with:

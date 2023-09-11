@@ -22,7 +22,7 @@ module.exports = {
 	name: 'Tauri Settings',
 	// entryPoints: getListOfFiles(join(__dirname, '..', 'src')),
 	entryPoints: [join(__dirname, '..', 'src', 'index.ts')],
-	out: [join(__dirname, '..', 'docs', 'js')],
+	out: [join(__dirname, '..', '..', 'docs', 'js')],
 	readme: 'none',
 	theme: 'default'
 }
