@@ -17,9 +17,9 @@
   },
   "keywords": [
     "tauri",
+    "tauri-plugin",
     "tauri-apps",
-    "tauri-settings",
-    "settings-manager"
+    "tauri-settings"
   ],
   "author": "harshkhandeparkar",
   "license": "MIT",
