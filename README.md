@@ -1,7 +1,6 @@
 <div id="top"></div>
 
 <!-- PROJECT SHIELDS -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links-->
 <div align="center">
 
 [![Contributors][contributors-shield]][contributors-url]
@@ -14,7 +13,6 @@
 
 <!-- PROJECT LOGO -->
 <br />
-<!-- UPDATE -->
 <div align="center">
   <a href="https://github.com/harshkhandeparkar/tauri-settings">
     <img width="140" alt="image" src="./img/tauri-settings-logo-circular.png">
@@ -23,7 +21,6 @@
   <h3 align="center">Tauri Settings</h3>
 
   <p align="center">
-  <!-- UPDATE -->
     <p>A user settings manager library for Tauri inspired by electron-settings.</p>
     <a href="https://www.npmjs.com/package/tauri-settings">NPM</a>
     .
@@ -39,6 +36,7 @@
 - [About The Project](#about-the-project)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+    - [Migrating from v0.x.x](#migrating-from-v0xx)
   - [Usage](#usage)
 - [Acknowledgements](#acknowledgments)
 
@@ -52,6 +50,7 @@
 ## Getting Started
 
 ### Installation
+#### Migrating from v0.x.x
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -61,14 +60,12 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-
 * [Choose an Open Source License](https://choosealicense.com)
 * [Img Shields](https://shields.io)
 * [@proffapt's README](https://github.com/proffapt/myREADME/)
-* [Canva](https://canva.com)
+* [Canva](https://canva.com) (Logo design)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
