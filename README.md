@@ -38,6 +38,9 @@
   - [Installation](#installation)
     - [Migrating from v0.x.x](#migrating-from-v0xx)
   - [Usage](#usage)
+    - [Dot Notation](#dot-notation)
+    - [Differences from `electron-settings`](#differences-from-electron-settings)
+    - [Examples](#examples)
 - [Acknowledgements](#acknowledgments)
 
 <!-- ABOUT THE PROJECT -->
@@ -50,13 +53,34 @@
 ## Getting Started
 
 ### Installation
+1. Install the `tauri-plugin-settings` Tauri plugin.
+  - Run the command `cargo add tauri-plugin-settings` inside `src-tauri`. This will add the package to the `Cargo.toml` file.
+  - Load the plugin in the `src-tauri/main.rs` file. See the [plugin docs](https://harshkhandeparkar.github.io/tauri-settings/rust/tauri_plugin_settings#getting-started) for loading instructions.
+2. Install the `tauri-settings` JS plugin wrapper.
+  - Using npm: `npm install tauri-settings`.
+  - Using pnpm: `pnpm add tauri-settings`.
+  - Using yarn: `yarn add tauri-settings`.
+  - See the [Usage](#usage) section for usage instructions.
+
 #### Migrating from v0.x.x
+`v0.x.x` of Tauri Settings was a 100% Javascript library that used the [Tauri API](https://tauri.app/v1/api/js/) to read and write settings to the disk. `v1.x.x` is written as a Rust [Tauri plugin](https://tauri.app/v1/guides/features/plugin) with a JS wrapper for the frontend.
+
+To migrate from `v0.x.x` to `v1.x.x`, the Tauri plugin has to be installed and enabled (follow the [installation steps](#installation)). The frontend API remains the same with the only change being `hasCache`, `getCache`, and `setCache` being converted into `async` functions as the caching is now handled on the Rust side.
+
+> ![NOTE] The caching may change in the future to support JS-side caching for faster performance, but it will likely be a config option and use the same async API.
+
+> ![WARNING] Handling all filesystem operations on Rust-side doesn't automatically secure all data. This just prevents JS-side from having access to the filesystem APIs, and only allows settings read/write operations. The data is still written in plaintext to JSON files, so it is not recommended to use this for storing any secrets. Other plugins such as [stronghold](https://github.com/tauri-apps/tauri-plugin-stronghold) are more suitable.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ### Usage
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space.
+
+
+#### Dot Notation
+#### Differences from `electron-settings`
+
+#### Examples
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
