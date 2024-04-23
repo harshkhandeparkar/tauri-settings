@@ -9,6 +9,8 @@ rust-version = "1.60"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 license = "MIT"
 license-file = "../LICENSE"
+readme = "../README.md"
+homepage = "https://harshkhandeparkar.github.io/tauri-settings/rust/tauri_plugin_settings"
 
 [dependencies]
 tauri = { version = "1.4.0" }
