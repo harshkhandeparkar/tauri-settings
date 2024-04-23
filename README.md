@@ -7,6 +7,7 @@
 [![Build Workflow][build-workflow-shield]][build-workflow-url]
 [![Docs Workflow][docs-workflow-shield]][docs-workflow-url]
 [![NPM Version][npm-shield]][npm-url]
+[![Crates.io Version][cratesio-shield]][cratesio-url]
 [![MIT License][license-shield]][license-url]
 
 </div>
@@ -45,7 +46,11 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-`tauri-settings` is a user settings manager library for [Tauri](https://tauri.app) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings).
+`tauri-settings` is a user settings manager library and plugin for [Tauri](https://tauri.app) inspired by [electron-settings](https://github.com/nathanbuchar/electron-settings). It is structured as a Tauri [plugin](https://tauri.app/v1/guides/features/plugin) written in Rust with a Javascript library as the API. The plugin is published on [crates.io][cratesio-url] and the API library is published on [NPM][npm-url].
+
+`tauri-settings` provides drop-in replacements for the `electron-settings` API methods `has`, `get`, and `set` for easy migration of apps from Electron to Tauri. Differences from `electron-settings` due to fundamental differences in Tauri's architecture are documented [here](#differences-from-electron-settings).
+
+`tauri-settings` also provides a `SettingsManager` class and other API methods for easy management of settings (preferences) and also exports Rust APIs. Read the [JS API docs][js-docs] and [Rust plugin docs][rust-docs] for further information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -55,7 +60,7 @@
 ### Installation
 1. Install the `tauri-plugin-settings` Tauri plugin.
   - Run the command `cargo add tauri-plugin-settings` inside `src-tauri`. This will add the package to the `Cargo.toml` file.
-  - Load the plugin in the `src-tauri/main.rs` file. See the [plugin docs](https://harshkhandeparkar.github.io/tauri-settings/rust/tauri_plugin_settings#getting-started) for loading instructions.
+  - Load the plugin in the `src-tauri/main.rs` file. See the [plugin docs][rust-docs] for loading instructions.
 2. Install the `tauri-settings` JS plugin wrapper.
   - Using npm: `npm install tauri-settings`.
   - Using pnpm: `pnpm add tauri-settings`.
@@ -106,4 +111,8 @@ To migrate from `v0.x.x` to `v1.x.x`, the Tauri plugin has to be installed and e
 [docs-workflow-shield]: https://img.shields.io/github/actions/workflow/status/harshkhandeparkar/tauri-settings/docs.yml?style=for-the-badge&label=Docs&color=blue
 [docs-workflow-url]: https://harshkhandeparkar.github.io/tauri-settings
 [npm-shield]: https://img.shields.io/npm/v/tauri-settings?style=for-the-badge
+[cratesio-shield]: https://img.shields.io/crates/v/tauri-plugin-settings?style=for-the-badge
 [npm-url]: https://www.npmjs.com/package/tauri-settings
+[cratesio-url]: https://crates.io/crates/tauri-plugin-settings
+[js-docs]: https://harshkhandeparkar.github.io/tauri-settings/js
+[rust-docs]: https://harshkhandeparkar.github.io/tauri-settings/rust/tauri_plugin_settings
