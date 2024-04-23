@@ -67,9 +67,11 @@
 
 To migrate from `v0.x.x` to `v1.x.x`, the Tauri plugin has to be installed and enabled (follow the [installation steps](#installation)). The frontend API remains the same with the only change being `hasCache`, `getCache`, and `setCache` being converted into `async` functions as the caching is now handled on the Rust side.
 
-> ![NOTE] The caching may change in the future to support JS-side caching for faster performance, but it will likely be a config option and use the same async API.
+> [!NOTE]
+> The caching may change in the future to support JS-side caching for faster performance, but it will likely be a config option and use the same async API.
 
-> ![WARNING] Handling all filesystem operations on Rust-side doesn't automatically secure all data. This just prevents JS-side from having access to the filesystem APIs, and only allows settings read/write operations. The data is still written in plaintext to JSON files, so it is not recommended to use this for storing any secrets. Other plugins such as [stronghold](https://github.com/tauri-apps/tauri-plugin-stronghold) are more suitable.
+> [!WARNING]
+> Handling all filesystem operations on Rust-side doesn't automatically secure all data. This just prevents JS-side from having access to the filesystem APIs, and only allows settings read/write operations. The data is still written in plaintext to JSON files, so it is not recommended to use this for storing any secrets. Other plugins such as [stronghold](https://github.com/tauri-apps/tauri-plugin-stronghold) are more suitable.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
