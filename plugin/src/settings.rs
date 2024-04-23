@@ -1,86 +1,79 @@
-//! Functions for getting and setting settings directly from Rust.
-
-use std::error::Error;
-
+use std::{error::Error, fs, path::PathBuf};
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::{from_value, to_value, Value};
+use crate::dot_notation::{self, set_dot_notation};
 
-use crate::{
-	config::Config,
-	dot_notation::{get_dot_notation, set_dot_notation},
-	fs::{load_settings_file, save_settings_json},
-};
-
-/// Checks if a key exists in the settings.
-///
-/// Here key supports dot notation. Eg: `preferences.theme`.
-/// ### Examples
-/// ```no_run
-/// # use tauri_plugin_settings::{Config, settings::has};
-/// # let config = Config::default(&tauri::Config::default()).unwrap();
-/// let theme_exists = has(&config, "preferences.theme").unwrap();
-/// ```
-pub fn has(config: &Config, key: &str) -> Result<bool, Box<dyn Error>> {
-	let (exists, _) = _has(config, key)?;
-
-	Ok(exists)
+#[derive(Debug, Clone)]
+/// Struct representing one settings JSON file.
+pub struct SettingsFile {
+	/// Path to the settings file
+	pub file_path: PathBuf,
+	/// Whether to prettify the JSON output. (Default: `false`)
+	pub prettify: bool
 }
 
-pub(crate) fn _has(config: &Config, key: &str) -> Result<(bool, Value), Box<dyn Error>> {
-	let settings = load_settings_file(config)?;
+impl SettingsFile {
+	pub fn new(file_path: PathBuf, prettify: Option<bool>) -> Result<Self, Box<dyn Error>> {
+		let settings_file = Self {
+			file_path,
+			prettify: prettify.unwrap_or(false)
+		};
 
-	let value: Value = get_dot_notation(&settings, key)?;
-	Ok((!value.is_null(), settings))
-}
+		settings_file.ensure_settings_file()?;
+		Ok(settings_file)
+	}
 
-/// Returns the value corresponding to a key in the settings.
-///
-/// Here key supports dot notation. Eg: `preferences.theme`.
-/// ### Examples
-/// ```no_run
-/// # use tauri_plugin_settings::{Config, settings::get};
-/// # let config = Config::default(&tauri::Config::default()).unwrap();
-/// let theme: String = get(&config, "preferences.theme").unwrap();
-/// ```
-///
-/// ```no_run
-/// # use tauri_plugin_settings::{Config, settings::get};
-/// # let config = Config::default(&tauri::Config::default()).unwrap();
-/// let theme: Vec<String> = get(&config, "recently_opened").unwrap();
-/// ```
-pub fn get<V: DeserializeOwned>(config: &Config, key: &str) -> Result<V, Box<dyn Error>> {
-	let (value, _) = _get(config, key)?;
+	pub fn has(&self, key: &str) -> Result<bool, Box<dyn Error>> {
+		let settings = self.load_settings()?;
 
-	Ok(value)
-}
+		dot_notation::exists_dot_notation(&settings, key)
+	}
 
-pub(crate) fn _get<V: DeserializeOwned>(
-	config: &Config,
-	key: &str,
-) -> Result<(V, Value), Box<dyn Error>> {
-	let settings = load_settings_file(config)?;
+	pub fn get<V: DeserializeOwned>(&self, key: &str) -> Result<V, Box<dyn Error>> {
+		let settings = self.load_settings()?;
 
-	Ok((from_value(get_dot_notation(&settings, key)?)?, settings))
-}
+		let value: Value = dot_notation::get_dot_notation(&settings, key)?;
 
-/// Sets the value corresponding to a key in the settings.
-///
-/// Here key supports dot notation. Eg: `preferences.theme`.
-/// ### Examples
-/// ```no_run
-/// # use tauri_plugin_settings::{Config, settings::set};
-/// # let config = Config::default(&tauri::Config::default()).unwrap();
-/// set(&config, "preferences.theme", "dark").unwrap();
-/// ```
-pub fn set<V: Serialize>(
-	config: &Config,
-	key: &str,
-	new_value: V,
-) -> Result<Value, Box<dyn Error>> {
-	let settings = load_settings_file(config)?;
+		Ok(from_value(value)?)
+	}
 
-	let new_settings = set_dot_notation(&settings, key, to_value(new_value)?)?;
-	save_settings_json(&new_settings, config)?;
+	pub fn set<V: Serialize>(&self, key: &str, new_value: V) -> Result<(), Box<dyn Error>> {
+		let mut settings = self.load_settings()?;
 
-	Ok(new_settings)
+		set_dot_notation(&mut settings, key, to_value(new_value)?)?;
+		self.save_settings(&settings)?;
+
+		Ok(())
+	}
+
+	fn ensure_settings_file(&self) -> Result<bool, Box<dyn Error>> {
+		if !self.file_path.exists() {
+			fs::write(&self.file_path, "{}")?;
+			return Ok(true);
+		}
+
+		Ok(false)
+	}
+
+	fn load_settings(&self) -> Result<Value, Box<dyn Error>> {
+		let settings_json = fs::read_to_string(&self.file_path)?;
+
+		let settings: serde_json::Value = serde_json::from_str(&settings_json)?;
+
+		Ok(settings)
+	}
+
+	fn save_settings<T: ?Sized + serde::Serialize>(
+		&self,
+		settings: &T,
+	) -> Result<(), Box<dyn Error>> {
+		let settings_json = if self.prettify {
+			serde_json::to_string_pretty(&settings)?
+		} else {
+			serde_json::to_string(&settings)?
+		};
+
+		fs::write(&self.file_path, settings_json)?;
+		Ok(())
+	}
 }
