@@ -7,6 +7,8 @@ description = "A Tauri user settings manager plugin inspired by electron-setting
 edition = "2021"
 rust-version = "1.60"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
+license = "MIT"
+license-file = "../LICENSE"
 
 [dependencies]
 tauri = { version = "1.4.0" }
