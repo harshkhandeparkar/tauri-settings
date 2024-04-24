@@ -22,7 +22,7 @@ pub(crate) fn has<R: Runtime>(
 		.get_settings_file(file_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	Ok(settings_file.has(key).map_err(|err| err.to_string())?)
+	settings_file.has(key).map_err(|err| err.to_string())
 }
 
 /// Gets the value corresponding to a key in the settings.
@@ -42,7 +42,7 @@ pub(crate) fn get<R: Runtime>(
 		.get_settings_file(file_id.unwrap_or(0))
 		.map_err(|err| err.to_string())?;
 
-	Ok(settings_file.get(key).map_err(|err| err.to_string())?)
+	settings_file.get(key).map_err(|err| err.to_string())
 }
 
 /// Sets the value corresponding to a key in the settings. Creates the key path recursively if it doesn't exist.

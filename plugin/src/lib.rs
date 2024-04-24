@@ -120,12 +120,12 @@ pub(crate) type PluginState = Mutex<PluginStateData>;
 /// ```
 ///
 /// ```no_run
-/// use tauri_plugin_settings::ConfigOptions;
+/// use tauri_plugin_settings::PluginConfigOptions;
 ///
-/// let config = ConfigOptions::new(Some("preferences.json".into()), None, Some(true.into()));
+/// let config = PluginConfigOptions::new(Some("preferences.json".into()), None, Some(true.into()));
 ///
 /// tauri::Builder::default()
-///     .plugin(tauri_plugin_settings::init(Some(config)));
+///     .plugin(tauri_plugin_settings::init(Some(config), None));
 /// ```
 pub fn init<R: Runtime>(
 	plugin_config: PluginConfigOptions,
