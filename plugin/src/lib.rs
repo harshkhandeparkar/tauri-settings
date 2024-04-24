@@ -130,15 +130,9 @@ pub fn init<R: Runtime>(
 ) -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![
-			handlers::add_config,
 			handlers::has,
 			handlers::get,
-			handlers::set,
-			handlers::has_cache,
-			handlers::get_cache,
-			handlers::set_cache,
-			handlers::file_to_cache,
-			handlers::cache_to_file,
+			handlers::set
 		])
 		.setup(|app| {
 			let app_config = app.config();
