@@ -13,13 +13,18 @@ pub struct SettingsFile {
 }
 
 impl SettingsFile {
-	pub fn new(file_path: PathBuf, prettify: Option<bool>) -> Result<Self, Box<dyn Error>> {
+	pub fn new(
+		file_path: PathBuf,
+		prettify: Option<bool>,
+		default_settings: Option<Value>,
+	) -> Result<Self, Box<dyn Error>> {
 		let settings_file = Self {
 			file_path,
 			prettify: prettify.unwrap_or(false),
 		};
 
-		settings_file.ensure_settings_file()?;
+		settings_file.ensure_settings_file(default_settings.unwrap_or(Value::Null))?;
+
 		Ok(settings_file)
 	}
 
@@ -46,9 +51,9 @@ impl SettingsFile {
 		Ok(())
 	}
 
-	fn ensure_settings_file(&self) -> Result<bool, Box<dyn Error>> {
+	fn ensure_settings_file(&self, default_settings: Value) -> Result<bool, Box<dyn Error>> {
 		if !self.file_path.exists() {
-			fs::write(&self.file_path, "{}")?;
+			self.save_settings(&default_settings)?;
 			return Ok(true);
 		}
 

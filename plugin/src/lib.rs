@@ -157,7 +157,7 @@ pub fn init<R: Runtime>(
 						.ok_or("Error reading the app config directory.")?;
 					let settings_file_path = app_config_dir.join("settings.json");
 
-					vec![SettingsFile::new(settings_file_path, None).unwrap()]
+					vec![SettingsFile::new(settings_file_path, None, None).unwrap()]
 				};
 
 			app.manage::<PluginState>(Mutex::new(PluginStateData::new(
