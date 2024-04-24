@@ -1,9 +1,18 @@
 //! Helper functions for getting and setting values using dot notation.
 
+use serde_json::Value;
 use std::error::Error;
 
-use serde_json::Value;
-
+/// Checks if a given key (in dot notation) exists in the settings.
+///
+/// `path` is the dot notation for a key in the settings. (e.g.: `preferences.theme`)
+///
+/// ### Examples
+/// ```ignore
+/// if exists_dot_notation(&settings, "preferences.theme").unwrap() {
+///     println!("Key exists!");
+/// }
+/// ```
 pub fn exists_dot_notation(settings: &Value, path: &str) -> Result<bool, Box<dyn Error>> {
 	let keys = path.split('.');
 
@@ -26,7 +35,8 @@ pub fn exists_dot_notation(settings: &Value, path: &str) -> Result<bool, Box<dyn
 ///
 /// ### Examples
 /// ```ignore
-/// let theme: &str = from_value(get_dot_notation(&settings, "preferences.theme"));
+///
+/// let theme: &str = from_value(get_dot_notation(&settings, "preferences.theme")?);
 /// if theme == "dark" {
 ///     // do something
 /// }
@@ -49,7 +59,7 @@ pub fn get_dot_notation(settings: &Value, path: &str) -> Result<Value, Box<dyn E
 ///
 /// ### Examples
 /// ```ignore
-/// set_dot_notation(&settings, "preferences.theme", "dark");
+/// set_dot_notation(&settings, "preferences.theme", "dark").unwrap();
 /// ```
 pub fn set_dot_notation(
 	settings: &mut Value,

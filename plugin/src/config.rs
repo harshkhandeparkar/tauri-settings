@@ -18,6 +18,20 @@ pub struct PluginConfigOptions {
 	pub allow_file_addition: Option<bool>,
 }
 
+impl PluginConfigOptions {
+	pub fn new(
+		scope: Option<PathBuf>,
+		files_limit: Option<usize>,
+		allow_file_addition: Option<bool>,
+	) -> Self {
+		Self {
+			scope,
+			files_limit,
+			allow_file_addition,
+		}
+	}
+}
+
 impl PluginConfig {
 	pub fn new(
 		app_config: &tauri::Config,
