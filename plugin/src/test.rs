@@ -60,18 +60,17 @@ fn get_dot_notation_works() {
 
 #[test]
 fn set_dot_notation_works() {
-	let data: Value = get_dummy_data();
+	let mut data: Value = get_dummy_data();
 	let updated_data: Value = get_updated_dummy_data();
 
-	let data: Value = set_dot_notation(&data, "name", "John Lark").unwrap();
-	let data: Value = set_dot_notation(&data, "age", 40).unwrap();
-	let data: Value = set_dot_notation(&data, "preferences.theme", "light").unwrap();
-	let data: Value = set_dot_notation(&data, "preferences.open_on_start", 0).unwrap();
-	let data: Value = set_dot_notation(&data, "preferences.fullscreen", true).unwrap();
-	let data: Value =
-		set_dot_notation(&data, "preferences.run_out_of_names.another_setting", 12).unwrap();
-	let data: Value = set_dot_notation(&data, "recently_opened", vec!["file1", "file2"]).unwrap();
-	let data: Value = set_dot_notation(&data, "test.test_path", "ok").unwrap();
+	set_dot_notation(&mut data, "name", "John Lark".into()).unwrap();
+	set_dot_notation(&mut data, "age", 40.into()).unwrap();
+	set_dot_notation(&mut data, "preferences.theme", "light".into()).unwrap();
+	set_dot_notation(&mut data, "preferences.open_on_start", 0.into()).unwrap();
+	set_dot_notation(&mut data, "preferences.fullscreen", true.into()).unwrap();
+	set_dot_notation(&mut data, "preferences.run_out_of_names.another_setting", 12.into()).unwrap();
+	set_dot_notation(&mut data, "recently_opened", vec!["file1", "file2"].into()).unwrap();
+	set_dot_notation(&mut data, "test.test_path", "ok".into()).unwrap();
 
 	assert_eq!(data, updated_data);
 }
