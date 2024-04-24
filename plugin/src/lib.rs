@@ -55,7 +55,8 @@ pub mod settings;
 #[cfg(test)]
 mod test;
 
-use config::{PluginConfig, PluginConfigOptions};
+pub use config::PluginConfigOptions;
+use config::PluginConfig;
 use settings::SettingsFile;
 use std::{collections::HashMap, error::Error, sync::Mutex};
 use tauri::{
@@ -128,7 +129,7 @@ pub(crate) type PluginState = Mutex<PluginStateData>;
 ///     .plugin(tauri_plugin_settings::init(Some(config), None));
 /// ```
 pub fn init<R: Runtime>(
-	plugin_config: PluginConfigOptions,
+	plugin_config: Option<PluginConfigOptions>,
 	initial_settings_files: Option<Vec<SettingsFile>>,
 ) -> TauriPlugin<R> {
 	Builder::new("settings")
@@ -140,7 +141,11 @@ pub fn init<R: Runtime>(
 		])
 		.setup(move |app| {
 			let app_config = app.config();
-			let plugin_config = PluginConfig::from_options(&app_config, &plugin_config)?;
+			let plugin_config = if let Some(plugin_config) = plugin_config {
+				PluginConfig::from_options(&app_config, &plugin_config)?
+			} else {
+				PluginConfig::default(&app_config)?
+			};
 
 			let initial_settings_files = if let Some(initial_settings_files) = initial_settings_files {
 				initial_settings_files

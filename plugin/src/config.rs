@@ -24,7 +24,6 @@ impl PluginConfig {
 		scope: Option<PathBuf>,
 		files_limit: Option<usize>,
 		allow_file_addition: Option<bool>,
-
 	) -> Result<Self, Box<dyn Error>> {
 		let scope = scope.unwrap_or(
 			path::app_config_dir(app_config).ok_or("Error: Default config directory not found.")?,
@@ -33,7 +32,7 @@ impl PluginConfig {
 		Ok(Self {
 			scope,
 			files_limit: files_limit.unwrap_or(0),
-			allow_file_addition: allow_file_addition.unwrap_or(false)
+			allow_file_addition: allow_file_addition.unwrap_or(false),
 		})
 	}
 
@@ -45,7 +44,11 @@ impl PluginConfig {
 			app_config,
 			options.scope.clone(),
 			options.files_limit,
-			options.allow_file_addition
+			options.allow_file_addition,
 		)
+	}
+
+	pub fn default(app_config: &tauri::Config) -> Result<Self, Box<dyn Error>> {
+		Self::new(app_config, None, None, None)
 	}
 }
