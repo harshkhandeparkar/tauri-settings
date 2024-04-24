@@ -55,12 +55,14 @@ pub mod settings;
 #[cfg(test)]
 mod test;
 
-pub use config::PluginConfigOptions;
 use config::PluginConfig;
+pub use config::PluginConfigOptions;
 use settings::SettingsFile;
 use std::{collections::HashMap, error::Error, sync::Mutex};
 use tauri::{
-	api::path, plugin::{Builder, TauriPlugin}, Manager, Runtime
+	api::path,
+	plugin::{Builder, TauriPlugin},
+	Manager, Runtime,
 };
 
 pub(crate) struct PluginStateData {
@@ -147,20 +149,21 @@ pub fn init<R: Runtime>(
 				PluginConfig::default(&app_config)?
 			};
 
-			let initial_settings_files = if let Some(initial_settings_files) = initial_settings_files {
-				initial_settings_files
-			} else {
-				let app_config_dir = path::app_config_dir(&app_config).ok_or("Error reading the app config directory.")?;
-				let settings_file_path = app_config_dir.join("settings.json");
+			let initial_settings_files =
+				if let Some(initial_settings_files) = initial_settings_files {
+					initial_settings_files
+				} else {
+					let app_config_dir = path::app_config_dir(&app_config)
+						.ok_or("Error reading the app config directory.")?;
+					let settings_file_path = app_config_dir.join("settings.json");
 
-				vec![SettingsFile::new(settings_file_path, None).unwrap()]
-			};
+					vec![SettingsFile::new(settings_file_path, None).unwrap()]
+				};
 
-			app.manage::<PluginState>(
-				Mutex::new(
-					PluginStateData::new(plugin_config, initial_settings_files)
-				)
-			);
+			app.manage::<PluginState>(Mutex::new(PluginStateData::new(
+				plugin_config,
+				initial_settings_files,
+			)));
 			Ok(())
 		})
 		.build()

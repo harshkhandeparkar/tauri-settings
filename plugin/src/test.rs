@@ -68,7 +68,12 @@ fn set_dot_notation_works() {
 	set_dot_notation(&mut data, "preferences.theme", "light".into()).unwrap();
 	set_dot_notation(&mut data, "preferences.open_on_start", 0.into()).unwrap();
 	set_dot_notation(&mut data, "preferences.fullscreen", true.into()).unwrap();
-	set_dot_notation(&mut data, "preferences.run_out_of_names.another_setting", 12.into()).unwrap();
+	set_dot_notation(
+		&mut data,
+		"preferences.run_out_of_names.another_setting",
+		12.into(),
+	)
+	.unwrap();
 	set_dot_notation(&mut data, "recently_opened", vec!["file1", "file2"].into()).unwrap();
 	set_dot_notation(&mut data, "test.test_path", "ok".into()).unwrap();
 
