@@ -136,13 +136,12 @@ pub fn init<R: Runtime>(
 		])
 		.setup(move |app| {
 			let app_config = app.config();
-			// TODO: BETTER HANDLE ERRORS
-			let plugin_config = PluginConfig::from_options(&app_config, &plugin_config).unwrap();
+			let plugin_config = PluginConfig::from_options(&app_config, &plugin_config)?;
 
 			let initial_settings_file = if let Some(initial_settings_file) = initial_settings_file {
 				initial_settings_file
 			} else {
-				let app_config_dir = path::app_config_dir(&app_config).unwrap();
+				let app_config_dir = path::app_config_dir(&app_config).ok_or("Error reading the app config directory.")?;
 				let settings_file_path = app_config_dir.join("settings.json");
 
 				SettingsFile::new(settings_file_path, None).unwrap()
