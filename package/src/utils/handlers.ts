@@ -1,8 +1,8 @@
 import { invoke } from '@tauri-apps/api';
-import { ISettingsFile } from './settings_file';
+import { ISettingsFileOptions } from './settings_file';
 
-export async function add_settings_file(settingsFile: ISettingsFile): Promise<number> {
-	return await invoke('plugin:settings|add_settings_file', { settingsFile });
+export async function add_settings_file(settingsFileOptions: ISettingsFileOptions): Promise<number> {
+	return await invoke('plugin:settings|add_settings_file', { settingsFileOptions });
 }
 
 export async function has(key: string, fileId?: number): Promise<boolean> {

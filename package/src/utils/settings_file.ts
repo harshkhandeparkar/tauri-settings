@@ -1,13 +1,13 @@
-export interface ISettingsFile {
+export interface ISettingsFileOptions {
 	/**
-	 * The name of the file in which the settings should be saved.
-	 * The filename should be without any extension.
-	 * Default: 'settings'
+	 * The path to the settings file relative to the scope of the plugin.
+	 * E.g. `settings.json` or `preferences/user.json`.
 	 */
-	file_path?: string;
+	relative_file_path: string;
 	/**
 	 * Whether or not to prettify the JSON settings data before storing to the file.
 	 * Default: false
 	 */
 	prettify?: boolean;
+	default_settings?: any;
 }
