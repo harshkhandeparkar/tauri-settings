@@ -7,9 +7,9 @@ use std::{error::Error, fs, path::PathBuf};
 /// Struct representing one settings JSON file.
 pub struct SettingsFile {
 	/// Path to the settings file
-	file_path: PathBuf,
+	pub file_path: PathBuf,
 	/// Whether to prettify the JSON output. (Default: `false`)
-	prettify: bool,
+	pub prettify: bool,
 }
 
 impl SettingsFile {
