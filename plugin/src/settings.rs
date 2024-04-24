@@ -17,7 +17,7 @@ pub struct SettingsFileOptions {
 	/// Path to the settings file relative to the scope.
 	pub scoped_file_path: String,
 	pub prettify: Option<bool>,
-	pub default_settings: Option<Value>
+	pub default_settings: Option<Value>,
 }
 
 impl SettingsFile {
