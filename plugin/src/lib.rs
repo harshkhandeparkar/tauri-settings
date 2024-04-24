@@ -135,7 +135,8 @@ pub fn init<R: Runtime>(
 		.invoke_handler(tauri::generate_handler![
 			handlers::has,
 			handlers::get,
-			handlers::set
+			handlers::set,
+			handlers::add_settings_file
 		])
 		.setup(move |app| {
 			let app_config = app.config();

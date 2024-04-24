@@ -3,7 +3,24 @@
 use serde_json::Value;
 use tauri::{AppHandle, Runtime, State};
 
-use crate::PluginState;
+use crate::{settings::SettingsFile, PluginState};
+
+#[tauri::command]
+pub(crate) fn add_settings_file<R: Runtime>(
+	_app: AppHandle<R>,
+	state: State<'_, PluginState>,
+	settings_file: SettingsFile,
+) -> Result<usize, String> {
+	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
+
+	if !state.plugin_config.allow_file_addition {
+		return Err("Error: Settings file addition from frontend is not allowed.".into());
+	} else if state.plugin_config.files_limit != 0 && state.plugin_config.files_limit >= state.settings_files.len() {
+		return Err("Error: Settings file limit reached".into());
+	} else {
+		return Ok(state.add_settings_file(settings_file));
+	}
+}
 
 /// Checks whether a key exists in the settings.
 ///

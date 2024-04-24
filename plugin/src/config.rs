@@ -7,14 +7,14 @@ use tauri::api::path;
 /// Configuration for the tauri settings plugin.
 pub struct PluginConfig {
 	pub scope: PathBuf,
-	pub files_limit: u32,
+	pub files_limit: usize,
 	pub allow_file_addition: bool,
 }
 
 #[derive(Debug, Clone)]
 pub struct PluginConfigOptions {
 	pub scope: Option<PathBuf>,
-	pub files_limit: Option<u32>,
+	pub files_limit: Option<usize>,
 	pub allow_file_addition: Option<bool>,
 }
 
@@ -22,7 +22,7 @@ impl PluginConfig {
 	pub fn new(
 		app_config: &tauri::Config,
 		scope: Option<PathBuf>,
-		files_limit: Option<u32>,
+		files_limit: Option<usize>,
 		allow_file_addition: Option<bool>,
 
 	) -> Result<Self, Box<dyn Error>> {

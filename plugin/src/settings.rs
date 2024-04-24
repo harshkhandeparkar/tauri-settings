@@ -1,9 +1,9 @@
 use crate::dot_notation::{self, set_dot_notation};
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::{from_value, to_value, Value};
 use std::{error::Error, fs, path::PathBuf};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 /// Struct representing one settings JSON file.
 pub struct SettingsFile {
 	/// Path to the settings file
