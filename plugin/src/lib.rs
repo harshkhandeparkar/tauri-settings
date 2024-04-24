@@ -64,12 +64,12 @@ use tauri::{
 
 pub(crate) struct PluginStateData {
 	plugin_config: config::PluginConfig,
-	last_file_id: u32,
-	settings_files: HashMap<u32, settings::SettingsFile>,
+	last_file_id: usize,
+	settings_files: HashMap<usize, settings::SettingsFile>,
 }
 
 impl PluginStateData {
-	pub(crate) fn add_settings_file(&mut self, settings_file: SettingsFile) -> u32 {
+	pub(crate) fn add_settings_file(&mut self, settings_file: SettingsFile) -> usize {
 		self.last_file_id += 1;
 		self.settings_files.insert(self.last_file_id, settings_file);
 
@@ -78,14 +78,14 @@ impl PluginStateData {
 
 	pub(crate) fn get_settings_file_mut(
 		&mut self,
-		id: u32,
+		id: usize,
 	) -> Result<&mut SettingsFile, Box<dyn Error>> {
 		self.settings_files
 			.get_mut(&id)
 			.ok_or("Error: Config does not exist.".into())
 	}
 
-	pub(crate) fn get_settings_file(&self, id: u32) -> Result<&SettingsFile, Box<dyn Error>> {
+	pub(crate) fn get_settings_file(&self, id: usize) -> Result<&SettingsFile, Box<dyn Error>> {
 		self.settings_files
 			.get(&id)
 			.ok_or("Error: Config does not exist.".into())
@@ -93,13 +93,16 @@ impl PluginStateData {
 
 	pub(crate) fn new(
 		plugin_config: PluginConfig,
-		initial_settings_file: SettingsFile,
+		initial_settings_files: Vec<SettingsFile>,
 	) -> PluginStateData {
-		let mut settings_files: HashMap<u32, SettingsFile> = HashMap::new();
-		settings_files.insert(0, initial_settings_file);
+		let mut settings_files: HashMap<usize, SettingsFile> = HashMap::new();
+
+		for (i, settings_file) in initial_settings_files.iter().enumerate() {
+			settings_files.insert(i, settings_file.clone());
+		}
 
 		PluginStateData {
-			last_file_id: 0,
+			last_file_id: settings_files.len() - 1,
 			settings_files,
 			plugin_config,
 		}
@@ -126,7 +129,7 @@ pub(crate) type PluginState = Mutex<PluginStateData>;
 /// ```
 pub fn init<R: Runtime>(
 	plugin_config: PluginConfigOptions,
-	initial_settings_file: Option<SettingsFile>,
+	initial_settings_files: Option<Vec<SettingsFile>>,
 ) -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![
@@ -138,18 +141,18 @@ pub fn init<R: Runtime>(
 			let app_config = app.config();
 			let plugin_config = PluginConfig::from_options(&app_config, &plugin_config)?;
 
-			let initial_settings_file = if let Some(initial_settings_file) = initial_settings_file {
-				initial_settings_file
+			let initial_settings_files = if let Some(initial_settings_files) = initial_settings_files {
+				initial_settings_files
 			} else {
 				let app_config_dir = path::app_config_dir(&app_config).ok_or("Error reading the app config directory.")?;
 				let settings_file_path = app_config_dir.join("settings.json");
 
-				SettingsFile::new(settings_file_path, None).unwrap()
+				vec![SettingsFile::new(settings_file_path, None).unwrap()]
 			};
 
 			app.manage::<PluginState>(
 				Mutex::new(
-					PluginStateData::new(plugin_config, initial_settings_file)
+					PluginStateData::new(plugin_config, initial_settings_files)
 				)
 			);
 			Ok(())

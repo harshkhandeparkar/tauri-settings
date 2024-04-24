@@ -15,7 +15,7 @@ pub(crate) fn has<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
-	file_id: Option<u32>,
+	file_id: Option<usize>,
 ) -> Result<bool, String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 	let settings_file = state
@@ -35,7 +35,7 @@ pub(crate) fn get<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
 	key: &str,
-	file_id: Option<u32>,
+	file_id: Option<usize>,
 ) -> Result<Value, String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 	let settings_file = state
@@ -57,7 +57,7 @@ pub(crate) fn set<R: Runtime>(
 	state: State<'_, PluginState>,
 	key: &str,
 	value: Value,
-	file_id: Option<u32>,
+	file_id: Option<usize>,
 ) -> Result<(), String> {
 	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
 	let settings_file = state
