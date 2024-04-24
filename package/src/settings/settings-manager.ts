@@ -1,8 +1,8 @@
-import { ISettingsFile } from '../utils/settings_file';
+import { ISettingsFileOptions } from '../utils/settings_file';
 
 import { has, get, set } from './getter-setter';
 import { Path, PathValue } from '../utils/dot-notation';
-import { add_settings_file } from '../utils/handlers';
+import { add_settings_file, get_settings_file_id } from '../utils/handlers';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
 	/**
@@ -12,13 +12,16 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	/**
 	 * Configuration for the settings manager
 	 */
-	settings_file_options: ISettingsFile;
+	settings_file_options: ISettingsFileOptions;
 	/** @internal */
 	fileId: number = 0;
 
-	constructor(defaultSettings: SettingsSchema, settings_file_options?: ISettingsFile) {
+	constructor(
+		defaultSettings: SettingsSchema,
+		settings_file_options: ISettingsFileOptions
+	) {
 		this.default = { ...defaultSettings };
-		this.settings_file_options = settings_file_options ?? {};
+		this.settings_file_options = settings_file_options;
 	}
 
 	/**
@@ -26,7 +29,8 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The entire settings object
 	 */
 	async initialize(): Promise<void> {
-		this.fileId = await add_settings_file(this.settings_file_options);
+		const fileId = await get_settings_file_id(this.settings_file_options.scoped_file_path);
+		this.fileId = fileId ?? await add_settings_file(this.settings_file_options);
 	}
 
 	/**
