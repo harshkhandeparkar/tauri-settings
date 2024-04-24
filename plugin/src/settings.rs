@@ -1,22 +1,22 @@
-use std::{error::Error, fs, path::PathBuf};
+use crate::dot_notation::{self, set_dot_notation};
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::{from_value, to_value, Value};
-use crate::dot_notation::{self, set_dot_notation};
+use std::{error::Error, fs, path::PathBuf};
 
 #[derive(Debug, Clone)]
 /// Struct representing one settings JSON file.
 pub struct SettingsFile {
 	/// Path to the settings file
-	pub file_path: PathBuf,
+	file_path: PathBuf,
 	/// Whether to prettify the JSON output. (Default: `false`)
-	pub prettify: bool
+	prettify: bool,
 }
 
 impl SettingsFile {
 	pub fn new(file_path: PathBuf, prettify: Option<bool>) -> Result<Self, Box<dyn Error>> {
 		let settings_file = Self {
 			file_path,
-			prettify: prettify.unwrap_or(false)
+			prettify: prettify.unwrap_or(false),
 		};
 
 		settings_file.ensure_settings_file()?;
