@@ -40,7 +40,7 @@ pub fn get_dot_notation(settings: &Value, path: &str) -> Result<Value, Box<dyn E
 		traverse = &traverse[key];
 	}
 
-	Ok(*traverse)
+	Ok(traverse.clone())
 }
 
 /// Recursively sets the value in `settings` corresponding to the dot notation for a key.

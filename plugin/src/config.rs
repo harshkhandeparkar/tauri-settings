@@ -10,6 +10,7 @@ pub struct PluginConfig {
 	pub files_limit: u32,
 }
 
+#[derive(Debug, Clone)]
 pub struct PluginConfigOptions {
 	pub scope: Option<PathBuf>,
 	pub files_limit: Option<u32>,
@@ -37,12 +38,8 @@ impl PluginConfig {
 	) -> Result<Self, Box<dyn Error>> {
 		Self::new(
 			app_config,
-			options.scope,
+			options.scope.clone(),
 			options.files_limit
 		)
-	}
-
-	pub fn default(app_config: &tauri::Config) -> Result<Self, Box<dyn Error>> {
-		Self::new(app_config, None, None)
 	}
 }

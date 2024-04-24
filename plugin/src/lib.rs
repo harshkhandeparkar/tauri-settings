@@ -134,7 +134,7 @@ pub fn init<R: Runtime>(
 			handlers::get,
 			handlers::set
 		])
-		.setup(|app| {
+		.setup(move |app| {
 			let app_config = app.config();
 			// TODO: BETTER HANDLE ERRORS
 			let plugin_config = PluginConfig::from_options(&app_config, &plugin_config).unwrap();
