@@ -3,30 +3,39 @@
 use serde_json::Value;
 use tauri::{AppHandle, Runtime, State};
 
-use crate::{settings::SettingsFile, PluginState};
+use crate::{settings::{SettingsFile, SettingsFileOptions}, PluginState};
 
 #[tauri::command]
 pub(crate) fn add_settings_file<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
-	settings_file: SettingsFile,
+	settings_file_options: SettingsFileOptions
 ) -> Result<usize, String> {
 	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
 
 	if !state.plugin_config.allow_file_addition {
 		return Err("Error: Settings file addition from frontend is not allowed.".into());
-	} else if state.plugin_config.files_limit != 0
+	}
+
+	if state.plugin_config.files_limit != 0
 		&& state.plugin_config.files_limit >= state.settings_files.len()
 	{
 		return Err("Error: Settings file limit reached.".into());
-	} else if !settings_file
-		.file_path
-		.starts_with(&state.plugin_config.scope)
-	{
-		return Err("Error: Settings file path out of the allowed scope.".into());
-	} else {
-		return Ok(state.add_settings_file(settings_file));
 	}
+
+	let settings_file_path = state.plugin_config.scope.join(settings_file_options.scoped_file_path);
+
+	if settings_file_path.starts_with(&state.plugin_config.scope) {
+		return Err("Error: Settings file path out of the allowed scope.".into());
+	}
+
+	let settings_file = SettingsFile::new(
+		settings_file_path,
+		settings_file_options.prettify,
+		settings_file_options.default_settings
+	).map_err(|err| err.to_string())?;
+
+	Ok(state.add_settings_file(settings_file))
 }
 
 /// Checks whether a key exists in the settings.

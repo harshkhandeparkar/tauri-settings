@@ -51,13 +51,13 @@
 mod config;
 mod dot_notation;
 mod handlers;
-pub mod settings;
+mod settings;
 #[cfg(test)]
 mod test;
 
 use config::PluginConfig;
 pub use config::PluginConfigOptions;
-use settings::SettingsFile;
+pub use settings::{SettingsFile, SettingsFileOptions};
 use std::{collections::HashMap, error::Error, sync::Mutex};
 use tauri::{
 	api::path,

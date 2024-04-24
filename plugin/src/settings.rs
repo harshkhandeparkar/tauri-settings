@@ -3,13 +3,21 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::{from_value, to_value, Value};
 use std::{error::Error, fs, path::PathBuf};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 /// Struct representing one settings JSON file.
 pub struct SettingsFile {
 	/// Path to the settings file
-	pub file_path: PathBuf,
+	file_path: PathBuf,
 	/// Whether to prettify the JSON output. (Default: `false`)
-	pub prettify: bool,
+	prettify: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SettingsFileOptions {
+	/// Path to the settings file relative to the scope.
+	pub scoped_file_path: String,
+	pub prettify: Option<bool>,
+	pub default_settings: Option<Value>
 }
 
 impl SettingsFile {
