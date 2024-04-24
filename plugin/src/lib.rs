@@ -50,60 +50,58 @@
 
 mod config;
 mod dot_notation;
-mod fs;
 mod handlers;
 pub mod settings;
 #[cfg(test)]
 mod test;
 
-use serde_json::Value;
+use config::{PluginConfig, PluginConfigOptions};
+use settings::SettingsFile;
 use std::{collections::HashMap, error::Error, sync::Mutex};
 use tauri::{
-	plugin::{Builder, TauriPlugin},
-	Manager, Runtime,
+	api::path, plugin::{Builder, TauriPlugin}, Manager, Runtime
 };
 
-pub use config::{Config, ConfigOptions};
-
-pub(crate) struct PluginStateConfig {
-	config: Config,
-	settings_cache: Value,
-}
 pub(crate) struct PluginStateData {
-	last_config_id: u32,
-	configs: HashMap<u32, PluginStateConfig>,
+	plugin_config: config::PluginConfig,
+	last_file_id: u32,
+	settings_files: HashMap<u32, settings::SettingsFile>,
 }
 
 impl PluginStateData {
-	pub(crate) fn add_config(&mut self, config: PluginStateConfig) -> u32 {
-		self.last_config_id += 1;
-		self.configs.insert(self.last_config_id, config);
+	pub(crate) fn add_settings_file(&mut self, settings_file: SettingsFile) -> u32 {
+		self.last_file_id += 1;
+		self.settings_files.insert(self.last_file_id, settings_file);
 
-		self.last_config_id
+		self.last_file_id
 	}
 
-	pub(crate) fn get_config_mut(
+	pub(crate) fn get_settings_file_mut(
 		&mut self,
 		id: u32,
-	) -> Result<&mut PluginStateConfig, Box<dyn Error>> {
-		self.configs
+	) -> Result<&mut SettingsFile, Box<dyn Error>> {
+		self.settings_files
 			.get_mut(&id)
 			.ok_or("Error: Config does not exist.".into())
 	}
 
-	pub(crate) fn get_config(&self, id: u32) -> Result<&PluginStateConfig, Box<dyn Error>> {
-		self.configs
+	pub(crate) fn get_settings_file(&self, id: u32) -> Result<&SettingsFile, Box<dyn Error>> {
+		self.settings_files
 			.get(&id)
 			.ok_or("Error: Config does not exist.".into())
 	}
 
-	pub(crate) fn new(initial_config: PluginStateConfig) -> PluginStateData {
-		let mut configs: HashMap<u32, PluginStateConfig> = HashMap::new();
-		configs.insert(0, initial_config);
+	pub(crate) fn new(
+		plugin_config: PluginConfig,
+		initial_settings_file: SettingsFile,
+	) -> PluginStateData {
+		let mut settings_files: HashMap<u32, SettingsFile> = HashMap::new();
+		settings_files.insert(0, initial_settings_file);
 
 		PluginStateData {
-			last_config_id: 0,
-			configs,
+			last_file_id: 0,
+			settings_files,
+			plugin_config,
 		}
 	}
 }
@@ -126,7 +124,10 @@ pub(crate) type PluginState = Mutex<PluginStateData>;
 /// tauri::Builder::default()
 ///     .plugin(tauri_plugin_settings::init(Some(config)));
 /// ```
-pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> {
+pub fn init<R: Runtime>(
+	plugin_config: PluginConfigOptions,
+	initial_settings_file: Option<SettingsFile>,
+) -> TauriPlugin<R> {
 	Builder::new("settings")
 		.invoke_handler(tauri::generate_handler![
 			handlers::add_config,
@@ -140,18 +141,24 @@ pub fn init<R: Runtime>(custom_config: Option<ConfigOptions>) -> TauriPlugin<R> 
 			handlers::cache_to_file,
 		])
 		.setup(|app| {
-			let config = custom_config
-				.map(|options| Config::from_config_options(&app.config(), &options))
-				.unwrap_or_else(|| Config::new(&app.config(), None, None, None))?;
+			let app_config = app.config();
+			// TODO: BETTER HANDLE ERRORS
+			let plugin_config = PluginConfig::from_options(&app_config, &plugin_config).unwrap();
 
-			fs::ensure_settings_file(&config)?;
-			let initial_settings =
-				fs::load_settings_file(&config).map_err(|err| err.to_string())?;
+			let initial_settings_file = if let Some(initial_settings_file) = initial_settings_file {
+				initial_settings_file
+			} else {
+				let app_config_dir = path::app_config_dir(&app_config).unwrap();
+				let settings_file_path = app_config_dir.join("settings.json");
 
-			app.manage::<PluginState>(Mutex::new(PluginStateData::new(PluginStateConfig {
-				config,
-				settings_cache: initial_settings,
-			})));
+				SettingsFile::new(settings_file_path, None).unwrap()
+			};
+
+			app.manage::<PluginState>(
+				Mutex::new(
+					PluginStateData::new(plugin_config, initial_settings_file)
+				)
+			);
 			Ok(())
 		})
 		.build()
