@@ -1,41 +1,18 @@
 import { invoke } from '@tauri-apps/api';
-import { IConfigOptions } from './config';
+import { ISettingsFile } from './settings_file';
 
-export async function add_config(
-	config: IConfigOptions,
-	defaultSettings: any
-): Promise<number> {
-	return await invoke('plugin:settings|add_config', { config: { ...config, file_name: `${config.file_name}.json` }, defaultSettings });
+export async function add_settings_file(settingsFile: ISettingsFile): Promise<number> {
+	return await invoke('plugin:settings|add_settings_file', { settingsFile });
 }
 
-export async function has(key: string, configId?: number): Promise<boolean> {
-	return await invoke('plugin:settings|has', { key, configId });
+export async function has(key: string, fileId?: number): Promise<boolean> {
+	return await invoke('plugin:settings|has', { key, fileId });
 }
 
-export async function has_cache(key: string, configId?: number): Promise<boolean> {
-	return await invoke('plugin:settings|has_cache', { key, configId });
+export async function get(key: string, fileId?: number): Promise<any> {
+	return await invoke('plugin:settings|get', { key, fileId });
 }
 
-export async function get(key: string, configId?: number): Promise<any> {
-	return await invoke('plugin:settings|get', { key, configId });
-}
-
-export async function get_cache(key: string, configId?: number): Promise<any> {
-	return await invoke('plugin:settings|get_cache', { key, configId });
-}
-
-export async function set(key: string, value: any, configId?: number): Promise<void> {
-	return await invoke('plugin:settings|set', { key, value, configId });
-}
-
-export async function set_cache(key: string, value: any, configId?: number): Promise<void> {
-	return await invoke('plugin:settings|set_cache', { key, value, configId });
-}
-
-export async function cache_to_file(configId?: number): Promise<any> {
-	return await invoke('plugin:settings|cache_to_file', { configId });
-}
-
-export async function file_to_cache(configId?: number): Promise<any> {
-	return await invoke('plugin:settings|file_to_cache', { configId });
+export async function set(key: string, value: any, fileId?: number): Promise<void> {
+	return await invoke('plugin:settings|set', { key, value, fileId });
 }

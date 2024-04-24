@@ -1,8 +1,8 @@
-import { IConfigOptions } from '../utils/config';
+import { ISettingsFile } from '../utils/settings_file';
 
-import { has, get, set, hasCache, getCache, setCache } from './getter-setter';
-import { add_config, cache_to_file } from '../utils/handlers';
+import { has, get, set } from './getter-setter';
 import { Path, PathValue } from '../utils/dot-notation';
+import { add_settings_file } from '../utils/handlers';
 
 export class SettingsManager<SettingsSchema extends {} = any> {
 	/**
@@ -12,13 +12,13 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	/**
 	 * Configuration for the settings manager
 	 */
-	config: IConfigOptions;
+	settings_file_options: ISettingsFile;
 	/** @internal */
-	configId: number = 0;
+	fileId: number = 0;
 
-	constructor(defaultSettings: SettingsSchema, config?: IConfigOptions) {
+	constructor(defaultSettings: SettingsSchema, settings_file_options?: ISettingsFile) {
 		this.default = { ...defaultSettings };
-		this.config = config ?? {};
+		this.settings_file_options = settings_file_options ?? {};
 	}
 
 	/**
@@ -26,42 +26,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The entire settings object
 	 */
 	async initialize(): Promise<void> {
-		let configId = await add_config(this.config, this.default);
-
-		this.configId = configId;
-	}
-
-	/**
-	 * @internal
-	 */
-	protected async saveSettings() {
-		await cache_to_file(this.configId);
-	}
-
-	/**
-	 * Checks whether a key exists in the settings cache.
-	 * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
-	 */
-	async hasCache<K extends Path<SettingsSchema>>(key: K): Promise<boolean> {
-		return hasCache<SettingsSchema, K>(key, this.configId);
-	}
-
-	/**
-	 * Sets the value of a setting from the cache.
-	 * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
-	 * @returns The value of the setting
-	 */
-	async getCache<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
-		return getCache<SettingsSchema, K>(key, this.configId);
-	}
-
-	/**
-	 * Sets the value for a setting. Only updates cache.
-	 * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
-	 * @param value The new value for the setting
-	 */
-	async setCache<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<void> {
-		await setCache<SettingsSchema, K>(key, value, this.configId);
+		this.fileId = await add_settings_file(this.settings_file_options);
 	}
 
 	/**
@@ -69,7 +34,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @param key The key for the setting. Key supports dot notation. See https://github.com/harshkhandeparkar/tauri-settings#dot-notation.
 	 */
 	async has<K extends Path<SettingsSchema>>(key: K): Promise<boolean> {
-		return has<SettingsSchema, K>(key, this.configId);
+		return has<SettingsSchema, K>(key, this.fileId);
 	}
 
 	/**
@@ -78,7 +43,7 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The value of the setting
 	 */
 	async get<K extends Path<SettingsSchema>>(key: K): Promise<PathValue<SettingsSchema, K>> {
-		return get<SettingsSchema, K>(key, this.configId);
+		return get<SettingsSchema, K>(key, this.fileId);
 	}
 
 	/**
@@ -87,14 +52,6 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @param value The new value for the setting
 	 */
 	async set<K extends Path<SettingsSchema>, V extends PathValue<SettingsSchema, K>>(key: K, value: V): Promise<void> {
-		await set<SettingsSchema, K>(key, value, this.configId);
-	}
-
-	/**
-	 * Saves the current settings cache to the storage.
-	 * @returns The entire settings object
-	 */
-	async syncCache() {
-		await this.saveSettings();
+		await set<SettingsSchema, K>(key, value, this.fileId);
 	}
 }
