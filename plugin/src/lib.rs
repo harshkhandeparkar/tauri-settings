@@ -58,7 +58,7 @@ mod test;
 use config::PluginConfig;
 pub use config::PluginConfigOptions;
 pub use settings::{SettingsFile, SettingsFileOptions};
-use std::{collections::HashMap, error::Error, sync::Mutex};
+use std::{collections::HashMap, error::Error, path::PathBuf, sync::Mutex};
 use tauri::{
 	api::path,
 	plugin::{Builder, TauriPlugin},
@@ -92,6 +92,13 @@ impl PluginStateData {
 		self.settings_files
 			.get(&id)
 			.ok_or("Error: Config does not exist.".into())
+	}
+
+	pub(crate) fn find_settings_file(&self, file_path: PathBuf) -> Option<usize> {
+		self.settings_files
+			.iter()
+			.find(|settings_file| settings_file.1.file_path == file_path)
+			.map(|(&id, _)| id)
 	}
 
 	pub(crate) fn new(
@@ -139,7 +146,8 @@ pub fn init<R: Runtime>(
 			handlers::has,
 			handlers::get,
 			handlers::set,
-			handlers::add_settings_file
+			handlers::add_settings_file,
+			handlers::get_settings_file_id
 		])
 		.setup(move |app| {
 			let app_config = app.config();

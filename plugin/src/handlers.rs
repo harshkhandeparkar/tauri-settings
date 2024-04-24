@@ -3,13 +3,16 @@
 use serde_json::Value;
 use tauri::{AppHandle, Runtime, State};
 
-use crate::{settings::{SettingsFile, SettingsFileOptions}, PluginState};
+use crate::{
+	settings::{SettingsFile, SettingsFileOptions},
+	PluginState,
+};
 
 #[tauri::command]
 pub(crate) fn add_settings_file<R: Runtime>(
 	_app: AppHandle<R>,
 	state: State<'_, PluginState>,
-	settings_file_options: SettingsFileOptions
+	settings_file_options: SettingsFileOptions,
 ) -> Result<usize, String> {
 	let mut state = state.inner().lock().map_err(|err| err.to_string())?;
 
@@ -23,7 +26,10 @@ pub(crate) fn add_settings_file<R: Runtime>(
 		return Err("Error: Settings file limit reached.".into());
 	}
 
-	let settings_file_path = state.plugin_config.scope.join(settings_file_options.scoped_file_path);
+	let settings_file_path = state
+		.plugin_config
+		.scope
+		.join(settings_file_options.scoped_file_path);
 
 	if settings_file_path.starts_with(&state.plugin_config.scope) {
 		return Err("Error: Settings file path out of the allowed scope.".into());
@@ -32,10 +38,27 @@ pub(crate) fn add_settings_file<R: Runtime>(
 	let settings_file = SettingsFile::new(
 		settings_file_path,
 		settings_file_options.prettify,
-		settings_file_options.default_settings
-	).map_err(|err| err.to_string())?;
+		settings_file_options.default_settings,
+	)
+	.map_err(|err| err.to_string())?;
 
 	Ok(state.add_settings_file(settings_file))
+}
+
+#[tauri::command]
+pub(crate) fn get_settings_file_id<R: Runtime>(
+	_app: AppHandle<R>,
+	state: State<'_, PluginState>,
+	scoped_file_path: String,
+) -> Result<Option<usize>, String> {
+	let state = state.inner().lock().map_err(|err| err.to_string())?;
+
+	let settings_file_path = state.plugin_config.scope.join(scoped_file_path);
+	if settings_file_path.starts_with(&state.plugin_config.scope) {
+		return Err("Error: Settings file path out of the allowed scope.".into());
+	}
+
+	Ok(state.find_settings_file(settings_file_path))
 }
 
 /// Checks whether a key exists in the settings.
