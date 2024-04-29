@@ -4,21 +4,29 @@ use std::{error::Error, path::PathBuf};
 use tauri::api::path;
 
 #[derive(Debug, Clone)]
-/// Configuration for the tauri settings plugin.
+/// A struct that stores the configuration for the tauri settings plugin.
 pub struct PluginConfig {
+	/// A path to limit the creation of settings files to.
 	pub scope: PathBuf,
-	pub files_limit: usize,
+	/// Whether to allow the frontend handlers to create new settings files.
 	pub allow_file_addition: bool,
+	/// The maximum number of settings files that can be created by the frontend handlers.
+	pub files_limit: usize,
 }
 
 #[derive(Debug, Clone)]
+/// Configuration options for the tauri settings plugin.
 pub struct PluginConfigOptions {
+	/// A path to limit the creation of settings files to. Default: The app config directory.
 	pub scope: Option<PathBuf>,
-	pub files_limit: Option<usize>,
+	/// Whether to allow the frontend handlers to create new settings files. Default: `false`.`
 	pub allow_file_addition: Option<bool>,
+	/// The maximum number of settings files that can be created by the frontend handlers. Default: `0`.
+	pub files_limit: Option<usize>,
 }
 
 impl PluginConfigOptions {
+	/// Creates a new `PluginConfigOptions` struct.
 	pub fn new(
 		scope: Option<PathBuf>,
 		files_limit: Option<usize>,
@@ -33,6 +41,12 @@ impl PluginConfigOptions {
 }
 
 impl PluginConfig {
+	/// Creates a new `PluginConfig` struct.
+	/// ### rguments
+	/// - `app_config`: The Tauri app config, used to get the path of the system app config directory.
+	/// - `scope`: A directory to which all settings files will be restricted. Default: The system app config directory.
+	/// - `files_limit`: The maximum number of settings files that can be created (from the frontend). Use `0` for unlimited. Default: `0`.
+	/// - `allow_file_addition`: Whether to allow the addition of settings files from the frontend. Default: `false`.
 	pub fn new(
 		app_config: &tauri::Config,
 		scope: Option<PathBuf>,
@@ -50,6 +64,7 @@ impl PluginConfig {
 		})
 	}
 
+	/// Creates a new `PluginConfig` struct from `PluginConfigOptions` struct, replacing all `None` values with their defaults.
 	pub fn from_options(
 		app_config: &tauri::Config,
 		options: &PluginConfigOptions,
@@ -62,6 +77,7 @@ impl PluginConfig {
 		)
 	}
 
+	/// Creates a `PluginConfig` struct with the default values.
 	pub fn default(app_config: &tauri::Config) -> Result<Self, Box<dyn Error>> {
 		Self::new(app_config, None, None, None)
 	}

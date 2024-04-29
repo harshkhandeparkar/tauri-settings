@@ -8,6 +8,10 @@ use crate::{
 	PluginState,
 };
 
+/// Adds a new settings file if the `allow_file_addition` option is set and the maximum files limit is not reached.
+///
+/// ### Arguments
+/// - `settings_file_options`: The path to the settings file relative to the scope directory.
 #[tauri::command]
 pub(crate) fn add_settings_file<R: Runtime>(
 	_app: AppHandle<R>,
@@ -45,6 +49,10 @@ pub(crate) fn add_settings_file<R: Runtime>(
 	Ok(state.add_settings_file(settings_file))
 }
 
+/// Gets the ID of a settings file from its scoped file path.
+///
+/// ### Arguments
+/// - `scoped_file_path`: The path to the settings file relative to the scope directory.
 #[tauri::command]
 pub(crate) fn get_settings_file_id<R: Runtime>(
 	_app: AppHandle<R>,
@@ -65,7 +73,7 @@ pub(crate) fn get_settings_file_id<R: Runtime>(
 ///
 /// ### Arguments
 /// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
-/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
+/// * `file_id`: Optional ID for the settings file to search. Selects the default/initial settings file if absent.
 #[tauri::command]
 pub(crate) fn has<R: Runtime>(
 	_app: AppHandle<R>,
@@ -85,7 +93,7 @@ pub(crate) fn has<R: Runtime>(
 ///
 /// ### Arguments
 /// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
-/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
+/// * `config_id`: Optional ID for the settings file to search. Selects the default/initial settings file if absent.
 #[tauri::command]
 pub(crate) fn get<R: Runtime>(
 	_app: AppHandle<R>,
@@ -106,7 +114,7 @@ pub(crate) fn get<R: Runtime>(
 /// ### Arguments
 /// * `key`: Key for the setting. Supports dot notation. (e.g. `preferences.theme`)
 /// * `value`: The value to set.
-/// * `config_id`: ID for an optional custom configuration. Selects the default/initial configuration if absent.
+/// * `config_id`: Optional ID for the settings file to search. Selects the default/initial settings file if absent.
 #[tauri::command]
 pub(crate) fn set<R: Runtime>(
 	_app: AppHandle<R>,

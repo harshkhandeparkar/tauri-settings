@@ -14,9 +14,11 @@ pub struct SettingsFile {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SettingsFileOptions {
-	/// Path to the settings file relative to the scope.
+	/// Path to the settings file relative to the scope directory.
 	pub scoped_file_path: String,
+	/// Whether to prettify the JSON before storing in the settings file. (Default: `false`)
 	pub prettify: Option<bool>,
+	/// The default values to write to the settings file when creating the file for the first time. (Default: an empty object)
 	pub default_settings: Option<Value>,
 }
 
