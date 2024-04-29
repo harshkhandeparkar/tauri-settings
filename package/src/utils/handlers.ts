@@ -5,7 +5,7 @@ export async function get_settings_file_id(scopedFilePath: string): Promise<numb
 	return await invoke('plugin:settings|get_settings_file_id', { scopedFilePath });
 }
 
-export async function add_settings_file(settingsFileOptions: ISettingsFileOptions): Promise<number> {
+export async function add_settings_file(settingsFileOptions: ISettingsFileOptions<any>): Promise<number> {
 	return await invoke('plugin:settings|add_settings_file', {
 		settingsFileOptions: {
 			...settingsFileOptions,

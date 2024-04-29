@@ -12,16 +12,13 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	/**
 	 * Configuration for the settings manager
 	 */
-	settings_file_options: ISettingsFileOptions;
+	settings_file_options: ISettingsFileOptions<SettingsSchema>;
 	/** @internal */
 	fileId: number = 0;
 
-	constructor(
-		defaultSettings: SettingsSchema,
-		settings_file_options?: ISettingsFileOptions
-	) {
-		this.default = { ...defaultSettings };
-		this.settings_file_options = settings_file_options ?? {};
+	constructor(settings_file_options: ISettingsFileOptions<SettingsSchema>) {
+		this.default = { ...settings_file_options.default_settings };
+		this.settings_file_options = settings_file_options;
 	}
 
 	/**

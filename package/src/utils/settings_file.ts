@@ -1,4 +1,4 @@
-export interface ISettingsFileOptions {
+export interface ISettingsFileOptions<SettingsSchema> {
 	/**
 	 * The settings file to use. Either an ID or the path to the settings file relative to the scope of the plugin.
 	 * E.g. `settings.json` or `preferences/user.json`.
@@ -10,5 +10,5 @@ export interface ISettingsFileOptions {
 	 * Default: false
 	 */
 	prettify?: boolean;
-	default_settings?: any;
+	default_settings: SettingsSchema;
 }
