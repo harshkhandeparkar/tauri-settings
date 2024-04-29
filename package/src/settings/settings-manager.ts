@@ -18,10 +18,10 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 
 	constructor(
 		defaultSettings: SettingsSchema,
-		settings_file_options: ISettingsFileOptions
+		settings_file_options?: ISettingsFileOptions
 	) {
 		this.default = { ...defaultSettings };
-		this.settings_file_options = settings_file_options;
+		this.settings_file_options = settings_file_options ?? {};
 	}
 
 	/**
@@ -29,7 +29,10 @@ export class SettingsManager<SettingsSchema extends {} = any> {
 	 * @returns The entire settings object
 	 */
 	async initialize(): Promise<void> {
-		const fileId = await get_settings_file_id(this.settings_file_options.scoped_file_path);
+		const fileId = this.settings_file_options.file !== undefined ? (
+			typeof this.settings_file_options.file === 'string' ? await get_settings_file_id(this.settings_file_options.file) : this.settings_file_options.file
+		) : 0;
+
 		this.fileId = fileId ?? await add_settings_file(this.settings_file_options);
 	}
 
