@@ -62,7 +62,6 @@ pub(crate) fn get_settings_file_id<R: Runtime>(
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 
 	let settings_file_path = state.plugin_config.scope.join(scoped_file_path);
-	println!("{:?} {:?}", settings_file_path, &state.plugin_config.scope);
 	if !settings_file_path.starts_with(&state.plugin_config.scope) {
 		return Err("Error: Settings file path out of the allowed scope.".into());
 	}
