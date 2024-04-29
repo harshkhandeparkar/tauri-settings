@@ -69,13 +69,13 @@ impl PluginStateData {
 	) -> Result<&mut SettingsFile, Box<dyn Error>> {
 		self.settings_files
 			.get_mut(&id)
-			.ok_or("Error: Config does not exist.".into())
+			.ok_or(format!("Error: Settings file with ID {} does not exist.", id).into())
 	}
 
 	pub(crate) fn get_settings_file(&self, id: usize) -> Result<&SettingsFile, Box<dyn Error>> {
 		self.settings_files
 			.get(&id)
-			.ok_or("Error: Config does not exist.".into())
+			.ok_or(format!("Error: Settings file with ID {} does not exist.", id).into())
 	}
 
 	pub(crate) fn find_settings_file(&self, file_path: PathBuf) -> Option<usize> {
