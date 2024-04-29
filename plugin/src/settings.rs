@@ -1,6 +1,6 @@
 use crate::dot_notation::{self, set_dot_notation};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
-use serde_json::{from_value, to_value, Value};
+use serde_json::{from_value, to_value, Map, Value};
 use std::{error::Error, fs, path::PathBuf};
 
 #[derive(Debug, Clone)]
@@ -33,7 +33,7 @@ impl SettingsFile {
 			prettify: prettify.unwrap_or(false),
 		};
 
-		settings_file.ensure_settings_file(default_settings.unwrap_or(Value::Null))?;
+		settings_file.ensure_settings_file(default_settings.unwrap_or(Value::Object(Map::new())))?;
 
 		Ok(settings_file)
 	}
