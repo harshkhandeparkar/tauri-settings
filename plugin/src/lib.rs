@@ -88,18 +88,27 @@ impl PluginStateData {
 	pub(crate) fn new(
 		plugin_config: PluginConfig,
 		initial_settings_files: Vec<SettingsFile>,
-	) -> PluginStateData {
+	) -> Result<PluginStateData, Box<dyn Error>> {
 		let mut settings_files: HashMap<usize, SettingsFile> = HashMap::new();
+
+		if plugin_config.files_limit != 0 && initial_settings_files.len() > plugin_config.files_limit {
+			return Err(format!(
+				"Error: Initial settings files ({}) more than the limit ({}).",
+				initial_settings_files.len(),
+				plugin_config.files_limit
+			)
+			.into());
+		}
 
 		for (i, settings_file) in initial_settings_files.iter().enumerate() {
 			settings_files.insert(i, settings_file.clone());
 		}
 
-		PluginStateData {
+		Ok(PluginStateData {
 			last_file_id: settings_files.len() - 1,
 			settings_files,
 			plugin_config,
-		}
+		})
 	}
 }
 
@@ -156,7 +165,7 @@ pub fn init<R: Runtime>(
 			app.manage::<PluginState>(Mutex::new(PluginStateData::new(
 				plugin_config,
 				initial_settings_files,
-			)));
+			)?));
 			Ok(())
 		})
 		.build()
