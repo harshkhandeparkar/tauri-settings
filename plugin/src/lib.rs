@@ -91,7 +91,9 @@ impl PluginStateData {
 	) -> Result<PluginStateData, Box<dyn Error>> {
 		let mut settings_files: HashMap<usize, SettingsFile> = HashMap::new();
 
-		if plugin_config.files_limit != 0 && initial_settings_files.len() > plugin_config.files_limit {
+		if plugin_config.files_limit != 0
+			&& initial_settings_files.len() > plugin_config.files_limit
+		{
 			return Err(format!(
 				"Error: Initial settings files ({}) more than the limit ({}).",
 				initial_settings_files.len(),

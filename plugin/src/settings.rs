@@ -33,7 +33,8 @@ impl SettingsFile {
 			prettify: prettify.unwrap_or(false),
 		};
 
-		settings_file.ensure_settings_file(default_settings.unwrap_or(Value::Object(Map::new())))?;
+		settings_file
+			.ensure_settings_file(default_settings.unwrap_or(Value::Object(Map::new())))?;
 
 		Ok(settings_file)
 	}

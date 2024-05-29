@@ -42,7 +42,7 @@ impl PluginConfigOptions {
 
 impl PluginConfig {
 	/// Creates a new `PluginConfig` struct.
-	/// ### rguments
+	/// ### Arguments
 	/// - `app_config`: The Tauri app config, used to get the path of the system app config directory.
 	/// - `scope`: A directory to which all settings files will be restricted. Default: The system app config directory.
 	/// - `files_limit`: The maximum number of settings files that can be created (from the frontend). Use `0` for unlimited. Default: `0`.
