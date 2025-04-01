@@ -33,7 +33,9 @@ pub(crate) fn add_settings_file<R: Runtime>(
 	let settings_file_path = state
 		.plugin_config
 		.scope
-		.join(settings_file_options.scoped_file_path);
+		.join(settings_file_options.scoped_file_path)
+		.canonicalize()
+		.map_err(|err| err.to_string())?;
 
 	if !settings_file_path.starts_with(&state.plugin_config.scope) {
 		return Err("Error: Settings file path out of the allowed scope.".into());
@@ -61,7 +63,7 @@ pub(crate) fn get_settings_file_id<R: Runtime>(
 ) -> Result<Option<usize>, String> {
 	let state = state.inner().lock().map_err(|err| err.to_string())?;
 
-	let settings_file_path = state.plugin_config.scope.join(scoped_file_path);
+	let settings_file_path = state.plugin_config.scope.join(scoped_file_path).canonicalize().map_err(|err| err.to_string())?;
 	if !settings_file_path.starts_with(&state.plugin_config.scope) {
 		return Err("Error: Settings file path out of the allowed scope.".into());
 	}
