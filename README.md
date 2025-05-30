@@ -32,22 +32,19 @@ yarn add @tauri-apps/api
 ```
 
 #### Enable Tauri APIs
-The following APIs need to be added to the Tauri [allowlist](https://tauri.app/v1/api/config/#allowlistconfig).
+The following scopes need to be added to your [src-tauri/capabilities/{name}.json](https://v2.tauri.app/security/capabilities/).
 ```jsonc
+
 {
-  "allowlist": {
-    "fs": { // see https://tauri.app/v1/api/config/#fsallowlistconfig
-      "createDir": true,
-      "readDir": true,
-      "readFile": true,
-      "writeFile": true,
-      "scope": ["$APPCONFIG", "$APPCONFIG/*"]
-    },
-    "path": {
-      "all": true
-     }
-  }
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-capability",
+  "description": "Capability for the main window",
+  "windows": ["main"],
+  "permissions": [
+    "core:path:default", // add this
+  ]
 }
+
 ```
 
 #### Usage
