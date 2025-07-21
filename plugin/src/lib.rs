@@ -44,7 +44,6 @@ pub use config::PluginConfigOptions;
 pub use settings::{SettingsFile, SettingsFileOptions};
 use std::{collections::HashMap, error::Error, path::PathBuf, sync::Mutex};
 use tauri::{
-	api::path,
 	plugin::{Builder, TauriPlugin},
 	Manager, Runtime,
 };
@@ -145,20 +144,21 @@ pub fn init<R: Runtime>(
 			handlers::add_settings_file,
 			handlers::get_settings_file_id
 		])
-		.setup(move |app| {
-			let app_config = app.config();
+		.setup(move |app, _api| {
 			let plugin_config = if let Some(plugin_config) = plugin_config {
-				PluginConfig::from_options(&app_config, &plugin_config)?
+				PluginConfig::from_options(app, &plugin_config)?
 			} else {
-				PluginConfig::default(&app_config)?
+				PluginConfig::default(app)?
 			};
 
 			let initial_settings_files =
 				if let Some(initial_settings_files) = initial_settings_files {
 					initial_settings_files
 				} else {
-					let app_config_dir = path::app_config_dir(&app_config)
-						.ok_or("Error reading the app config directory.")?;
+					let app_config_dir = app
+						.path()
+						.app_config_dir()
+						.map_err(|_| "Error reading the app config directory.")?;
 					let settings_file_path = app_config_dir.join("settings.json");
 
 					vec![SettingsFile::new(settings_file_path, None, None).unwrap()]
@@ -168,6 +168,7 @@ pub fn init<R: Runtime>(
 				plugin_config,
 				initial_settings_files,
 			)?));
+
 			Ok(())
 		})
 		.build()
