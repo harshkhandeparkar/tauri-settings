@@ -63,6 +63,12 @@ impl SettingsFile {
 	}
 
 	fn ensure_settings_file(&self, default_settings: Value) -> Result<bool, Box<dyn Error>> {
+		if let Some(parent_dir) = self.file_path.parent() {
+			if !parent_dir.exists() {
+				fs::create_dir_all(parent_dir)?;
+			}
+		}
+
 		if !self.file_path.exists() {
 			self.save_settings(&default_settings)?;
 			return Ok(true);
